@@ -1,2 +1,4 @@
 ﻿  Obj.cpp
+C:\Users\zabit\Documents\GitHub\ObjProg_Ver1\Obj\Obj.cpp(34,28): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+C:\Users\zabit\Documents\GitHub\ObjProg_Ver1\Obj\Obj.cpp(38,52): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
   Obj.vcxproj -> C:\Users\zabit\Documents\GitHub\ObjProg_Ver1\x64\Debug\Obj.exe
