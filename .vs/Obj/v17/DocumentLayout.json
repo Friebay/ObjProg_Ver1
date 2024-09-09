@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\zabit\\Documents\\GitHub\\ObjProg_Ver1\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{AD142565-FB29-4442-AF11-576E1B06A61F}|Obj\\Obj.vcxproj|C:\\Users\\zabit\\Documents\\GitHub\\ObjProg_Ver1\\Obj\\Obj.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{AD142565-FB29-4442-AF11-576E1B06A61F}|Obj\\Obj.vcxproj|solutionrelative:Obj\\Obj.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Obj.cpp",
+              "DocumentMoniker": "C:\\Users\\zabit\\Documents\\GitHub\\ObjProg_Ver1\\Obj\\Obj.cpp",
+              "RelativeDocumentMoniker": "Obj\\Obj.cpp",
+              "ToolTip": "C:\\Users\\zabit\\Documents\\GitHub\\ObjProg_Ver1\\Obj\\Obj.cpp",
+              "RelativeToolTip": "Obj\\Obj.cpp",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAADQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-09-09T09:52:48.713Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
