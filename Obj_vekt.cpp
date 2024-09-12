@@ -86,6 +86,8 @@ int gautiPazymi(const string& tekstas) {
     }
 }
 
+
+
 int main() {
     Duomenys stud1, stud2;
     
