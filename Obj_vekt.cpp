@@ -16,7 +16,6 @@ struct Duomenys {
     float galutinis_med = 0;
 };
 
-// Function to sort the grades
 void rikiavimas(vector<int>& pazymiu_sarasas) {
     for (int i = 0; i < pazymiu_sarasas.size() - 1; i++) {
         for (int j = i + 1; j < pazymiu_sarasas.size(); j++) {
@@ -29,7 +28,6 @@ void rikiavimas(vector<int>& pazymiu_sarasas) {
     }
 }
 
-// Function to find the median of the grades
 float medianosRadimas(vector<int>& pazymiu_sarasas) {
     rikiavimas(pazymiu_sarasas);
     int kiekis = pazymiu_sarasas.size();
@@ -41,20 +39,56 @@ float medianosRadimas(vector<int>& pazymiu_sarasas) {
     }
 }
 
-// Function to calculate the average of the grades
 float vidurkioRadimas(vector<int>& pazymiu_sarasas) {
     int suma = 0;
+    
     for (int paz : pazymiu_sarasas) {
         suma += paz;
     }
-    return pazymiu_sarasas.empty() ? 0 : float(suma) / pazymiu_sarasas.size();
+
+    if (pazymiu_sarasas.size() == 0) {
+        return 0;
+    } else {
+        return float(suma) / pazymiu_sarasas.size();
+    }
+}
+
+int gautiPazymi(const string& tekstas) {
+    while (true) {
+        string pazymys;
+        cout << tekstas;
+        cin >> pazymys;
+
+        if (pazymys == "-1") return -1;
+
+        bool arSkaicius = true;
+        for (char simbolis : pazymys) {
+            if (simbolis < '0' || simbolis > '9') {
+                arSkaicius = false;
+                break;
+            }
+        }
+
+        if (arSkaicius) {
+            int grade = 0;
+            for (char simbolis : pazymys) {
+                grade = grade * 10 + (simbolis - '0');
+            }
+
+            if (grade >= 0 && grade <= 10) {
+                return grade;
+            } else {
+                cout << "Klaida: pazymys turi buti nuo 0 iki 10." << endl;
+            }
+        } else {
+            cout << "Klaida: iveskite tik skaicius." << endl;
+        }
+    }
 }
 
 int main() {
     Duomenys stud1, stud2;
-    int pazymys;
-
-    // Input for the first student
+    
     cout << "Vardas: ";
     cin >> stud1.Vardas;
 
@@ -62,15 +96,14 @@ int main() {
     cin >> stud1.Pavarde;
 
     cout << "Iveskite pazymius (iveskite -1, kad baigtumete):" << endl;
+
     while (true) {
-        cout << "Pazymys: ";
-        cin >> pazymys;
+        int pazymys = gautiPazymi("Pazymys (arba -1 baigti): ");
         if (pazymys == -1) break;
         stud1.paz.push_back(pazymys);
     }
 
-    cout << "Egzamino pazymys: ";
-    cin >> stud1.egz;
+    stud1.egz = gautiPazymi("Egzamino pazymys: ");
 
     if (!stud1.paz.empty()) {
         stud1.vidurkis = vidurkioRadimas(stud1.paz);
@@ -80,23 +113,19 @@ int main() {
     stud1.galutinis_vid = 0.4 * stud1.vidurkis + 0.6 * stud1.egz;
     stud1.galutinis_med = 0.4 * stud1.mediana + 0.6 * stud1.egz;
 
-    // Input for the second student
     cout << "Vardas: ";
     cin >> stud2.Vardas;
 
     cout << "Pavarde: ";
     cin >> stud2.Pavarde;
 
-    cout << "Iveskite pazymius (iveskite -1, kad baigtumete):" << endl;
     while (true) {
-        cout << "Pazymys: ";
-        cin >> pazymys;
+        int pazymys = gautiPazymi("Pazymys (arba -1 baigti): ");
         if (pazymys == -1) break;
         stud2.paz.push_back(pazymys);
     }
 
-    cout << "Egzamino pazymys: ";
-    cin >> stud2.egz;
+    stud2.egz = gautiPazymi("Egzamino pazymys: ");
 
     if (!stud2.paz.empty()) {
         stud2.vidurkis = vidurkioRadimas(stud2.paz);
@@ -106,7 +135,7 @@ int main() {
     stud2.galutinis_vid = 0.4 * stud2.vidurkis + 0.6 * stud2.egz;
     stud2.galutinis_med = 0.4 * stud2.mediana + 0.6 * stud2.egz;
 
-    // Output the results
+
     cout << left << setw(12) << "Pavarde" << setw(15) << "Vardas" << setw(25) << "Galutinis (Vidurkis)" << " / " << "Galutinis (Mediana)" << endl;
     cout << "-------------------------------------------------------------------------" << endl;
 
