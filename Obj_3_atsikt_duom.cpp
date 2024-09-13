@@ -1,11 +1,4 @@
-#include <iostream>
-#include <iomanip>
-#include <vector>
-#include <cstdlib>
-#include <ctime>
-#include <string>  
-
-using namespace std;
+#include "Biblioteka.h"
 
 struct Studentas {
     string vardas, pavarde;
