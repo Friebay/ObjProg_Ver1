@@ -164,9 +164,7 @@ int main() {
     cout << "-------------------------------------------------------------------------" << endl;
 
     for (const Studentas& studentas : studentai) {
-        cout << left << setw(12) << studentas.pavarde << setw(15) << studentas.vardas 
-             << setw(25) << fixed << setprecision(2) << studentas.galutinisVidurkis 
-             << "   " << fixed << setprecision(2) << studentas.galutineMediana << endl;
+        cout << left << setw(12) << studentas.pavarde << setw(15) << studentas.vardas << setw(25) << fixed << setprecision(2) << studentas.galutinisVidurkis << "   " << fixed << setprecision(2) << studentas.galutineMediana << endl;
     }
 
     return 0;
