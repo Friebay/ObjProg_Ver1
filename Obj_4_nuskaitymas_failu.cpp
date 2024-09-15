@@ -138,14 +138,16 @@ int main() {
     cin >> pasirinkimas;
 
     if (pasirinkimas == '1') {
-        studentai.resize(2);
+        cout << "Kiek studentu norite irasyti? ";
+        cin >> studentuKiekis;
+        studentai.resize(studentuKiekis);
         for (Studentas& studentas : studentai) {
             ivestiStudentoDuomenis(studentas);
         }
     } else if (pasirinkimas == '2') {
         cout << "Kiek studentu norite sugeneruoti? ";
         cin >> studentuKiekis;
-        for (int i = 0; i < studentuKiekis; ++i) {
+        for (int i = 0; i < studentuKiekis; i++) {
             studentai.push_back(generuotiAtsitiktiniStudenta());
         }
     } else if (pasirinkimas == '3') {
