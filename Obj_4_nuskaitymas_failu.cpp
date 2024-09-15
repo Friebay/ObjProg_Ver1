@@ -21,7 +21,6 @@ void rusiuoti(vector<int>& pazymiai) {
         }
     }
 }
-
 float skaiciuotiMediana(vector<int>& pazymiai) {
     rusiuoti(pazymiai); 
     int pazymiuKiekis = pazymiai.size();
@@ -41,6 +40,38 @@ float skaiciuotiVidurki(vector<int>& pazymiai) {
     }
     return float(suma) / pazymiai.size();
 }
+
+void skaitytiDuomenisIsFailo(const string& failoVardas, vector<Studentas>& studentai) {
+    ifstream failas(failoVardas);
+    if (!failas) {
+        cout << "Nepavyko atidaryti failo: " << failoVardas << endl;
+        return;
+    }
+
+    string eilute;
+    getline(failas, eilute);
+
+    while (getline(failas, eilute)) {
+        istringstream iss(eilute);
+        Studentas studentas;
+        iss >> studentas.vardas >> studentas.pavarde;
+
+        int pazymys;
+        while (iss >> pazymys) {
+            studentas.pazymiai.push_back(pazymys);
+        }
+        
+        studentas.egzaminoPazymys = studentas.pazymiai.back();
+        studentas.pazymiai.pop_back();
+
+        studentas.vidurkis = skaiciuotiVidurki(studentas.pazymiai);
+        studentas.mediana = skaiciuotiMediana(studentas.pazymiai);
+        studentas.galutinisVidurkis = 0.4 * studentas.vidurkis + 0.6 * studentas.egzaminoPazymys;
+        studentas.galutineMediana = 0.4 * studentas.mediana + 0.6 * studentas.egzaminoPazymys;
+
+        studentai.push_back(studentas);
+    }
+}   
 
 int gautiPazymi(const string& klausimas) {
     while (true) {
@@ -151,8 +182,27 @@ int main() {
             studentai.push_back(generuotiAtsitiktiniStudenta());
         }
     } else if (pasirinkimas == '3') {
-        cout << "Kodas dar neparuostas";
-        return 0;
+        cout << "Pasirinkite faila (1. studentai10.txt, 2. studentai100.txt, 3. studentai10000.txt, 4. studentai100000.txt, 5. studentai1000000.txt): ";
+        int failoPasirinkimas;
+        cin >> failoPasirinkimas;
+        
+        string failoVardas;
+        if (failoPasirinkimas == 1) {
+            failoVardas = "C:/Users/zabit/Documents/GitHub/ObjProg_Ver1/stud_duomenys/studentai10.txt";
+        } else if (failoPasirinkimas == 2) {
+            failoVardas = "C:/Users/zabit/Documents/GitHub/ObjProg_Ver1/stud_duomenys/studentai100.txt";
+        } else if (failoPasirinkimas == 3) {
+            failoVardas = "C:/Users/zabit/Documents/GitHub/ObjProg_Ver1/stud_duomenys/studentai10000.txt";
+        } else if (failoPasirinkimas == 4) {
+            failoVardas = "C:/Users/zabit/Documents/GitHub/ObjProg_Ver1/stud_duomenys/studentai100000.txt";
+        } else if (failoPasirinkimas == 5) {
+            failoVardas = "C:/Users/zabit/Documents/GitHub/ObjProg_Ver1/stud_duomenys/studentai1000000.txt";
+        } else {
+            cout << "Neteisingas pasirinkimas." << endl;
+            return 0;
+        }
+
+        skaitytiDuomenisIsFailo(failoVardas, studentai);
     } else {
         cout << "Neteisingas pasirinkimas.\n";
         return 0;

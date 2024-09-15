@@ -7,6 +7,8 @@
 #include <cstdlib>
 #include <ctime>
 #include <string>
+#include <fstream>
+#include <sstream>
 
 using std::endl;
 using std::cout;
@@ -17,7 +19,8 @@ using std::left;
 using std::setw;
 using std::fixed;
 using std::setprecision;
-
+using std::ifstream;
+using std::istringstream;
 
 
 #endif // BIBLIOTEKA_H_INCLUDED
