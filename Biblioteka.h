@@ -9,6 +9,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 
 using std::endl;
 using std::cout;

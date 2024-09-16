@@ -58,8 +58,7 @@ float skaiciuotiVidurki(vector<int>& pazymiai) {
 void skaitytiDuomenisIsFailo(const string& failoVardas, vector<Studentas>& studentai) {
     ifstream failas(failoVardas);
     if (!failas) {
-        cout << "Nepavyko atidaryti failo: " << failoVardas << endl;
-        return;
+        throw std::runtime_error("Nepavyko atidaryti failo: " + failoVardas);
     }
 
     string eilute;
@@ -170,6 +169,9 @@ void ivestiStudentoDuomenis(Studentas& studentas) {
     }
 
     studentas.egzaminoPazymys = gautiPazymi("Egzamino pazymys: ");
+    if (studentas.egzaminoPazymys == -1){
+        studentas.egzaminoPazymys = 0;
+    }
 
     if (!studentas.pazymiai.empty()) {
         studentas.vidurkis = skaiciuotiVidurki(studentas.pazymiai);
@@ -185,17 +187,21 @@ int main() {
     
     vector<Studentas> studentai;
     char pasirinkimas;
-    int studentuKiekis;
+    long long studentuKiekis;
 
-    cout << "1. Ivesti duomenis ranka\n";
-    cout << "2. Automatiskai generuoti duomenis\n";
-    cout << "3. Nuskaityti duomenis is failo\n";
+    cout << "1. Ivesti duomenis ranka" << endl;
+    cout << "2. Automatiskai generuoti duomenis" << endl;
+    cout << "3. Nuskaityti duomenis is failo" << endl;
     cout << "Jusu pasirinkimas: ";
     cin >> pasirinkimas;
 
     if (pasirinkimas == '1') {
         cout << "Kiek studentu norite irasyti? ";
         cin >> studentuKiekis;
+        if (studentuKiekis < 1 || studentuKiekis > 2147483647) {
+            cout << "Klaida: Studentu skaicius turi buti daugiau nei 0 ir maziau nei 2147483647." << endl << "Programa uzdaroma.";
+            return 0;
+        }
         studentai.resize(studentuKiekis);
         for (Studentas& studentas : studentai) {
             ivestiStudentoDuomenis(studentas);
@@ -203,6 +209,10 @@ int main() {
     } else if (pasirinkimas == '2') {
         cout << "Kiek studentu norite sugeneruoti? ";
         cin >> studentuKiekis;
+        if (studentuKiekis < 1 || studentuKiekis > 2147483647) {
+            cout << "Klaida: Studentu skaicius turi buti daugiau nei 0 ir maziau nei 2147483647." << endl << "Programa uzdaroma.";
+            return 0;
+        }
         for (int i = 0; i < studentuKiekis; i++) {
             studentai.push_back(generuotiAtsitiktiniStudenta());
         }
@@ -223,13 +233,12 @@ int main() {
         } else if (failoPasirinkimas == 5) {
             failoVardas = "C:/Users/zabit/Documents/GitHub/ObjProg_Ver1/stud_duomenys/studentai1000000.txt";
         } else {
-            cout << "Neteisingas pasirinkimas." << endl;
+            cout << "Neteisingas pasirinkimas." << endl << "Programa uzdaroma.";
             return 0;
         }
-
         skaitytiDuomenisIsFailo(failoVardas, studentai);
     } else {
-        cout << "Neteisingas pasirinkimas.\n";
+        cout << "Neteisingas pasirinkimas." << endl << "Programa uzdaroma.";
         return 0;
     }
 
@@ -242,7 +251,6 @@ int main() {
     for (const Studentas& studentas : studentai) {
         cout << left << setw(12) << studentas.pavarde << setw(15) << studentas.vardas << setw(25) << fixed << setprecision(2) << studentas.galutinisVidurkis << "   " << fixed << setprecision(2) << studentas.galutineMediana << endl;
     }
-
 
     return 0;
 }
