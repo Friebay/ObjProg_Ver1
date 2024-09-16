@@ -11,6 +11,7 @@
 #include <sstream>
 #include <stdexcept>
 
+
 using std::endl;
 using std::cout;
 using std::cin;
@@ -22,6 +23,7 @@ using std::fixed;
 using std::setprecision;
 using std::ifstream;
 using std::istringstream;
-
+using std::runtime_error;
+using std::invalid_argument;
 
 #endif // BIBLIOTEKA_H_INCLUDED

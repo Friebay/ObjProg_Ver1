@@ -55,11 +55,12 @@ float skaiciuotiVidurki(vector<int>& pazymiai) {
     return float(suma) / pazymiai.size();
 }
 
-void skaitytiDuomenisIsFailo(const string& failoVardas, vector<Studentas>& studentai) {
-    ifstream failas(failoVardas);
+void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& studentai) {
+    ifstream failas(failoPavadinimas);
     if (!failas) {
-        cout << "Failo " << failoVardas << " nera." << endl;
+        cout << "Failo " << failoPavadinimas << " nera." << endl;
         system("pause");
+        return;
     }
 
     string eilute;
@@ -70,22 +71,52 @@ void skaitytiDuomenisIsFailo(const string& failoVardas, vector<Studentas>& stude
         Studentas studentas;
         iss >> studentas.vardas >> studentas.pavarde;
 
-        int pazymys;
-        while (iss >> pazymys) {
-            studentas.pazymiai.push_back(pazymys);
+        string pazymysStr;
+        bool tinkamiPazymiai = true;
+
+        while (iss >> pazymysStr) {
+            try {
+                if (pazymysStr.find_first_not_of("0123456789") != string::npos) {
+                    throw invalid_argument("Klaida: pazymys turi buti skaicius.");
+                }
+
+                int pazymys = stoi(pazymysStr);
+
+                if (pazymys < 0 || pazymys > 10) {
+                    cout << "Klaida: pazymys turi buti tarp 0 ir 10." << endl;
+                    tinkamiPazymiai = false;
+                    break;
+                }
+
+                studentas.pazymiai.push_back(pazymys);
+            } catch (const invalid_argument&) {
+                cout << "Klaida: neteisingas pazymys: " << pazymysStr << endl;
+                tinkamiPazymiai = false;
+                break;
+            }
         }
 
-        studentas.egzaminoPazymys = studentas.pazymiai.back();
-        studentas.pazymiai.pop_back();
+        if (tinkamiPazymiai) {
+            if (!studentas.pazymiai.empty()) {
+                studentas.egzaminoPazymys = studentas.pazymiai.back();
+                studentas.pazymiai.pop_back();
 
-        studentas.vidurkis = skaiciuotiVidurki(studentas.pazymiai);
-        studentas.mediana = skaiciuotiMediana(studentas.pazymiai);
-        studentas.galutinisVidurkis = 0.4 * studentas.vidurkis + 0.6 * studentas.egzaminoPazymys;
-        studentas.galutineMediana = 0.4 * studentas.mediana + 0.6 * studentas.egzaminoPazymys;
+                studentas.vidurkis = skaiciuotiVidurki(studentas.pazymiai);
+                studentas.mediana = skaiciuotiMediana(studentas.pazymiai);
+                studentas.galutinisVidurkis = 0.4 * studentas.vidurkis + 0.6 * studentas.egzaminoPazymys;
+                studentas.galutineMediana = 0.4 * studentas.mediana + 0.6 * studentas.egzaminoPazymys;
 
-        studentai.push_back(studentas);
+                studentai.push_back(studentas);
+            } else {
+                cout << "Klaida: truksta pazymiu studentui " << studentas.vardas << " " << studentas.pavarde << endl;
+            }
+        } else {
+            cout << "Studentas " << studentas.vardas << " " << studentas.pavarde << " neturi galutiniu pazymiu del neteisingu duomenu." << endl;
+        }
     }
-}   
+}
+
+
 
 int gautiPazymi(const string& klausimas) {
     while (true) {
@@ -117,8 +148,8 @@ int gautiPazymi(const string& klausimas) {
 }
 
 void inicializuotiAtsitiktinius() {
-    int seklos = int(time(0));
-    srand(seklos);
+    int random = int(time(0));
+    srand(random);
 }
 
 int generuotiSkaiciu(int min, int max) {
@@ -126,13 +157,13 @@ int generuotiSkaiciu(int min, int max) {
 }
 
 string generuotiVardaPavarde() {
-    string vardasPavarde;
+    string raidziuRinkinys;
     char raides[] = "abcdefghijklmnopqrstuvwxyz";
     for (int i = 0; i < 5; ++i) {
         char x = raides[rand() % 26];
-        vardasPavarde += x;
+        raidziuRinkinys += x;
     }
-    return vardasPavarde;
+    return raidziuRinkinys;
 }
 
 Studentas generuotiAtsitiktiniStudenta() {
@@ -220,27 +251,29 @@ int main() {
             studentai.push_back(generuotiAtsitiktiniStudenta());
         }
     } else if (pasirinkimas == '3') {
-        cout << "Pasirinkite faila (1. studentai10.txt, 2. studentai100.txt, 3. studentai10000.txt, 4. studentai100000.txt, 5. studentai1000000.txt): ";
+        cout << "Pasirinkite faila (1. studentai10.txt, 2. studentai100.txt, 3. studentai10000.txt, 4. studentai100000.txt, 5. studentai1000000.txt, 6. studentai10_blog.txt): ";
         int failoPasirinkimas;
         cin >> failoPasirinkimas;
         
-        string failoVardas;
+        string failoPavadinimas;
         if (failoPasirinkimas == 1) {
-            failoVardas = "C:/Users/zabit/Documents/GitHub/ObjProg_Ver1/stud_duomenys/studentai10.txt";
+            failoPavadinimas = "studentai10.txt";
         } else if (failoPasirinkimas == 2) {
-            failoVardas = "C:/Users/zabit/Documents/GitHub/ObjProg_Ver1/stud_duomenys/studentai100.txt";
+            failoPavadinimas = "studentai100.txt";
         } else if (failoPasirinkimas == 3) {
-            failoVardas = "C:/Users/zabit/Documents/GitHub/ObjProg_Ver1/stud_duomenys/studentai10000.txt";
+            failoPavadinimas = "studentai10000.txt";
         } else if (failoPasirinkimas == 4) {
-            failoVardas = "C:/Users/zabit/Documents/GitHub/ObjProg_Ver1/stud_duomenys/studentai100000.txt";
+            failoPavadinimas = "studentai100000.txt";
         } else if (failoPasirinkimas == 5) {
-            failoVardas = "C:/Users/zabit/Documents/GitHub/ObjProg_Ver1/stud_duomenys/studentai1000000.txt";
+            failoPavadinimas = "studentai1000000.txt";
+        } else if (failoPasirinkimas == 6) {
+            failoPavadinimas = "studentai10_blog.txt";
         } else {
             cout << "Neteisingas pasirinkimas." << endl << "Programa uzdaroma." << endl;;
             system("pause");
             return 0;
         }
-        skaitytiDuomenisIsFailo(failoVardas, studentai);
+        skaitytiDuomenisIsFailo(failoPavadinimas, studentai);
     } else {
         cout << "Neteisingas pasirinkimas." << endl << "Programa uzdaroma." << endl;
         system("pause");
