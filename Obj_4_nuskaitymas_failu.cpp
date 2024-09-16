@@ -58,7 +58,8 @@ float skaiciuotiVidurki(vector<int>& pazymiai) {
 void skaitytiDuomenisIsFailo(const string& failoVardas, vector<Studentas>& studentai) {
     ifstream failas(failoVardas);
     if (!failas) {
-        throw std::runtime_error("Nepavyko atidaryti failo: " + failoVardas);
+        cout << "Failo " << failoVardas << " nera." << endl;
+        system("pause");
     }
 
     string eilute;
@@ -199,7 +200,8 @@ int main() {
         cout << "Kiek studentu norite irasyti? ";
         cin >> studentuKiekis;
         if (studentuKiekis < 1 || studentuKiekis > 2147483647) {
-            cout << "Klaida: Studentu skaicius turi buti daugiau nei 0 ir maziau nei 2147483647." << endl << "Programa uzdaroma.";
+            cout << "Klaida: Studentu skaicius turi buti daugiau nei 0 ir maziau nei 2147483647." << endl << "Programa uzdaroma." << endl;;
+            system("pause");
             return 0;
         }
         studentai.resize(studentuKiekis);
@@ -210,7 +212,8 @@ int main() {
         cout << "Kiek studentu norite sugeneruoti? ";
         cin >> studentuKiekis;
         if (studentuKiekis < 1 || studentuKiekis > 2147483647) {
-            cout << "Klaida: Studentu skaicius turi buti daugiau nei 0 ir maziau nei 2147483647." << endl << "Programa uzdaroma.";
+            cout << "Klaida: Studentu skaicius turi buti daugiau nei 0 ir maziau nei 2147483647." << endl << "Programa uzdaroma." << endl;;
+            system("pause");
             return 0;
         }
         for (int i = 0; i < studentuKiekis; i++) {
@@ -233,12 +236,14 @@ int main() {
         } else if (failoPasirinkimas == 5) {
             failoVardas = "C:/Users/zabit/Documents/GitHub/ObjProg_Ver1/stud_duomenys/studentai1000000.txt";
         } else {
-            cout << "Neteisingas pasirinkimas." << endl << "Programa uzdaroma.";
+            cout << "Neteisingas pasirinkimas." << endl << "Programa uzdaroma." << endl;;
+            system("pause");
             return 0;
         }
         skaitytiDuomenisIsFailo(failoVardas, studentai);
     } else {
-        cout << "Neteisingas pasirinkimas." << endl << "Programa uzdaroma.";
+        cout << "Neteisingas pasirinkimas." << endl << "Programa uzdaroma." << endl;
+        system("pause");
         return 0;
     }
 
@@ -251,6 +256,7 @@ int main() {
     for (const Studentas& studentas : studentai) {
         cout << left << setw(12) << studentas.pavarde << setw(15) << studentas.vardas << setw(25) << fixed << setprecision(2) << studentas.galutinisVidurkis << "   " << fixed << setprecision(2) << studentas.galutineMediana << endl;
     }
+    system("pause");
 
     return 0;
 }
