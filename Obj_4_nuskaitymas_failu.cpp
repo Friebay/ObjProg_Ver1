@@ -11,8 +11,8 @@ struct Studentas {
 };
 
 void rusiuotiPazymius(vector<int>& pazymiai) {
-    for (int i = 0; i < pazymiai.size(); ++i) {
-        for (int j = i + 1; j < pazymiai.size(); ++j) {
+    for (int i = 0; i < pazymiai.size(); i++) {
+        for (int j = i + 1; j < pazymiai.size(); j++) {
             if (pazymiai[i] > pazymiai[j]) {
                 int pazymys = pazymiai[i];
                 pazymiai[i] = pazymiai[j];
@@ -23,8 +23,8 @@ void rusiuotiPazymius(vector<int>& pazymiai) {
 }
 
 void rusiuotiStudentus(vector<Studentas>& studentai) {
-    for (int i = 0; i < studentai.size() - 1; ++i) {
-        for (int j = i + 1; j < studentai.size(); ++j) {
+    for (int i = 0; i < studentai.size() - 1; i++) {
+        for (int j = i + 1; j < studentai.size(); j++) {
             if (studentai[i].pavarde > studentai[j].pavarde || 
                (studentai[i].pavarde == studentai[j].pavarde && studentai[i].vardas > studentai[j].vardas)) {
                 Studentas temp = studentai[i];
@@ -34,6 +34,7 @@ void rusiuotiStudentus(vector<Studentas>& studentai) {
         }
     }
 }
+
 
 float skaiciuotiMediana(vector<int>& pazymiai) {
     rusiuotiPazymius(pazymiai); 
@@ -159,7 +160,7 @@ int generuotiSkaiciu(int min, int max) {
 string generuotiVardaPavarde() {
     string raidziuRinkinys;
     char raides[] = "abcdefghijklmnopqrstuvwxyz";
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 5; i++) {
         char x = raides[rand() % 26];
         raidziuRinkinys += x;
     }
@@ -173,7 +174,7 @@ Studentas generuotiAtsitiktiniStudenta() {
     studentas.pavarde = generuotiVardaPavarde();
 
     int pazymiuKiekis = generuotiSkaiciu(1, 20);
-    for (int i = 0; i < pazymiuKiekis; ++i) {
+    for (int i = 0; i < pazymiuKiekis; i++) {
         studentas.pazymiai.push_back(generuotiSkaiciu(0, 10));
     }
 
