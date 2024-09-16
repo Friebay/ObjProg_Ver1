@@ -10,7 +10,7 @@ struct Studentas {
     float galutineMediana = 0;
 };
 
-void rusiuoti(vector<int>& pazymiai) {
+void rusiuotiPazymius(vector<int>& pazymiai) {
     for (int i = 0; i < pazymiai.size(); ++i) {
         for (int j = i + 1; j < pazymiai.size(); ++j) {
             if (pazymiai[i] > pazymiai[j]) {
@@ -21,8 +21,22 @@ void rusiuoti(vector<int>& pazymiai) {
         }
     }
 }
+
+void rusiuotiStudentus(vector<Studentas>& studentai) {
+    for (int i = 0; i < studentai.size() - 1; ++i) {
+        for (int j = i + 1; j < studentai.size(); ++j) {
+            if (studentai[i].pavarde > studentai[j].pavarde || 
+               (studentai[i].pavarde == studentai[j].pavarde && studentai[i].vardas > studentai[j].vardas)) {
+                Studentas temp = studentai[i];
+                studentai[i] = studentai[j];
+                studentai[j] = temp;
+            }
+        }
+    }
+}
+
 float skaiciuotiMediana(vector<int>& pazymiai) {
-    rusiuoti(pazymiai); 
+    rusiuotiPazymius(pazymiai); 
     int pazymiuKiekis = pazymiai.size();
     if (pazymiuKiekis % 2 == 1) {
         return pazymiai[pazymiuKiekis / 2];
@@ -60,7 +74,7 @@ void skaitytiDuomenisIsFailo(const string& failoVardas, vector<Studentas>& stude
         while (iss >> pazymys) {
             studentas.pazymiai.push_back(pazymys);
         }
-        
+
         studentas.egzaminoPazymys = studentas.pazymiai.back();
         studentas.pazymiai.pop_back();
 
@@ -111,10 +125,21 @@ int generuotiSkaiciu(int min, int max) {
     return min + (rand() % (max - min + 1));
 }
 
+string generuotiVardaPavarde() {
+    string vardasPavarde;
+    char raides[] = "abcdefghijklmnopqrstuvwxyz";
+    for (int i = 0; i < 5; ++i) {
+        char x = raides[rand() % 26];
+        vardasPavarde += x;
+    }
+    return vardasPavarde;
+}
+
 Studentas generuotiAtsitiktiniStudenta() {
     Studentas studentas;
-    studentas.vardas = "Vardas";
-    studentas.pavarde = "Pavarde";
+    
+    studentas.vardas = generuotiVardaPavarde();
+    studentas.pavarde = generuotiVardaPavarde();
 
     int pazymiuKiekis = generuotiSkaiciu(1, 20);
     for (int i = 0; i < pazymiuKiekis; ++i) {
@@ -208,13 +233,16 @@ int main() {
         return 0;
     }
 
-    cout << left << setw(12) << "Pavarde" << setw(15) << "Vardas" 
+    rusiuotiStudentus(studentai);
+
+    cout << left << setw(16) << "Pavarde" << setw(16) << "Vardas" 
          << setw(25) << "Galutinis Vidurkis" << " / " << "Galutine Mediana" << endl;
     cout << "-------------------------------------------------------------------------" << endl;
 
     for (const Studentas& studentas : studentai) {
         cout << left << setw(12) << studentas.pavarde << setw(15) << studentas.vardas << setw(25) << fixed << setprecision(2) << studentas.galutinisVidurkis << "   " << fixed << setprecision(2) << studentas.galutineMediana << endl;
     }
+
 
     return 0;
 }
