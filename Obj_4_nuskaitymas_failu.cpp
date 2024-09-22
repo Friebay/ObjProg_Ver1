@@ -281,16 +281,19 @@ int main() {
         return 0;
     }
 
+    if (studentai.empty()) {
+        return 0;
+    }
     rusiuotiStudentus(studentai);
 
-    cout << left << setw(16) << "Pavarde" << setw(16) << "Vardas" 
-         << setw(25) << "Galutinis Vidurkis" << " / " << "Galutine Mediana" << endl;
+    cout << left << setw(16) << "Pavarde" << setw(16) << "Vardas" << setw(25) << "Galutinis Vidurkis" << " / " << "Galutine Mediana" << endl;
+         
     cout << "-------------------------------------------------------------------------" << endl;
 
     for (const Studentas& studentas : studentai) {
         cout << left << setw(12) << studentas.pavarde << setw(15) << studentas.vardas << setw(25) << fixed << setprecision(2) << studentas.galutinisVidurkis << "   " << fixed << setprecision(2) << studentas.galutineMediana << endl;
     }
-    system("pause");
 
+    system("pause");
     return 0;
 }
