@@ -14,6 +14,7 @@
 #include <ios>
 
 
+
 using std::endl;
 using std::cout;
 using std::cin;
@@ -30,5 +31,6 @@ using std::invalid_argument;
 using std::numeric_limits;
 using std::streamsize;
 using std::max;
+using std::sort;
 
 #endif // BIBLIOTEKA_H_INCLUDED

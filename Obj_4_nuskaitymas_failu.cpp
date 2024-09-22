@@ -37,6 +37,7 @@ void rusiuotiStudentus(vector<Studentas>& studentai) {
 
 
 float skaiciuotiMediana(vector<int>& pazymiai) {
+    if (pazymiai.empty()) return 0;
     rusiuotiPazymius(pazymiai); 
     int pazymiuKiekis = pazymiai.size();
     if (pazymiuKiekis % 2 == 1) {
@@ -56,68 +57,8 @@ float skaiciuotiVidurki(vector<int>& pazymiai) {
     return float(suma) / pazymiai.size();
 }
 
-void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& studentai) {
-    ifstream failas(failoPavadinimas);
-    if (!failas) {
-        cout << "Failo " << failoPavadinimas << " nera." << endl;
-        return;
-    }
 
-    string eilute;
-    getline(failas, eilute);
-
-    while (getline(failas, eilute)) {
-        istringstream iss(eilute);
-        Studentas studentas;
-        iss >> studentas.vardas >> studentas.pavarde;
-
-        string pazymysStr;
-        bool tinkamiPazymiai = true;
-
-        while (iss >> pazymysStr) {
-            try {
-                if (pazymysStr.find_first_not_of("0123456789") != string::npos) {
-                    throw invalid_argument("Klaida: pazymys turi buti skaicius.");
-                }
-
-                int pazymys = stoi(pazymysStr);
-
-                if (pazymys < 0 || pazymys > 10) {
-                    cout << "Klaida: pazymys turi buti tarp 0 ir 10." << endl;
-                    tinkamiPazymiai = false;
-                    break;
-                }
-
-                studentas.pazymiai.push_back(pazymys);
-            } catch (const invalid_argument&) {
-                cout << "Klaida: neteisingas pazymys: " << pazymysStr << endl;
-                tinkamiPazymiai = false;
-                break;
-            }
-        }
-
-        if (tinkamiPazymiai) {
-            if (!studentas.pazymiai.empty()) {
-                studentas.egzaminoPazymys = studentas.pazymiai.back();
-                studentas.pazymiai.pop_back();
-
-                studentas.vidurkis = skaiciuotiVidurki(studentas.pazymiai);
-                studentas.mediana = skaiciuotiMediana(studentas.pazymiai);
-                studentas.galutinisVidurkis = 0.4 * studentas.vidurkis + 0.6 * studentas.egzaminoPazymys;
-                studentas.galutineMediana = 0.4 * studentas.mediana + 0.6 * studentas.egzaminoPazymys;
-
-                studentai.push_back(studentas);
-            } else {
-                cout << "Klaida: truksta pazymiu studentui " << studentas.vardas << " " << studentas.pavarde << endl;
-            }
-        } else {
-            cout << "Studentas " << studentas.vardas << " " << studentas.pavarde << " neturi galutiniu pazymiu del neteisingu duomenu." << endl;
-        }
-    }
-}
-
-
-
+// 1. Įvedimo ranka kodas
 int gautiPazymi(const string& klausimas) {
     while (true) {
         string skaicius;
@@ -126,27 +67,49 @@ int gautiPazymi(const string& klausimas) {
 
         if (skaicius == "-1") return -1;
 
-        bool arSkaicius = true;
-        for (char simbolis : skaicius) {
-            if (simbolis < '0' || simbolis > '9') {
-                arSkaicius = false;
-                break;
-            }
-        }
-
-        if (arSkaicius) {
+        try {
             int pazymys = stoi(skaicius);
+
             if (pazymys >= 0 && pazymys <= 10) {
                 return pazymys;
             } else {
                 cout << "Klaida: pazymys turi buti tarp 0 ir 10." << endl;
             }
-        } else {
+        } catch (const invalid_argument&) {
             cout << "Klaida: iveskite teisinga skaiciu." << endl;
         }
     }
 }
 
+void ivestiStudentoDuomenis(Studentas& studentas) {
+    cout << "Vardas: ";
+    cin >> studentas.vardas;
+
+    cout << "Pavarde: ";
+    cin >> studentas.pavarde;
+
+    cout << "Iveskite pazymius (iveskite -1, kad baigtumete):" << endl;
+    while (true) {
+        int pazymys = gautiPazymi("Pazymys (arba -1, kad baigtumete): ");
+        if (pazymys == -1) break;
+        studentas.pazymiai.push_back(pazymys);
+    }
+
+    studentas.egzaminoPazymys = gautiPazymi("Egzamino pazymys: ");
+    if (studentas.egzaminoPazymys == -1){
+        studentas.egzaminoPazymys = 0;
+    }
+
+    if (!studentas.pazymiai.empty()) {
+        studentas.vidurkis = skaiciuotiVidurki(studentas.pazymiai);
+        studentas.mediana = skaiciuotiMediana(studentas.pazymiai);
+    }
+
+    studentas.galutinisVidurkis = 0.4 * studentas.vidurkis + 0.6 * studentas.egzaminoPazymys;
+    studentas.galutineMediana = 0.4 * studentas.mediana + 0.6 * studentas.egzaminoPazymys;
+}
+
+// 2. Studentų generavimo kodas
 void inicializuotiAtsitiktinius() {
     int random = int(time(0));
     srand(random);
@@ -186,33 +149,70 @@ Studentas generuotiAtsitiktiniStudenta() {
     return studentas;
 }
 
-void ivestiStudentoDuomenis(Studentas& studentas) {
-    cout << "Vardas: ";
-    cin >> studentas.vardas;
+// 3. Failo skaitymo, skaičiavimo kodas
+void skaiciuotiIsFailo(Studentas& studentas, bool tinkamiPazymiai, vector<Studentas>& studentai) {
+    if (tinkamiPazymiai) {
+        if (!studentas.pazymiai.empty()) {
+            studentas.egzaminoPazymys = studentas.pazymiai.back();
+            studentas.pazymiai.pop_back();
 
-    cout << "Pavarde: ";
-    cin >> studentas.pavarde;
+            studentas.vidurkis = skaiciuotiVidurki(studentas.pazymiai);
+            studentas.mediana = skaiciuotiMediana(studentas.pazymiai);
+            studentas.galutinisVidurkis = 0.4 * studentas.vidurkis + 0.6 * studentas.egzaminoPazymys;
+            studentas.galutineMediana = 0.4 * studentas.mediana + 0.6 * studentas.egzaminoPazymys;
 
-    cout << "Iveskite pazymius (iveskite -1, kad baigtumete):" << endl;
-    while (true) {
-        int pazymys = gautiPazymi("Pazymys (arba -1, kad baigtumete): ");
-        if (pazymys == -1) break;
-        studentas.pazymiai.push_back(pazymys);
+            studentai.push_back(studentas);
+        } else {
+            cout << "Klaida: truksta pazymiu studentui " << studentas.vardas << " " << studentas.pavarde << endl;
+        }
+    } else {
+        cout << "Studentas " << studentas.vardas << " " << studentas.pavarde << " neturi galutiniu pazymiu del neteisingu duomenu." << endl;
     }
-
-    studentas.egzaminoPazymys = gautiPazymi("Egzamino pazymys: ");
-    if (studentas.egzaminoPazymys == -1){
-        studentas.egzaminoPazymys = 0;
-    }
-
-    if (!studentas.pazymiai.empty()) {
-        studentas.vidurkis = skaiciuotiVidurki(studentas.pazymiai);
-        studentas.mediana = skaiciuotiMediana(studentas.pazymiai);
-    }
-
-    studentas.galutinisVidurkis = 0.4 * studentas.vidurkis + 0.6 * studentas.egzaminoPazymys;
-    studentas.galutineMediana = 0.4 * studentas.mediana + 0.6 * studentas.egzaminoPazymys;
 }
+
+void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& studentai) {
+    ifstream failas(failoPavadinimas);
+    if (!failas) {
+        cout << "Failo " << failoPavadinimas << " nera." << endl;
+        return;
+    }
+
+    string eilute;
+    getline(failas, eilute);
+
+    while (getline(failas, eilute)) {
+        istringstream iss(eilute);
+        Studentas studentas;
+        iss >> studentas.vardas >> studentas.pavarde;
+
+        string pazymysStr;
+        bool tinkamiPazymiai = true;
+
+        while (iss >> pazymysStr) {
+            try {
+                if (pazymysStr.find_first_not_of("0123456789") != string::npos) {
+                    throw invalid_argument("Klaida: pazymys turi buti skaicius.");
+                }
+
+                int pazymys = stoi(pazymysStr);
+                if (pazymys < 0 || pazymys > 10) {
+                    cout << "Klaida: pazymys turi buti tarp 0 ir 10." << endl;
+                    tinkamiPazymiai = false;
+                    break;
+                }
+
+                studentas.pazymiai.push_back(pazymys);
+            } catch (const invalid_argument&) {
+                cout << "Klaida: neteisingas pazymys: " << pazymysStr << endl;
+                tinkamiPazymiai = false;
+                break;
+            }
+        }
+
+        skaiciuotiIsFailo(studentas, tinkamiPazymiai, studentai);
+    }
+}
+
 void programa(){
     vector<Studentas> studentai;
     char pasirinkimas;
