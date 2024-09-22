@@ -34,3 +34,6 @@ stud_duomenys/studentai100000.txt
 stud_duomenys/studentai1000000.txt
 stud_duomenys/desktop.ini
 *.txt
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+.vscode/settings.json
