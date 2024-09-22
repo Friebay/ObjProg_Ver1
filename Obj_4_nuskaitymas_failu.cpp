@@ -60,7 +60,6 @@ void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& 
     ifstream failas(failoPavadinimas);
     if (!failas) {
         cout << "Failo " << failoPavadinimas << " nera." << endl;
-        system("pause");
         return;
     }
 
@@ -214,10 +213,7 @@ void ivestiStudentoDuomenis(Studentas& studentas) {
     studentas.galutinisVidurkis = 0.4 * studentas.vidurkis + 0.6 * studentas.egzaminoPazymys;
     studentas.galutineMediana = 0.4 * studentas.mediana + 0.6 * studentas.egzaminoPazymys;
 }
-
-int main() {
-    inicializuotiAtsitiktinius();
-    
+void programa(){
     vector<Studentas> studentai;
     char pasirinkimas;
     long long studentuKiekis;
@@ -228,72 +224,92 @@ int main() {
     cout << "Jusu pasirinkimas: ";
     cin >> pasirinkimas;
 
-    if (pasirinkimas == '1') {
-        cout << "Kiek studentu norite irasyti? ";
-        cin >> studentuKiekis;
-        if (studentuKiekis < 1 || studentuKiekis > 2147483647) {
-            cout << "Klaida: Studentu skaicius turi buti daugiau nei 0 ir maziau nei 2147483647." << endl << "Programa uzdaroma." << endl;;
-            system("pause");
-            return 0;
-        }
-        studentai.resize(studentuKiekis);
-        for (Studentas& studentas : studentai) {
-            ivestiStudentoDuomenis(studentas);
-        }
-    } else if (pasirinkimas == '2') {
-        cout << "Kiek studentu norite sugeneruoti? ";
-        cin >> studentuKiekis;
-        if (studentuKiekis < 1 || studentuKiekis > 2147483647) {
-            cout << "Klaida: Studentu skaicius turi buti daugiau nei 0 ir maziau nei 2147483647." << endl << "Programa uzdaroma." << endl;;
-            system("pause");
-            return 0;
-        }
-        for (int i = 0; i < studentuKiekis; i++) {
-            studentai.push_back(generuotiAtsitiktiniStudenta());
-        }
-    } else if (pasirinkimas == '3') {
-        cout << "Pasirinkite faila (1. studentai10.txt, 2. studentai100.txt, 3. studentai10000.txt, 4. studentai100000.txt, 5. studentai1000000.txt, 6. studentai10_blog.txt): ";
-        int failoPasirinkimas;
-        cin >> failoPasirinkimas;
+    switch (pasirinkimas) {
+        case '1':
+            cout << "Kiek studentu norite irasyti? ";
+            cin >> studentuKiekis;
+            if (studentuKiekis < 1 || studentuKiekis > 2147483647) {
+                cout << "Klaida: Studentu skaicius turi buti daugiau nei 0 ir maziau nei 2147483647." << endl;
+                return;
+            }
+            studentai.resize(studentuKiekis);
+            for (Studentas& studentas : studentai) {
+                ivestiStudentoDuomenis(studentas);
+            }
+            break;
         
-        string failoPavadinimas;
-        if (failoPasirinkimas == 1) {
-            failoPavadinimas = "studentai10.txt";
-        } else if (failoPasirinkimas == 2) {
-            failoPavadinimas = "studentai100.txt";
-        } else if (failoPasirinkimas == 3) {
-            failoPavadinimas = "studentai10000.txt";
-        } else if (failoPasirinkimas == 4) {
-            failoPavadinimas = "studentai100000.txt";
-        } else if (failoPasirinkimas == 5) {
-            failoPavadinimas = "studentai1000000.txt";
-        } else if (failoPasirinkimas == 6) {
-            failoPavadinimas = "studentai10_blog.txt";
-        } else {
-            cout << "Neteisingas pasirinkimas." << endl << "Programa uzdaroma." << endl;;
-            system("pause");
-            return 0;
+        case '2':
+            cout << "Kiek studentu norite sugeneruoti? ";
+            cin >> studentuKiekis;
+            if (studentuKiekis < 1 || studentuKiekis > 2147483647) {
+                cout << "Klaida: Studentu skaicius turi buti daugiau nei 0 ir maziau nei 2147483647." << endl;
+                return;
+            }
+            for (int i = 0; i < studentuKiekis; i++) {
+                studentai.push_back(generuotiAtsitiktiniStudenta());
+            }
+            break;
+
+        case '3': {
+            cout << "Pasirinkite faila (1. studentai10.txt, 2. studentai100.txt, 3. studentai10000.txt, 4. studentai100000.txt, 5. studentai1000000.txt, 6. studentai10_blog.txt): ";
+            int failoPasirinkimas;
+            cin >> failoPasirinkimas;
+            
+            string failoPavadinimas;
+            switch (failoPasirinkimas) {
+                case 1: failoPavadinimas = "studentai10.txt"; break;
+                case 2: failoPavadinimas = "studentai100.txt"; break;
+                case 3: failoPavadinimas = "studentai10000.txt"; break;
+                case 4: failoPavadinimas = "studentai100000.txt"; break;
+                case 5: failoPavadinimas = "studentai1000000.txt"; break;
+                case 6: failoPavadinimas = "studentai10_blog.txt"; break;
+                default: 
+                    cout << "Neteisingas pasirinkimas." << endl;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    return;
+            }
+            skaitytiDuomenisIsFailo(failoPavadinimas, studentai);
+            break;
         }
-        skaitytiDuomenisIsFailo(failoPavadinimas, studentai);
-    } else {
-        cout << "Neteisingas pasirinkimas." << endl << "Programa uzdaroma." << endl;
-        system("pause");
-        return 0;
+
+        default:
+            cout << "Neteisingas pasirinkimas." << endl;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            return;
     }
 
     if (studentai.empty()) {
-        return 0;
+        return;
     }
+
     rusiuotiStudentus(studentai);
 
     cout << left << setw(16) << "Pavarde" << setw(16) << "Vardas" << setw(25) << "Galutinis Vidurkis" << " / " << "Galutine Mediana" << endl;
-         
     cout << "-------------------------------------------------------------------------" << endl;
 
     for (const Studentas& studentas : studentai) {
         cout << left << setw(12) << studentas.pavarde << setw(15) << studentas.vardas << setw(25) << fixed << setprecision(2) << studentas.galutinisVidurkis << "   " << fixed << setprecision(2) << studentas.galutineMediana << endl;
     }
+}
 
-    system("pause");
+
+int main() {
+    inicializuotiAtsitiktinius();
+    
+    int pabaiga;
+    
+    do {
+        programa();
+        
+        cout << "Ar norite uzdaryti programa? Jeigu taip - rasykite 1, jeigu ne - rasykite 0: ";
+        cin >> pabaiga;
+        
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    } while (pabaiga != 1);
+    
     return 0;
 }

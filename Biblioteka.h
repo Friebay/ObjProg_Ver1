@@ -10,6 +10,8 @@
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include <limits>
+#include <ios>
 
 
 using std::endl;
@@ -25,5 +27,8 @@ using std::ifstream;
 using std::istringstream;
 using std::runtime_error;
 using std::invalid_argument;
+using std::numeric_limits;
+using std::streamsize;
+using std::max;
 
 #endif // BIBLIOTEKA_H_INCLUDED

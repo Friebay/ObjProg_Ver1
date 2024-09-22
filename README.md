@@ -1,5 +1,5 @@
 # ObjProg_Ver1
-# Studentų Pažymių Sistema
+# Studentų pažymių skaičiuoklė
 
 ## Aprašymas
 
