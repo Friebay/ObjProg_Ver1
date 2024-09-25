@@ -19,9 +19,6 @@
 
 - C++11 arba naujesnė versija.
 - Standartinė šablonų biblioteka.
-- Programos failai:
-  - `Biblioteka.h`
-  - `Obj_4_nuskaitymas_failu.cpp`
   
 ## Naudojimas
 
