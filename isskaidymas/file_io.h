@@ -4,7 +4,6 @@
 #include "Biblioteka.h"
 #include "student_functions.h"
 
-// Functions
 void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& studentai);
 void skaiciuotiIsFailo(Studentas& studentas, bool tinkamiPazymiai, vector<Studentas>& studentai);
 

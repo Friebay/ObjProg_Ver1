@@ -3,7 +3,6 @@
 
 #include "Biblioteka.h"
 
-// Structure for Student
 struct Studentas {
     string vardas, pavarde;
     vector<int> pazymiai;
@@ -14,7 +13,6 @@ struct Studentas {
     float galutineMediana = 0;
 };
 
-// Functions
 void programa();
 void ivestiStudentoDuomenis(Studentas& studentas);
 void inicializuotiAtsitiktinius();

@@ -139,7 +139,7 @@ void programa() {
     vector<Studentas> studentai;
     int pasirinkimas;
     long long studentuKiekis;
-    bool validInput = false;
+    bool gerasPasirinkimas = false;
     int failoPasirinkimas;
 
     cout << "1. Ivesti duomenis ranka" << endl;
@@ -147,7 +147,7 @@ void programa() {
     cout << "3. Nuskaityti duomenis is failo" << endl;
     cout << "Jusu pasirinkimas: ";
     
-    while (!validInput) {
+    while (!gerasPasirinkimas) {
     cout << "Iveskite pasirinkima (1, 2 arba 3): ";
     cin >> pasirinkimas;
 
@@ -156,7 +156,7 @@ void programa() {
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Neteisingas pasirinkimas. Prasome ivesti 1, 2, arba 3." << endl;
     } else {
-        validInput = true;
+        gerasPasirinkimas = true;
     }
 }
 
@@ -164,16 +164,16 @@ void programa() {
         switch (pasirinkimas) {
             case 1: {
                 cout << "Kiek studentu norite irasyti? ";
-                bool validInput = false;
+                bool gerasPasirinkimas = false;
 
-                while (!validInput) {
+                while (!gerasPasirinkimas) {
                     cin >> studentuKiekis;
                     if (cin.fail() || studentuKiekis < 1) {
                         cin.clear();
                         cin.ignore(numeric_limits<streamsize>::max(), '\n');
                         cout << "Klaida: Ivestas neteisingas studentu skaicius. Prasome ivesti skaiciu didesni uz 0: ";
                     } else {
-                        validInput = true;
+                        gerasPasirinkimas = true;
                     }
                 }
 
@@ -186,16 +186,16 @@ void programa() {
 
             case 2: {
                 cout << "Kiek studentu norite sugeneruoti? ";
-                bool validInput = false;
+                bool gerasPasirinkimas = false;
 
-                while (!validInput) {
+                while (!gerasPasirinkimas) {
                     cin >> studentuKiekis;
                     if (cin.fail() || studentuKiekis < 1) {
                         cin.clear();
                         cin.ignore(numeric_limits<streamsize>::max(), '\n');
                         cout << "Klaida: Ivestas neteisingas studentu skaicius. Prasome ivesti skaiciu didesni uz 0: ";
                     } else {
-                        validInput = true;
+                        gerasPasirinkimas = true;
                     }
                 }
 
@@ -207,16 +207,16 @@ void programa() {
 
             case 3: {
                 cout << "Pasirinkite faila (1. studentai10.txt, 2. studentai100.txt, 3. studentai10000.txt, 4. studentai100000.txt, 5. studentai1000000.txt, 6. studentai10_blog.txt, 7. tuscias.txt): ";
-                bool validInput = false;
+                bool gerasPasirinkimas = false;
 
-                while (!validInput) {
+                while (!gerasPasirinkimas) {
                     cin >> failoPasirinkimas;
                     if (cin.fail() || failoPasirinkimas < 1 || failoPasirinkimas > 7) {
                         cin.clear();
                         cin.ignore(numeric_limits<streamsize>::max(), '\n');
                         cout << "Neteisingas pasirinkimas. Prasome ivesti skaiciu nuo 1 iki 7: ";
                     } else {
-                        validInput = true;
+                        gerasPasirinkimas = true;
                     }
                 }
 
@@ -246,9 +246,7 @@ void programa() {
         cout << "-------------------------------------------------------------------------" << endl;
 
         for (const Studentas& studentas : studentai) {
-            cout << left << setw(12) << studentas.pavarde << setw(15) << studentas.vardas 
-                 << setw(25) << fixed << setprecision(2) << studentas.galutinisVidurkis 
-                 << "   " << fixed << setprecision(2) << studentas.galutineMediana << endl;
+            cout << left << setw(12) << studentas.pavarde << setw(15) << studentas.vardas << setw(25) << fixed << setprecision(2) << studentas.galutinisVidurkis << "   " << fixed << setprecision(2) << studentas.galutineMediana << endl;
         }
     } catch (const exception& e) {
         cout << "Ivyko klaida: " << e.what() << endl;
