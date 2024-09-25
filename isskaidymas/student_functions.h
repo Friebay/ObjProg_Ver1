@@ -1,0 +1,28 @@
+#ifndef STUDENT_FUNCTIONS_H
+#define STUDENT_FUNCTIONS_H
+
+#include "Biblioteka.h"
+
+// Structure for Student
+struct Studentas {
+    string vardas, pavarde;
+    vector<int> pazymiai;
+    int egzaminoPazymys;
+    float vidurkis = 0;
+    float mediana = 0;
+    float galutinisVidurkis = 0;
+    float galutineMediana = 0;
+};
+
+// Functions
+void programa();
+void ivestiStudentoDuomenis(Studentas& studentas);
+void inicializuotiAtsitiktinius();
+Studentas generuotiAtsitiktiniStudenta();
+int gautiPazymi(const string& klausimas);
+float skaiciuotiMediana(vector<int>& pazymiai);
+float skaiciuotiVidurki(vector<int>& pazymiai);
+void rusiuotiPazymius(vector<int>& pazymiai);
+void rusiuotiStudentus(vector<Studentas>& studentai);
+
+#endif

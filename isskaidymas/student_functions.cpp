@@ -1,64 +1,11 @@
-#include "Biblioteka.h"
+#include "student_functions.h"
+#include "file_io.h"
 
-struct Studentas {
-    string vardas, pavarde;
-    vector<int> pazymiai;
-    int egzaminoPazymys;
-    float vidurkis = 0;
-    float mediana = 0;
-    float galutinisVidurkis = 0;
-    float galutineMediana = 0;
-};
-
-void rusiuotiPazymius(vector<int>& pazymiai) {
-    for (int i = 0; i < pazymiai.size(); i++) {
-        for (int j = i + 1; j < pazymiai.size(); j++) {
-            if (pazymiai[i] > pazymiai[j]) {
-                int pazymys = pazymiai[i];
-                pazymiai[i] = pazymiai[j];
-                pazymiai[j] = pazymys;
-            }
-        }
-    }
+void inicializuotiAtsitiktinius() {
+    int random = int(time(0));
+    srand(random);
 }
 
-void rusiuotiStudentus(vector<Studentas>& studentai) {
-    for (int i = 0; i < studentai.size() - 1; i++) {
-        for (int j = i + 1; j < studentai.size(); j++) {
-            if (studentai[i].pavarde > studentai[j].pavarde || 
-               (studentai[i].pavarde == studentai[j].pavarde && studentai[i].vardas > studentai[j].vardas)) {
-                Studentas temp = studentai[i];
-                studentai[i] = studentai[j];
-                studentai[j] = temp;
-            }
-        }
-    }
-}
-
-
-float skaiciuotiMediana(vector<int>& pazymiai) {
-    if (pazymiai.empty()) return 0;
-    rusiuotiPazymius(pazymiai); 
-    int pazymiuKiekis = pazymiai.size();
-    if (pazymiuKiekis % 2 == 1) {
-        return pazymiai[pazymiuKiekis / 2];
-    } else {
-        return (pazymiai[pazymiuKiekis / 2 - 1] + pazymiai[pazymiuKiekis / 2]) / 2.0;
-    }
-}
-
-float skaiciuotiVidurki(vector<int>& pazymiai) {
-    if (pazymiai.empty()) return 0; 
-
-    int suma = 0;
-    for (int pazymys : pazymiai) {
-        suma += pazymys;
-    }
-    return float(suma) / pazymiai.size();
-}
-
-
-// 1. Įvedimo ranka kodas
 int gautiPazymi(const string& klausimas) {
     while (true) {
         string skaicius;
@@ -69,7 +16,6 @@ int gautiPazymi(const string& klausimas) {
 
         try {
             int pazymys = stoi(skaicius);
-
             if (pazymys >= 0 && pazymys <= 10) {
                 return pazymys;
             } else {
@@ -109,10 +55,50 @@ void ivestiStudentoDuomenis(Studentas& studentas) {
     studentas.galutineMediana = 0.4 * studentas.mediana + 0.6 * studentas.egzaminoPazymys;
 }
 
-// 2. Studentų generavimo kodas
-void inicializuotiAtsitiktinius() {
-    int random = int(time(0));
-    srand(random);
+void rusiuotiPazymius(vector<int>& pazymiai) {
+    for (int i = 0; i < pazymiai.size(); i++) {
+        for (int j = i + 1; j < pazymiai.size(); j++) {
+            if (pazymiai[i] > pazymiai[j]) {
+                int pazymys = pazymiai[i];
+                pazymiai[i] = pazymiai[j];
+                pazymiai[j] = pazymys;
+            }
+        }
+    }
+}
+
+void rusiuotiStudentus(vector<Studentas>& studentai) {
+    for (int i = 0; i < studentai.size() - 1; i++) {
+        for (int j = i + 1; j < studentai.size(); j++) {
+            if (studentai[i].pavarde > studentai[j].pavarde || 
+               (studentai[i].pavarde == studentai[j].pavarde && studentai[i].vardas > studentai[j].vardas)) {
+                Studentas temp = studentai[i];
+                studentai[i] = studentai[j];
+                studentai[j] = temp;
+            }
+        }
+    }
+}
+
+float skaiciuotiMediana(vector<int>& pazymiai) {
+    if (pazymiai.empty()) return 0;
+    rusiuotiPazymius(pazymiai); 
+    int pazymiuKiekis = pazymiai.size();
+    if (pazymiuKiekis % 2 == 1) {
+        return pazymiai[pazymiuKiekis / 2];
+    } else {
+        return (pazymiai[pazymiuKiekis / 2 - 1] + pazymiai[pazymiuKiekis / 2]) / 2.0;
+    }
+}
+
+float skaiciuotiVidurki(vector<int>& pazymiai) {
+    if (pazymiai.empty()) return 0; 
+
+    int suma = 0;
+    for (int pazymys : pazymiai) {
+        suma += pazymys;
+    }
+    return float(suma) / pazymiai.size();
 }
 
 int generuotiSkaiciu(int min, int max) {
@@ -149,81 +135,11 @@ Studentas generuotiAtsitiktiniStudenta() {
     return studentas;
 }
 
-// 3. Failo skaitymo, skaičiavimo kodas
-void skaiciuotiIsFailo(Studentas& studentas, bool tinkamiPazymiai, vector<Studentas>& studentai) {
-    if (tinkamiPazymiai) {
-        if (!studentas.pazymiai.empty()) {
-            studentas.egzaminoPazymys = studentas.pazymiai.back();
-            studentas.pazymiai.pop_back();
-
-            studentas.vidurkis = skaiciuotiVidurki(studentas.pazymiai);
-            studentas.mediana = skaiciuotiMediana(studentas.pazymiai);
-            studentas.galutinisVidurkis = 0.4 * studentas.vidurkis + 0.6 * studentas.egzaminoPazymys;
-            studentas.galutineMediana = 0.4 * studentas.mediana + 0.6 * studentas.egzaminoPazymys;
-
-            studentai.push_back(studentas);
-        } else {
-            cout << "Klaida: truksta pazymiu studentui " << studentas.vardas << " " << studentas.pavarde << endl;
-        }
-    } else {
-        cout << "Studentas " << studentas.vardas << " " << studentas.pavarde << " neturi galutiniu pazymiu del neteisingu duomenu." << endl;
-    }
-}
-
-void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& studentai) {
-    ifstream failas(failoPavadinimas);
-    if (!failas) {
-        throw runtime_error("Failo " + failoPavadinimas + " nera.");
-    }
-
-    string eilute;
-    getline(failas, eilute);
-
-    while (getline(failas, eilute)) {
-        istringstream iss(eilute);
-        Studentas studentas;
-        if (!(iss >> studentas.vardas >> studentas.pavarde)) {
-            throw runtime_error("Klaida nuskaitant varda ir pavarde.");
-        }
-
-        string pazymysStr;
-        bool tinkamiPazymiai = true;
-
-        while (iss >> pazymysStr) {
-            try {
-                if (pazymysStr.find_first_not_of("0123456789") != string::npos) {
-                    throw invalid_argument("Klaida: pazymys turi buti skaicius.");
-                }
-
-                int pazymys = stoi(pazymysStr);
-                if (pazymys < 0 || pazymys > 10) {
-                    throw out_of_range("Klaida: pazymys turi buti tarp 0 ir 10.");
-                }
-
-                studentas.pazymiai.push_back(pazymys);
-            } catch (const invalid_argument& e) {
-                cout << "Klaida: neteisingas pazymys: " << pazymysStr << " - " << e.what() << endl;
-                tinkamiPazymiai = false;
-                break;
-            } catch (const out_of_range& e) {
-                cout << e.what() << endl;
-                tinkamiPazymiai = false;
-                break;
-            }
-        }
-
-        if (tinkamiPazymiai) {
-            skaiciuotiIsFailo(studentas, tinkamiPazymiai, studentai);
-        } else {
-            cout << "Studentas " << studentas.vardas << " " << studentas.pavarde << " neturi galutiniu pazymiu del neteisingu duomenu." << endl;
-        }
-    }
-}
-
 void programa() {
     vector<Studentas> studentai;
     int pasirinkimas;
     long long studentuKiekis;
+    bool validInput = false;
     int failoPasirinkimas;
 
     cout << "1. Ivesti duomenis ranka" << endl;
@@ -231,11 +147,18 @@ void programa() {
     cout << "3. Nuskaityti duomenis is failo" << endl;
     cout << "Jusu pasirinkimas: ";
     
-    while (!(cin >> pasirinkimas) || (pasirinkimas < 1 || pasirinkimas > 3)) {
+    while (!validInput) {
+    cout << "Iveskite pasirinkima (1, 2 arba 3): ";
+    cin >> pasirinkimas;
+
+    if (cin.fail() || pasirinkimas < 1 || pasirinkimas > 3) {
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Neteisingas pasirinkimas. Prasome ivesti 1, 2, arba 3: ";
+        cout << "Neteisingas pasirinkimas. Prasome ivesti 1, 2, arba 3." << endl;
+    } else {
+        validInput = true;
     }
+}
 
     try {
         switch (pasirinkimas) {
@@ -330,27 +253,4 @@ void programa() {
     } catch (const exception& e) {
         cout << "Ivyko klaida: " << e.what() << endl;
     }
-}
-
-int main() {
-    inicializuotiAtsitiktinius();
-    
-    char pabaiga = 'N';
-
-    while (toupper(pabaiga) != 'T') { 
-        programa();
-
-        cout << "Ar norite uzdaryti programa? Jeigu taip - rasykite T, jeigu ne - rasykite N: ";
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cin >> pabaiga; 
-
-        while (toupper(pabaiga) != 'T' && toupper(pabaiga) != 'N') {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Neteisingas pasirinkimas. Prasome ivesti T arba N: ";
-            cin >> pabaiga;
-        }
-    }
-    return 0;
 }
