@@ -1,1 +1,1 @@
-g++ main.cpp student_functions.cpp file_io.cpp -o program
+g++ main.cpp funkcijos.cpp failo_apdorojimas.cpp -o program

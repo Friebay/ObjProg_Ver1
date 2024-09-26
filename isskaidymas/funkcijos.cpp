@@ -1,5 +1,5 @@
-#include "student_functions.h"
-#include "file_io.h"
+#include "funkcijos.h"
+#include "failo_apdorojimas.h"
 
 // Inicializuoja atsitiktinių skaičių generatorių
 void inicializuotiAtsitiktinius() {
@@ -163,17 +163,17 @@ void programa() {
     
     // Vartotojo pasirinkimo tikrinimas
     while (!gerasPasirinkimas) {
-    cout << "Iveskite pasirinkima (1, 2 arba 3): ";
-    cin >> pasirinkimas;
+        cout << "Iveskite pasirinkima (1, 2 arba 3): ";
+        cin >> pasirinkimas;
 
-    if (cin.fail() || pasirinkimas < 1 || pasirinkimas > 3) {
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Neteisingas pasirinkimas. Prasome ivesti 1, 2, arba 3." << endl;
-    } else {
-        gerasPasirinkimas = true;
+        if (cin.fail() || pasirinkimas < 1 || pasirinkimas > 3) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Neteisingas pasirinkimas. Prasome ivesti 1, 2, arba 3." << endl;
+        } else {
+            gerasPasirinkimas = true;
+        }
     }
-}
 
     try {
         switch (pasirinkimas) {

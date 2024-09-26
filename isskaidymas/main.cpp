@@ -1,5 +1,5 @@
-#include "student_functions.h"
-#include "file_io.h"
+#include "funkcijos.h"
+#include "failo_apdorojimas.h"
 
 int main() {
     inicializuotiAtsitiktinius();

@@ -1,5 +1,5 @@
-#ifndef STUDENT_FUNCTIONS_H
-#define STUDENT_FUNCTIONS_H
+#ifndef FUNKCIJOS_H
+#define FUNKCIJOS_H
 
 #include "Biblioteka.h"
 

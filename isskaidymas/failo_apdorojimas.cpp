@@ -1,4 +1,4 @@
-#include "file_io.h"
+#include "failo_apdorojimas.h"
 
 // Funkcija skaičiuoja studento galutinius įvertinimus ir prideda studentą į vektorių
 void skaiciuotiIsFailo(Studentas& studentas, bool tinkamiPazymiai, vector<Studentas>& studentai) {
