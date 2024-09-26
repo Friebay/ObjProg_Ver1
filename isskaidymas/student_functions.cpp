@@ -1,18 +1,20 @@
 #include "student_functions.h"
 #include "file_io.h"
 
+// Inicializuoja atsitiktinių skaičių generatorių
 void inicializuotiAtsitiktinius() {
     int random = int(time(0));
     srand(random);
 }
 
+// Gauna pažymį iš vartotojo įvesties
 int gautiPazymi(const string& klausimas) {
     while (true) {
         string skaicius;
         cout << klausimas;
         cin >> skaicius;
 
-        if (skaicius == "-1") return -1;
+        if (skaicius == "-1") return -1; // Grąžina -1, jei vartotojas nori baigti įvestį
 
         try {
             int pazymys = stoi(skaicius);
@@ -27,6 +29,7 @@ int gautiPazymi(const string& klausimas) {
     }
 }
 
+// Įveda studento duomenis
 void ivestiStudentoDuomenis(Studentas& studentas) {
     cout << "Vardas: ";
     cin >> studentas.vardas;
@@ -46,15 +49,18 @@ void ivestiStudentoDuomenis(Studentas& studentas) {
         studentas.egzaminoPazymys = 0;
     }
 
+    // Skaičiuoja vidurkį ir medianą, jei yra pažymių
     if (!studentas.pazymiai.empty()) {
         studentas.vidurkis = skaiciuotiVidurki(studentas.pazymiai);
         studentas.mediana = skaiciuotiMediana(studentas.pazymiai);
     }
 
+    // Skaičiuoja galutinius įvertinimus
     studentas.galutinisVidurkis = 0.4 * studentas.vidurkis + 0.6 * studentas.egzaminoPazymys;
     studentas.galutineMediana = 0.4 * studentas.mediana + 0.6 * studentas.egzaminoPazymys;
 }
 
+// Rūšiuoja pažymius didėjimo tvarka
 void rusiuotiPazymius(vector<int>& pazymiai) {
     for (int i = 0; i < pazymiai.size(); i++) {
         for (int j = i + 1; j < pazymiai.size(); j++) {
@@ -67,6 +73,7 @@ void rusiuotiPazymius(vector<int>& pazymiai) {
     }
 }
 
+// Rūšiuoja studentus pagal pavardę, o jei pavardės vienodos - pagal vardą
 void rusiuotiStudentus(vector<Studentas>& studentai) {
     for (int i = 0; i < studentai.size() - 1; i++) {
         for (int j = i + 1; j < studentai.size(); j++) {
@@ -80,6 +87,7 @@ void rusiuotiStudentus(vector<Studentas>& studentai) {
     }
 }
 
+// Skaičiuoja pažymių medianą
 float skaiciuotiMediana(vector<int>& pazymiai) {
     if (pazymiai.empty()) return 0;
     rusiuotiPazymius(pazymiai); 
@@ -91,6 +99,7 @@ float skaiciuotiMediana(vector<int>& pazymiai) {
     }
 }
 
+// Skaičiuoja pažymių vidurkį
 float skaiciuotiVidurki(vector<int>& pazymiai) {
     if (pazymiai.empty()) return 0; 
 
@@ -101,10 +110,12 @@ float skaiciuotiVidurki(vector<int>& pazymiai) {
     return float(suma) / pazymiai.size();
 }
 
+// Generuoja atsitiktinį skaičių nurodytame intervale
 int generuotiSkaiciu(int min, int max) {
     return min + (rand() % (max - min + 1));
 }
 
+// Generuoja atsitiktinį vardą arba pavardę
 string generuotiVardaPavarde() {
     string raidziuRinkinys;
     char raides[] = "abcdefghijklmnopqrstuvwxyz";
@@ -115,6 +126,7 @@ string generuotiVardaPavarde() {
     return raidziuRinkinys;
 }
 
+// Generuoja atsitiktinį studentą su atsitiktiniais duomenimis
 Studentas generuotiAtsitiktiniStudenta() {
     Studentas studentas;
     
@@ -135,18 +147,21 @@ Studentas generuotiAtsitiktiniStudenta() {
     return studentas;
 }
 
+// Pagrindinė programos funkcija
 void programa() {
     vector<Studentas> studentai;
     int pasirinkimas;
-    long long studentuKiekis;
-    bool gerasPasirinkimas = false;
     int failoPasirinkimas;
-
+    int studentuKiekis;
+    bool gerasPasirinkimas = false;
+    
+    // Meniu
     cout << "1. Ivesti duomenis ranka" << endl;
     cout << "2. Automatiskai generuoti duomenis" << endl;
     cout << "3. Nuskaityti duomenis is failo" << endl;
     cout << "Jusu pasirinkimas: ";
     
+    // Vartotojo pasirinkimo tikrinimas
     while (!gerasPasirinkimas) {
     cout << "Iveskite pasirinkima (1, 2 arba 3): ";
     cin >> pasirinkimas;
@@ -163,6 +178,7 @@ void programa() {
     try {
         switch (pasirinkimas) {
             case 1: {
+                // Duomenų įvedimas ranka
                 cout << "Kiek studentu norite irasyti? ";
                 bool gerasPasirinkimas = false;
 
@@ -185,6 +201,7 @@ void programa() {
             }
 
             case 2: {
+                // Automatinis duomenų generavimas
                 cout << "Kiek studentu norite sugeneruoti? ";
                 bool gerasPasirinkimas = false;
 
@@ -206,6 +223,7 @@ void programa() {
             }
 
             case 3: {
+                // Duomenų nuskaitymas iš failo
                 cout << "Pasirinkite faila (1. studentai10.txt, 2. studentai100.txt, 3. studentai10000.txt, 4. studentai100000.txt, 5. studentai1000000.txt, 6. studentai10_blog.txt, 7. tuscias.txt): ";
                 bool gerasPasirinkimas = false;
 
@@ -240,8 +258,10 @@ void programa() {
             throw runtime_error("Nera studentu duomenu.");
         }
 
+        // Rūšiuoja studentus
         rusiuotiStudentus(studentai);
 
+        // Spausdina rezultatus
         cout << left << setw(16) << "Pavarde" << setw(16) << "Vardas" << setw(25) << "Galutinis Vidurkis" << " / " << "Galutine Mediana" << endl;
         cout << "-------------------------------------------------------------------------" << endl;
 
