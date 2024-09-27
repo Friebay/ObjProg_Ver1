@@ -62,29 +62,17 @@ void ivestiStudentoDuomenis(Studentas& studentas) {
 
 // Rūšiuoja pažymius didėjimo tvarka
 void rusiuotiPazymius(vector<int>& pazymiai) {
-    for (int i = 0; i < pazymiai.size(); i++) {
-        for (int j = i + 1; j < pazymiai.size(); j++) {
-            if (pazymiai[i] > pazymiai[j]) {
-                int pazymys = pazymiai[i];
-                pazymiai[i] = pazymiai[j];
-                pazymiai[j] = pazymys;
-            }
-        }
-    }
+    sort(pazymiai.begin(), pazymiai.end());
 }
 
 // Rūšiuoja studentus pagal pavardę, o jei pavardės vienodos - pagal vardą
 void rusiuotiStudentus(vector<Studentas>& studentai) {
-    for (int i = 0; i < studentai.size() - 1; i++) {
-        for (int j = i + 1; j < studentai.size(); j++) {
-            if (studentai[i].pavarde > studentai[j].pavarde || 
-               (studentai[i].pavarde == studentai[j].pavarde && studentai[i].vardas > studentai[j].vardas)) {
-                Studentas temp = studentai[i];
-                studentai[i] = studentai[j];
-                studentai[j] = temp;
-            }
+    sort(studentai.begin(), studentai.end(), [](const Studentas& a, const Studentas& b) {
+        if (a.pavarde == b.pavarde) {
+            return a.vardas < b.vardas;
         }
-    }
+        return a.pavarde < b.pavarde;
+    });
 }
 
 // Skaičiuoja pažymių medianą

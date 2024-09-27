@@ -31,5 +31,6 @@ using std::streamsize;
 using std::max;
 using std::out_of_range;
 using std::exception;
+using std::sort;
 
 #endif
