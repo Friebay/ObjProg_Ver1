@@ -266,7 +266,7 @@ void programa() {
         cout << "-------------------------------------------------------------------------" << endl;
 
         for (const Studentas& studentas : studentai) {
-            cout << left << setw(12) << studentas.pavarde << setw(15) << studentas.vardas << setw(25) << fixed << setprecision(2) << studentas.galutinisVidurkis << "   " << fixed << setprecision(2) << studentas.galutineMediana << endl;
+            cout << left << setw(16) << studentas.pavarde << setw(16) << studentas.vardas << setw(25) << fixed << setprecision(2) << studentas.galutinisVidurkis << "   " << fixed << setprecision(2) << studentas.galutineMediana << endl;
         }
     } catch (const exception& e) {
         cout << "Ivyko klaida: " << e.what() << endl;
