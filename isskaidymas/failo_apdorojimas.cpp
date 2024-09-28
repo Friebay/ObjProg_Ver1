@@ -1,5 +1,6 @@
 #include "failo_apdorojimas.h"
 #include <iomanip>
+#include <sstream>
 
 // Funkcija skaičiuoja studento galutinius įvertinimus ir prideda studentą į vektorių
 void skaiciuotiIsFailo(Studentas& studentas, bool tinkamiPazymiai, vector<Studentas>& studentai) {
@@ -106,4 +107,44 @@ void skaitytiIrIsvestiDuomenis(const string& inputFileName, const string& output
     }
 
     outputFile.close();
+}
+
+void padalintiRezultatuFaila(const string& inputFileName, const string& passedFileName, const string& notPassedFileName) {
+    ifstream inputFile(inputFileName);
+    if (!inputFile) {
+        throw runtime_error("Nepavyko atidaryti ivesties failo " + inputFileName);
+    }
+
+    ofstream passedFile(passedFileName);
+    ofstream notPassedFile(notPassedFileName);
+    if (!passedFile || !notPassedFile) {
+        throw runtime_error("Nepavyko atidaryti isvesties failu");
+    }
+
+    string line;
+    getline(inputFile, line); // Read the header
+    passedFile << line << endl;
+    notPassedFile << line << endl;
+
+    getline(inputFile, line); // Read the separator line
+    passedFile << line << endl;
+    notPassedFile << line << endl;
+
+    while (getline(inputFile, line)) {
+        istringstream iss(line);
+        string pavarde, vardas;
+        float galutinisVidurkis, galutineMediana;
+
+        iss >> pavarde >> vardas >> galutinisVidurkis >> galutineMediana;
+
+        if (galutinisVidurkis >= 5.0) {
+            passedFile << line << endl;
+        } else {
+            notPassedFile << line << endl;
+        }
+    }
+
+    inputFile.close();
+    passedFile.close();
+    notPassedFile.close();
 }

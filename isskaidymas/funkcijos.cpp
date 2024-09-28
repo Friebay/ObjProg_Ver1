@@ -270,6 +270,32 @@ void programa() {
                 cout << "Duomenys nuskaityti is " << inputFileName << " ir isvesti i " << outputFileName << endl;
                 return;
             }
+
+            case 6: {
+                // New option: Split results file into passed and not passed
+                vector<int> fileSizes = {1000, 10000, 100000, 1000000, 10000000};
+                cout << "Pasirinkite rezultatu faila:" << endl;
+                for (int i = 0; i < fileSizes.size(); ++i) {
+                    cout << i + 1 << ". rezultatai_" << fileSizes[i] << ".txt" << endl;
+                }
+
+                int fileChoice;
+                cin >> fileChoice;
+                if (fileChoice < 1 || fileChoice > 5) {
+                    throw runtime_error("Neteisingas failo pasirinkimas.");
+                }
+
+                string inputFileName = "rezultatai_" + to_string(fileSizes[fileChoice - 1]) + ".txt";
+                string passedFileName = "rezultatai_" + to_string(fileSizes[fileChoice - 1]) + "_passed.txt";
+                string notPassedFileName = "rezultatai_" + to_string(fileSizes[fileChoice - 1]) + "_not_passed.txt";
+
+                padalintiRezultatuFaila(inputFileName, passedFileName, notPassedFileName);
+                cout << "Rezultatu failas padalintas i " << passedFileName << " ir " << notPassedFileName << endl;
+                return;
+            }
+
+            
+            
         }
 
         if (studentai.empty()) {
