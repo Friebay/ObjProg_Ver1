@@ -1,4 +1,5 @@
 #include "failo_apdorojimas.h"
+#include <iomanip>
 
 // Funkcija skaičiuoja studento galutinius įvertinimus ir prideda studentą į vektorių
 void skaiciuotiIsFailo(Studentas& studentas, bool tinkamiPazymiai, vector<Studentas>& studentai) {
@@ -83,4 +84,26 @@ void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& 
             cout << "Studentas " << studentas.vardas << " " << studentas.pavarde << " neturi galutiniu pazymiu del neteisingu duomenu." << endl;
         }
     }
+}
+
+void skaitytiIrIsvestiDuomenis(const string& inputFileName, const string& outputFileName) {
+    vector<Studentas> studentai;
+    skaitytiDuomenisIsFailo(inputFileName, studentai);
+
+    ofstream outputFile(outputFileName);
+    if (!outputFile) {
+        throw runtime_error("Nepavyko atidaryti isvesties failo " + outputFileName);
+    }
+
+    outputFile << left << setw(16) << "Pavarde" << setw(16) << "Vardas" 
+               << setw(25) << "Galutinis Vidurkis" << "Galutine Mediana" << endl;
+    outputFile << string(70, '-') << endl;
+
+    for (const auto& studentas : studentai) {
+        outputFile << left << setw(16) << studentas.pavarde << setw(16) << studentas.vardas 
+                   << setw(25) << fixed << setprecision(2) << studentas.galutinisVidurkis 
+                   << fixed << setprecision(2) << studentas.galutineMediana << endl;
+    }
+
+    outputFile.close();
 }

@@ -32,5 +32,7 @@ using std::max;
 using std::out_of_range;
 using std::exception;
 using std::sort;
+using std::to_string;
+using std::ofstream;
 
 #endif
