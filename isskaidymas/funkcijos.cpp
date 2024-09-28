@@ -151,17 +151,18 @@ void programa() {
     cout << "5. Nuskaityti sugeneruotus failus ir isvesti i nauja faila" << endl;
     cout << "6. Padalinti rezultatu faila i islaikius ir neislaikius" << endl;
     cout << "7. Sugeneruoti 5 atsitiktinius failus" << endl;
+    cout << "8. Vykdyti visus zingsnius visiems studentu kiekiams" << endl;
     cout << "Jusu pasirinkimas: ";
     
     // Vartotojo pasirinkimo tikrinimas
     while (!gerasPasirinkimas) {
-        cout << "Iveskite pasirinkima (1, 2, 3, 4, 5, 6 arba 7): ";
+        cout << "Iveskite pasirinkima (1-8): ";
         cin >> pasirinkimas;
 
-        if (cin.fail() || pasirinkimas < 1 || pasirinkimas > 7) {
+        if (cin.fail() || pasirinkimas < 1 || pasirinkimas > 8) {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Neteisingas pasirinkimas. Prasome ivesti 1, 2, 3, 4, 5, 6 arba 7." << endl;
+            cout << "Neteisingas pasirinkimas. Prasome ivesti skaiciu nuo 1 iki 8." << endl;
         } else {
             gerasPasirinkimas = true;
         }
@@ -301,6 +302,12 @@ void programa() {
                 return;
             }
 
+            case 8: {
+                // Perform all steps for all student amounts
+                vykdytiVisusZingsnius();
+                return;
+            }
+
             
             
         }
@@ -331,4 +338,44 @@ void generuotiAtsitiktiniusFailus() {
         generuotiStudentuFaila(studentuKiekis, failoPavadinimas);
         cout << "Sugeneruotas failas " << failoPavadinimas << " su " << studentuKiekis << " studentu." << endl;
     }
+}
+
+void vykdytiVisusZingsnius() {
+    vector<int> studentuKiekiai = {1000, 10000, 100000, 1000000, 10000000};
+
+    for (int kiekis : studentuKiekiai) {
+        cout << "Vykdomi zingsniai su " << kiekis << " studentu:" << endl;
+
+        // Step 4: Generate student file
+        string studentuFailas = "studentai_" + to_string(kiekis) + ".txt";
+        cout << "Generuojamas failas " << studentuFailas << "..." << endl;
+        auto pradziaGeneravimo = std::chrono::high_resolution_clock::now();
+        generuotiStudentuFaila(kiekis, studentuFailas);
+        auto pabaigaGeneravimo = std::chrono::high_resolution_clock::now();
+        auto trukmėGeneravimo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaGeneravimo - pradziaGeneravimo);
+        cout << "Failo generavimas uztruko " << trukmėGeneravimo.count() << " ms." << endl;
+
+        // Step 5: Read generated file and output to a new file
+        string rezultatuFailas = "rezultatai_" + to_string(kiekis) + ".txt";
+        cout << "Skaitomi duomenys is " << studentuFailas << " ir isvedami i " << rezultatuFailas << "..." << endl;
+        auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();
+        skaitytiIrIsvestiDuomenis(studentuFailas, rezultatuFailas);
+        auto pabaigaSkaitymo = std::chrono::high_resolution_clock::now();
+        auto trukmėSkaitymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo);
+        cout << "Duomenu skaitymas ir isvedimas uztruko " << trukmėSkaitymo.count() << " ms." << endl;
+
+        // Step 6: Split results file into passed and not passed
+        string islaikeFailas = "rezultatai_" + to_string(kiekis) + "_passed.txt";
+        string neislaikeFailas = "rezultatai_" + to_string(kiekis) + "_not_passed.txt";
+        cout << "Dalinamas rezultatu failas i islaikius ir neislaikius..." << endl;
+        auto pradziaDalinimo = std::chrono::high_resolution_clock::now();
+        padalintiRezultatuFaila(rezultatuFailas, islaikeFailas, neislaikeFailas);
+        auto pabaigaDalinimo = std::chrono::high_resolution_clock::now();
+        auto trukmėDalinimo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaDalinimo - pradziaDalinimo);
+        cout << "Rezultatu failo dalinimas uztruko " << trukmėDalinimo.count() << " ms." << endl;
+
+        cout << "Visi zingsniai su " << kiekis << " studentu baigti." << endl << endl;
+    }
+
+    cout << "Visi zingsniai visiems studentu kiekiams baigti." << endl;
 }

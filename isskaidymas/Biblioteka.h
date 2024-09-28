@@ -12,6 +12,7 @@
 #include <stdexcept>
 #include <limits>
 #include <algorithm>
+#include <chrono>
 
 using std::endl;
 using std::cout;
@@ -34,5 +35,6 @@ using std::exception;
 using std::sort;
 using std::to_string;
 using std::ofstream;
+using namespace std::chrono;
 
 #endif

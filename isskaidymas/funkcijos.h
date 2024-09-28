@@ -27,5 +27,6 @@ string generuotiVardaPavarde();
 void generuotiFaila();
 void generuotiAtsitiktiniusFailus();
 void generuotiStudentuFaila(int studentuKiekis, const string& failoPavadinimas);
+void vykdytiVisusZingsnius();
 
 #endif
