@@ -147,17 +147,18 @@ void programa() {
     cout << "1. Ivesti duomenis ranka" << endl;
     cout << "2. Automatiskai generuoti duomenis" << endl;
     cout << "3. Nuskaityti duomenis is failo" << endl;
+    cout << "4. Sukurti atsitiktiniu studentu failus" << endl;
     cout << "Jusu pasirinkimas: ";
     
     // Vartotojo pasirinkimo tikrinimas
     while (!gerasPasirinkimas) {
-        cout << "Iveskite pasirinkima (1, 2 arba 3): ";
+        cout << "Iveskite pasirinkima (1, 2, 3 arba 4): ";
         cin >> pasirinkimas;
 
-        if (cin.fail() || pasirinkimas < 1 || pasirinkimas > 3) {
+        if (cin.fail() || pasirinkimas < 1 || pasirinkimas > 4) {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Neteisingas pasirinkimas. Prasome ivesti 1, 2, arba 3." << endl;
+            cout << "Neteisingas pasirinkimas. Prasome ivesti 1, 2, 3, arba 4." << endl;
         } else {
             gerasPasirinkimas = true;
         }
@@ -240,6 +241,12 @@ void programa() {
                 skaitytiDuomenisIsFailo(failoPavadinimas, studentai);
                 break;
             }
+
+            case 4: {
+                // Atsitiktinių studentų failų kūrimas
+                generuotiFaila();
+                return; // Return after generating files to avoid further processing
+            }   
         }
 
         if (studentai.empty()) {
