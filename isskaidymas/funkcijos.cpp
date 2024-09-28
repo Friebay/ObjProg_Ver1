@@ -150,17 +150,18 @@ void programa() {
     cout << "4. Sukurti atsitiktiniu studentu failus" << endl;
     cout << "5. Nuskaityti sugeneruotus failus ir isvesti i nauja faila" << endl;
     cout << "6. Padalinti rezultatu faila i islaikius ir neislaikius" << endl;
+    cout << "7. Sugeneruoti 5 atsitiktinius failus" << endl;
     cout << "Jusu pasirinkimas: ";
     
     // Vartotojo pasirinkimo tikrinimas
     while (!gerasPasirinkimas) {
-        cout << "Iveskite pasirinkima (1, 2, 3, 4, 5 arba 6): ";
+        cout << "Iveskite pasirinkima (1, 2, 3, 4, 5, 6 arba 7): ";
         cin >> pasirinkimas;
 
-        if (cin.fail() || pasirinkimas < 1 || pasirinkimas > 6) {
+        if (cin.fail() || pasirinkimas < 1 || pasirinkimas > 7) {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Neteisingas pasirinkimas. Prasome ivesti 1, 2, 3, 4, 5 arba 6." << endl;
+            cout << "Neteisingas pasirinkimas. Prasome ivesti 1, 2, 3, 4, 5, 6 arba 7." << endl;
         } else {
             gerasPasirinkimas = true;
         }
@@ -294,6 +295,12 @@ void programa() {
                 return;
             }
 
+            case 7: {
+                // Generate 5 random-length files
+                generuotiAtsitiktiniusFailus();
+                return;
+            }
+
             
             
         }
@@ -314,5 +321,14 @@ void programa() {
         }
     } catch (const exception& e) {
         cout << "Ivyko klaida: " << e.what() << endl;
+    }
+}
+
+void generuotiAtsitiktiniusFailus() {
+    for (int i = 1; i <= 5; ++i) {
+        int studentuKiekis = generuotiSkaiciu(1, 10000000);
+        string failoPavadinimas = "studentai_random_" + to_string(i) + ".txt";
+        generuotiStudentuFaila(studentuKiekis, failoPavadinimas);
+        cout << "Sugeneruotas failas " << failoPavadinimas << " su " << studentuKiekis << " studentu." << endl;
     }
 }

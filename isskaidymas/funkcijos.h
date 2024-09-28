@@ -25,5 +25,7 @@ void rusiuotiStudentus(vector<Studentas>& studentai);
 int generuotiSkaiciu(int min, int max);
 string generuotiVardaPavarde();
 void generuotiFaila();
+void generuotiAtsitiktiniusFailus();
+void generuotiStudentuFaila(int studentuKiekis, const string& failoPavadinimas);
 
 #endif
