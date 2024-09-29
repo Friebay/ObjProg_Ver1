@@ -29,9 +29,8 @@ void skaiciuotiIsFailo(Studentas& studentas, bool tinkamiPazymiai, vector<Studen
 }
 
 // Funkcija skaito duomenis iš failo ir apdoroja kiekvieną studentą
-void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& studentai) {
-    auto pradziaViso = std::chrono::high_resolution_clock::now();
-    auto pradziaSkaitymo = pradziaViso;
+void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& studentai, long long& trukmeSkaitymo, long long& trukmeVidurkio) {
+    auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();
 
     // Atidaromas failas
     ifstream failas(failoPavadinimas);
@@ -39,8 +38,7 @@ void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& 
         throw runtime_error("Failo " + failoPavadinimas + " nera.");
     }
     string eilute;
-    // Praleidžiama antraštės eilutė
-    getline(failas, eilute);
+    getline(failas, eilute);  // Praleidžiama antraštės eilutė
 
     vector<Studentas> nuskaitytStudentai;
 
@@ -48,21 +46,18 @@ void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& 
     while (getline(failas, eilute)) {
         istringstream iss(eilute);
         Studentas studentas;
-        // Nuskaitomas vardas ir pavardė
         if (!(iss >> studentas.vardas >> studentas.pavarde)) {
             throw runtime_error("Klaida nuskaitant varda ir pavarde.");
         }
+
         string pazymysStr;
         bool tinkamiPazymiai = true;
-        // Skaitomi pažymiai
         while (iss >> pazymysStr) {
             try {
-                // Tikrinama, ar pažymys yra skaičius
                 if (pazymysStr.find_first_not_of("0123456789") != string::npos) {
                     throw invalid_argument("Klaida: pazymys turi buti skaicius.");
                 }
                 int pazymys = stoi(pazymysStr);
-                // Tikrinama, ar pažymys yra tinkamame intervale
                 if (pazymys < 0 || pazymys > 10) {
                     throw out_of_range("Klaida: pazymys turi buti tarp 0 ir 10.");
                 }
@@ -77,6 +72,7 @@ void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& 
                 break;
             }
         }
+
         if (tinkamiPazymiai) {
             nuskaitytStudentai.push_back(studentas);
         } else {
@@ -85,28 +81,22 @@ void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& 
     }
 
     auto pabaigaSkaitymo = std::chrono::high_resolution_clock::now();
-    auto trukmeSkaitymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo);
+    trukmeSkaitymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo).count();
 
     auto pradziaVidurkio = std::chrono::high_resolution_clock::now();
 
-    // Skaičiuojami galutiniai įvertinimai
     for (auto& studentas : nuskaitytStudentai) {
         skaiciuotiIsFailo(studentas, true, studentai);
     }
 
     auto pabaigaVidurkio = std::chrono::high_resolution_clock::now();
-    auto trukmeVidurkio = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaVidurkio - pradziaVidurkio);
-
-    auto pabaigaViso = std::chrono::high_resolution_clock::now();
-    auto trukmėViso = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaViso - pradziaViso);
-
-    cout << "Duomenu skaitymas is "<< failoPavadinimas <<" uztruko " << trukmeSkaitymo.count() << " ms." << endl;
-    cout << "Vidurkiu skaiciavimas uztruko " << trukmeVidurkio.count() << " ms." << endl;
+    trukmeVidurkio = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaVidurkio - pradziaVidurkio).count();
 }
 
-void skaitytiIrIsvestiDuomenis(const string& ivestiesFailoPavadinimas, const string& outputFileName) {
+
+void skaitytiIrIsvestiDuomenis(const string& ivestiesFailoPavadinimas, const string& outputFileName, long long& trukmeSkaitymo, long long& trukmeVidurkio, long long& trukmeIrasymo) {
     vector<Studentas> studentai;
-    skaitytiDuomenisIsFailo(ivestiesFailoPavadinimas, studentai);
+    skaitytiDuomenisIsFailo(ivestiesFailoPavadinimas, studentai, trukmeSkaitymo, trukmeVidurkio);
 
     auto pradziaIrasimo = std::chrono::high_resolution_clock::now();
     ofstream outputFile(outputFileName);
@@ -123,10 +113,10 @@ void skaitytiIrIsvestiDuomenis(const string& ivestiesFailoPavadinimas, const str
     outputFile.close();
 
     auto pabaigaIrasimo = std::chrono::high_resolution_clock::now();
-    auto trukmeIrasymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaIrasimo - pradziaIrasimo);
-    cout << "Duomenu isvedimas i "<< outputFileName << " uztruko " << trukmeIrasymo.count() << " ms." << endl;
-
+    trukmeIrasymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaIrasimo - pradziaIrasimo).count();
+    
 }
+
 
 void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const string& islaikiusiuFailoPavadinimas, const string& neislaikiusiuFailoPavadinimas) {
     ifstream ivestiesFailas(ivestiesFailoPavadinimas);
