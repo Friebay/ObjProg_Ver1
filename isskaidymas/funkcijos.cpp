@@ -249,7 +249,7 @@ void programa() {
             case 4: {
                 // Atsitiktinių studentų failų kūrimas
                 generuotiFaila();
-                return; // Return after generating files to avoid further processing
+                return;
             }   
             case 5: {
                 // Skaityti generuotus failus
@@ -274,7 +274,7 @@ void programa() {
             }
 
             case 6: {
-                // New option: Split results file into passed and not passed
+                // Rūšiuoti į išlaikiusius ir neišlaikiusius
                 vector<int> fileSizes = {1000, 10000, 100000, 1000000, 10000000};
                 cout << "Pasirinkite rezultatu faila:" << endl;
                 for (int i = 0; i < fileSizes.size(); ++i) {
@@ -297,13 +297,13 @@ void programa() {
             }
 
             case 7: {
-                // Generate 5 random-length files
+                // Generuoti 5 atsitiktinio dydžio studentų failus
                 generuotiAtsitiktiniusFailus();
                 return;
             }
 
             case 8: {
-                // Perform all steps for all student amounts
+                // Įvykdyti visus žingsnius su greičio matavimu
                 vykdytiVisusZingsnius();
                 return;
             }
@@ -346,35 +346,33 @@ void vykdytiVisusZingsnius() {
     for (int kiekis : studentuKiekiai) {
         cout << "Vykdomi zingsniai su " << kiekis << " studentu:" << endl;
 
-        // Step 4: Generate student file
+        // Generuoti studentų failą
         string studentuFailas = "studentai_" + to_string(kiekis) + ".txt";
-        cout << "Generuojamas failas " << studentuFailas << "..." << endl;
         auto pradziaGeneravimo = std::chrono::high_resolution_clock::now();
         generuotiStudentuFaila(kiekis, studentuFailas);
         auto pabaigaGeneravimo = std::chrono::high_resolution_clock::now();
-        auto trukmėGeneravimo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaGeneravimo - pradziaGeneravimo);
-        cout << "Failo generavimas uztruko " << trukmėGeneravimo.count() << " ms." << endl;
+        auto trukmeGeneravimo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaGeneravimo - pradziaGeneravimo);
+        cout << "Failo generavimas uztruko " << trukmeGeneravimo.count() << " ms." << endl;
 
-        // Step 5: Read generated file and output to a new file
+        // Skaitomas sugeneruotas failas ir išvedamas į naują failą
         string rezultatuFailas = "rezultatai_" + to_string(kiekis) + ".txt";
         cout << "Skaitomi duomenys is " << studentuFailas << " ir isvedami i " << rezultatuFailas << "..." << endl;
         auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();
         skaitytiIrIsvestiDuomenis(studentuFailas, rezultatuFailas);
         auto pabaigaSkaitymo = std::chrono::high_resolution_clock::now();
-        auto trukmėSkaitymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo);
-        cout << "Duomenu skaitymas ir isvedimas uztruko " << trukmėSkaitymo.count() << " ms." << endl;
+        auto trukmeSkaitymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo);
 
-        // Step 6: Split results file into passed and not passed
-        string islaikeFailas = "rezultatai_" + to_string(kiekis) + "_passed.txt";
-        string neislaikeFailas = "rezultatai_" + to_string(kiekis) + "_not_passed.txt";
-        cout << "Dalinamas rezultatu failas i islaikius ir neislaikius..." << endl;
+        // Rezultatų failo padalijimas į išlaikiusius ir neišlaikiusius
+        string islaikeFailas = "rezultatai_" + to_string(kiekis) + "_islaike.txt";
+        string neislaikeFailas = "rezultatai_" + to_string(kiekis) + "_neislaike.txt";
+        cout << "Dalinamas rezultatu failas i islaikiusius ir neislaikiusius..." << endl;
         auto pradziaDalinimo = std::chrono::high_resolution_clock::now();
         padalintiRezultatuFaila(rezultatuFailas, islaikeFailas, neislaikeFailas);
         auto pabaigaDalinimo = std::chrono::high_resolution_clock::now();
-        auto trukmėDalinimo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaDalinimo - pradziaDalinimo);
-        cout << "Rezultatu failo dalinimas uztruko " << trukmėDalinimo.count() << " ms." << endl;
+        auto trukmeDalinimo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaDalinimo - pradziaDalinimo);
+        cout << "Rezultatu failo dalinimas uztruko " << trukmeDalinimo.count() << " ms." << endl;
 
-        cout << "Visi zingsniai su " << kiekis << " studentu baigti." << endl << endl;
+        cout << "Visi zingsniai su " << kiekis << " studentu baigti. Trukme: " << trukmeGeneravimo.count() + trukmeSkaitymo.count() + trukmeDalinimo.count() << " ms."<< endl << endl;
     }
 
     cout << "Visi zingsniai visiems studentu kiekiams baigti." << endl;
