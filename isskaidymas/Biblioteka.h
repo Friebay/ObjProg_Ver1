@@ -13,6 +13,8 @@
 #include <limits>
 #include <algorithm>
 #include <chrono>
+#include <numeric>
+#include <random>
 
 using std::endl;
 using std::cout;

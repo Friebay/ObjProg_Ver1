@@ -80,6 +80,7 @@ void rusiuotiStudentus(vector<Studentas>& studentai) {
 }
 
 // Skaičiuoja pažymių medianą
+/* 
 float skaiciuotiMediana(vector<int>& pazymiai) {
     if (pazymiai.empty()) return 0;
     rusiuotiPazymius(pazymiai); 
@@ -90,8 +91,26 @@ float skaiciuotiMediana(vector<int>& pazymiai) {
         return (pazymiai[pazymiuKiekis / 2 - 1] + pazymiai[pazymiuKiekis / 2]) / 2.0;
     }
 }
+*/
 
-// Skaičiuoja pažymių vidurkį
+// Skaičiuoja pažymių medianą
+float skaiciuotiMediana(vector<int>& pazymiai) {
+    if (pazymiai.empty()) return 0;
+    
+    size_t n = pazymiai.size();
+    size_t middle = n / 2;
+    
+    if (n % 2 == 0) {
+        nth_element(pazymiai.begin(), pazymiai.begin() + middle - 1, pazymiai.end());
+        nth_element(pazymiai.begin() + middle - 1, pazymiai.begin() + middle, pazymiai.end());
+        return (pazymiai[middle-1] + pazymiai[middle]) / 2.0f;
+    } else {
+        nth_element(pazymiai.begin(), pazymiai.begin() + middle, pazymiai.end());
+        return pazymiai[middle];
+    }
+}
+
+/* 
 float skaiciuotiVidurki(vector<int>& pazymiai) {
     if (pazymiai.empty()) return 0; 
 
@@ -101,14 +120,30 @@ float skaiciuotiVidurki(vector<int>& pazymiai) {
     }
     return float(suma) / pazymiai.size();
 }
+*/
+
+// Skaičiuoja pažymių vidurkį
+float skaiciuotiVidurki(vector<int>& pazymiai) {
+    if (pazymiai.empty()) {
+        return 0.0f;
+    }
+    return std::accumulate(pazymiai.begin(), pazymiai.end(), 0.0f) / pazymiai.size();
+}
 
 // Generuoja atsitiktinį skaičių nurodytame intervale
-int generuotiSkaiciu(int min, int max) {
+/* int generuotiSkaiciu(int min, int max) {
     return min + (rand() % (max - min + 1));
+} */
+
+int generuotiSkaiciu(int min, int max) {
+    static std::random_device rd;  // Non-deterministic random seed
+    static std::mt19937 gen(rd()); // Mersenne Twister RNG
+    std::uniform_int_distribution<int> distrib(min, max);
+    return distrib(gen);
 }
 
 // Generuoja atsitiktinį vardą arba pavardę
-string generuotiVardaPavarde() {
+/*string generuotiVardaPavarde() {
     string raidziuRinkinys;
     char raides[] = "abcdefghijklmnopqrstuvwxyz";
     for (int i = 0; i < 5; i++) {
@@ -116,6 +151,21 @@ string generuotiVardaPavarde() {
         raidziuRinkinys += x;
     }
     return raidziuRinkinys;
+}*/
+
+string generuotiVardaPavarde() {
+    static const char raides[] = "abcdefghijklmnopqrstuvwxyz";
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> raideDistrib(0, 25);
+    
+    string vardasPavarde(5, ' ');  // Fixed length of 5 characters
+
+    for (int i = 0; i < 5; ++i) {
+        vardasPavarde[i] = raides[raideDistrib(gen)];
+    }
+
+    return vardasPavarde;
 }
 
 // Generuoja atsitiktinį studentą su atsitiktiniais duomenimis
