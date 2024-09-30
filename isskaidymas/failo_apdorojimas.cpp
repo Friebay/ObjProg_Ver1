@@ -29,6 +29,7 @@ void skaiciuotiIsFailo(Studentas& studentas, bool tinkamiPazymiai, vector<Studen
 }
 
 // Funkcija skaito duomenis iš failo ir apdoroja kiekvieną studentą
+/*
 void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& studentai, long long& trukmeSkaitymo, long long& trukmeVidurkio) {
     auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();
 
@@ -92,6 +93,93 @@ void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& 
     auto pabaigaVidurkio = std::chrono::high_resolution_clock::now();
     trukmeVidurkio = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaVidurkio - pradziaVidurkio).count();
 }
+*/
+
+#include "failo_apdorojimas.h"
+#include <sstream>
+#include <fstream>
+#include <chrono>
+#include <stdexcept>
+
+// Funkcija skaito duomenis iš failo ir apdoroja kiekvieną studentą
+void skaitytiDuomenisIsFailo(const std::string& failoPavadinimas, std::vector<Studentas>& studentai, long long& trukmeSkaitymo, long long& trukmeVidurkio) {
+    auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();
+
+    // Atidaromas failas binariniu režimu ir skaitomas turinys į buferį
+    std::ifstream failas(failoPavadinimas, std::ios::in | std::ios::binary);
+    if (!failas) {
+        throw std::runtime_error("Failo " + failoPavadinimas + " nera.");
+    }
+
+    // Gauti failo dydį ir perskaityti jį į buferį
+    failas.seekg(0, std::ios::end);
+    std::size_t failoDydis = failas.tellg();
+    failas.seekg(0, std::ios::beg);
+
+    std::vector<char> buferis(failoDydis);
+    failas.read(buferis.data(), failoDydis);
+    failas.close();
+
+    // Naudoti stringstream skaitant iš buferio
+    std::istringstream failoTurinys(std::string(buferis.begin(), buferis.end()));
+    std::string eilute;
+    
+    // Praleisti antraštės eilutę
+    std::getline(failoTurinys, eilute);
+
+    // Inicializuoti studento objektą iš anksto, kad nereikėtų sukurti kiekviename ciklo žingsnyje
+    Studentas studentas;
+    std::istringstream iss;
+    std::string pazymysStr;
+    bool tinkamiPazymiai;
+
+    // Skaitomos kiekvienos eilutės studentų duomenys
+    while (std::getline(failoTurinys, eilute)) {
+        iss.clear();  // Išvalyti stream būseną
+        iss.str(eilute);  // Panaudoti tą patį stream objektą naujai eilutei
+
+        if (!(iss >> studentas.vardas >> studentas.pavarde)) {
+            throw std::runtime_error("Klaida nuskaitant varda ir pavarde.");
+        }
+
+        studentas.pazymiai.clear();  // Išvalyti pažymius iš ankstesnio studento
+        tinkamiPazymiai = true;
+
+        while (iss >> pazymysStr) {
+            try {
+                // Greitesnis skaičių validavimas
+                int pazymys = std::stoi(pazymysStr);
+                if (pazymys < 0 || pazymys > 10) {
+                    throw std::out_of_range("Klaida: pazymys turi buti tarp 0 ir 10.");
+                }
+                studentas.pazymiai.push_back(pazymys);
+            } catch (const std::exception& e) {
+                // Netinkamas pažymys aptiktas
+                tinkamiPazymiai = false;
+                break;
+            }
+        }
+
+        if (tinkamiPazymiai && !studentas.pazymiai.empty()) {
+            studentas.egzaminoPazymys = studentas.pazymiai.back();  // Paskutinis pažymys yra egzamino pažymys
+            studentas.pazymiai.pop_back();  // Pašalinti egzamino pažymį iš sąrašo
+            studentas.vidurkis = skaiciuotiVidurki(studentas.pazymiai);
+            studentas.mediana = skaiciuotiMediana(studentas.pazymiai);
+            studentas.galutinisVidurkis = 0.4 * studentas.vidurkis + 0.6 * studentas.egzaminoPazymys;
+            studentas.galutineMediana = 0.4 * studentas.mediana + 0.6 * studentas.egzaminoPazymys;
+
+            studentai.push_back(std::move(studentas));  // Naudoti move, kad išvengti kopijavimo
+        }
+    }
+
+    auto pabaigaSkaitymo = std::chrono::high_resolution_clock::now();
+    trukmeSkaitymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo).count();
+
+    // Apdorojimo laikas (vidurkių skaičiavimas jau įtrauktas anksčiau)
+    auto pradziaVidurkio = std::chrono::high_resolution_clock::now();
+    auto pabaigaVidurkio = std::chrono::high_resolution_clock::now();
+    trukmeVidurkio = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaVidurkio - pradziaVidurkio).count();
+}
 
 
 void skaitytiIrIsvestiDuomenis(const string& ivestiesFailoPavadinimas, const string& outputFileName, long long& trukmeSkaitymo, long long& trukmeVidurkio, long long& trukmeIrasymo) {
@@ -117,7 +205,7 @@ void skaitytiIrIsvestiDuomenis(const string& ivestiesFailoPavadinimas, const str
     
 }
 
-
+/*
 void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const string& islaikiusiuFailoPavadinimas, const string& neislaikiusiuFailoPavadinimas) {
     ifstream ivestiesFailas(ivestiesFailoPavadinimas);
 
@@ -155,6 +243,65 @@ void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const strin
     }
 
     ivestiesFailas.close();
+    islaikiusiuFailas.close();
+    neislaikiusiuFailas.close();
+}
+*/
+
+void padalintiRezultatuFaila(const std::string& ivestiesFailoPavadinimas, const std::string& islaikiusiuFailoPavadinimas, const std::string& neislaikiusiuFailoPavadinimas) {
+    // Atidaromas įvesties failas binariniu režimu
+    std::ifstream ivestiesFailas(ivestiesFailoPavadinimas, std::ios::in | std::ios::binary);
+    if (!ivestiesFailas) {
+        throw std::runtime_error("Nepavyko atidaryti ivesties failo " + ivestiesFailoPavadinimas);
+    }
+
+    // Skaitomas įvesties failas į buferį
+    ivestiesFailas.seekg(0, std::ios::end);
+    std::size_t failoDydis = ivestiesFailas.tellg();
+    ivestiesFailas.seekg(0, std::ios::beg);
+    std::vector<char> buferis(failoDydis);
+    ivestiesFailas.read(buferis.data(), failoDydis);
+    ivestiesFailas.close();
+
+    // Atidaromi išvesties failai vieną kartą
+    std::ofstream islaikiusiuFailas(islaikiusiuFailoPavadinimas);
+    std::ofstream neislaikiusiuFailas(neislaikiusiuFailoPavadinimas);
+    if (!islaikiusiuFailas || !neislaikiusiuFailas) {
+        throw std::runtime_error("Nepavyko atidaryti išvesties failų");
+    }
+
+    std::string failoTurinys(buferis.begin(), buferis.end());
+    std::istringstream iss(failoTurinys);
+    std::string eilute;
+
+    // Kopijuojama antraštė į abu failus
+    std::getline(iss, eilute);
+    islaikiusiuFailas << eilute << '\n';
+    neislaikiusiuFailas << eilute << '\n';
+
+    // Antroji eilutė (nėra būtina tikrinti)
+    std::getline(iss, eilute);
+    islaikiusiuFailas << eilute << '\n';
+    neislaikiusiuFailas << eilute << '\n';
+
+    // Per visą likusį turinį
+    while (std::getline(iss, eilute)) {
+        // Rasti paskutinį tarpo simbolį, kad būtų galima greitai išgauti galutinį vidurkį
+        std::size_t paskutinisTarpas = eilute.rfind(' ');
+        if (paskutinisTarpas != std::string::npos) {
+            // Naudojame substring norint gauti galutinį vidurkį kaip float
+            float galutinisVidurkis = std::stof(eilute.substr(paskutinisTarpas + 1));
+
+            // Patikriname vidurkį ir rašome į atitinkamą failą
+            if (galutinisVidurkis >= 5.0f) {
+                islaikiusiuFailas << eilute << '\n';
+            } else {
+                neislaikiusiuFailas << eilute << '\n';
+            }
+        }
+    }
+
+    // Uždaryti išvesties failus
     islaikiusiuFailas.close();
     neislaikiusiuFailas.close();
 }

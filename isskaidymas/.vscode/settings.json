@@ -59,6 +59,7 @@
   "files.associations": {
     "iostream": "cpp",
     "chrono": "cpp",
-    "functional": "cpp"
+    "functional": "cpp",
+    "stdexcept": "cpp"
   }
 }

@@ -159,9 +159,9 @@ string generuotiVardaPavarde() {
     static std::mt19937 gen(rd());
     std::uniform_int_distribution<int> raideDistrib(0, 25);
     
-    string vardasPavarde(5, ' ');  // Fixed length of 5 characters
+    string vardasPavarde(4, ' ');  // Fixed length of 5 characters
 
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 4; ++i) {
         vardasPavarde[i] = raides[raideDistrib(gen)];
     }
 
