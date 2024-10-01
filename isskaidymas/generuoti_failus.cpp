@@ -1,7 +1,10 @@
 #include "funkcijos.h"
 #include <fstream>
 #include <iomanip>
+#include <sstream>
 
+
+/*
 void generuotiStudentuFaila(int studentuKiekis, const string& failoPavadinimas) {
     std::ofstream isvedimoFailas(failoPavadinimas);
     if (!isvedimoFailas.is_open()) {
@@ -29,7 +32,58 @@ void generuotiStudentuFaila(int studentuKiekis, const string& failoPavadinimas) 
 
     isvedimoFailas.close();
     cout << "Failas '" << failoPavadinimas << "' su " << studentuKiekis << " studentais buvo sugeneruotas." << endl;
+}*/
+
+#include <sstream>
+
+void generuotiStudentuFaila(int studentuKiekis, const std::string& failoPavadinimas) {
+    std::ofstream isvedimoFailas(failoPavadinimas);
+    if (!isvedimoFailas.is_open()) {
+        throw std::runtime_error("Nepavyko atidaryti failo " + failoPavadinimas);
+    }
+
+    // Generuojamas antraštės eilutė
+    std::ostringstream headerStream;
+    headerStream << std::left << std::setw(20) << "Vardas" << std::setw(20) << "Pavarde";
+    for (int i = 1; i <= 15; ++i) {
+        headerStream << std::setw(5) << "ND" + std::to_string(i);
+    }
+    headerStream << std::setw(10) << "Egz." << "\n";
+    isvedimoFailas << headerStream.str();
+
+    // Naudojamas stringstream, kad kauptų studentų duomenis prieš įrašymą
+    std::ostringstream outputStream;
+    for (int i = 0; i < studentuKiekis; ++i) {
+        std::string vardas = generuotiVardaPavarde();  // Generuojami vardai ir pavardės
+        std::string pavarde = generuotiVardaPavarde();
+
+        outputStream << std::left << std::setw(20) << vardas << std::setw(20) << pavarde;
+
+        // Generuojami 15 pažymių
+        for (int j = 0; j < 15; ++j) {
+            outputStream << std::setw(5) << generuotiSkaiciu(1, 10);
+        }
+
+        // Generuojamas egzamino pažymys
+        outputStream << std::setw(10) << generuotiSkaiciu(1, 10) << "\n";
+
+        // Periodiškai išrašome duomenis į failą, kad nesukauptų per daug atminties
+        if (i % 1000 == 0) {
+            isvedimoFailas << outputStream.str();
+            outputStream.str("");  // Išvalome stream turinį
+            outputStream.clear();  // Resetiname būseną
+        }
+    }
+
+    // Galutinis rašymas iš stream
+    if (!outputStream.str().empty()) {
+        isvedimoFailas << outputStream.str();
+    }
+
+    isvedimoFailas.close();
+    std::cout << "Failas '" << failoPavadinimas << "' su " << studentuKiekis << " studentais buvo sugeneruotas." << std::endl;
 }
+
 
 void generuotiFaila() {
     vector<int> fileSizes = {1000, 10000, 100000, 1000000, 10000000};
