@@ -66,23 +66,15 @@ void generuotiStudentuFaila(int studentuKiekis, const std::string& failoPavadini
 
         // Generuojamas egzamino pažymys
         outputStream << std::setw(10) << generuotiSkaiciu(1, 10) << "\n";
-
-        // Periodiškai išrašome duomenis į failą, kad nesukauptų per daug atminties
-        if (i % 1000 == 0) {
-            isvedimoFailas << outputStream.str();
-            outputStream.str("");  // Išvalome stream turinį
-            outputStream.clear();  // Resetiname būseną
-        }
     }
 
-    // Galutinis rašymas iš stream
-    if (!outputStream.str().empty()) {
-        isvedimoFailas << outputStream.str();
-    }
+    // Galutinis rašymas iš stream į failą
+    isvedimoFailas << outputStream.str();
 
     isvedimoFailas.close();
     std::cout << "Failas '" << failoPavadinimas << "' su " << studentuKiekis << " studentais buvo sugeneruotas." << std::endl;
 }
+
 
 
 void generuotiFaila() {

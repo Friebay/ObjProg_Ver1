@@ -168,26 +168,39 @@ string generuotiVardaPavarde() {
     return vardasPavarde;
 }
 
-// Generuoja atsitiktinį studentą su atsitiktiniais duomenimis
 Studentas generuotiAtsitiktiniStudenta() {
     Studentas studentas;
     
+    // Generuojami atsitiktiniai vardas ir pavarde
     studentas.vardas = generuotiVardaPavarde();
     studentas.pavarde = generuotiVardaPavarde();
 
+    // Pre-allocate space for pazymiai to avoid reallocations
     int pazymiuKiekis = generuotiSkaiciu(1, 20);
+    studentas.pazymiai.reserve(pazymiuKiekis);  // Reserve space for pazymiai
+
+    // Generuojami atsitiktiniai pažymiai
     for (int i = 0; i < pazymiuKiekis; i++) {
         studentas.pazymiai.push_back(generuotiSkaiciu(0, 10));
     }
 
+    // Generuojamas egzamino pažymys
     studentas.egzaminoPazymys = generuotiSkaiciu(0, 10);
+
+    // Apskaičiuojami vidurkis ir mediana
     studentas.vidurkis = skaiciuotiVidurki(studentas.pazymiai);
     studentas.mediana = skaiciuotiMediana(studentas.pazymiai);
-    studentas.galutinisVidurkis = 0.4 * studentas.vidurkis + 0.6 * studentas.egzaminoPazymys;
-    studentas.galutineMediana = 0.4 * studentas.mediana + 0.6 * studentas.egzaminoPazymys;
+
+    // Apskaičiuojami galutiniai įvertinimai, naudojami constant multipliers
+    const float koefVidurkis = 0.4f;
+    const float koefEgzaminas = 0.6f;
+
+    studentas.galutinisVidurkis = koefVidurkis * studentas.vidurkis + koefEgzaminas * studentas.egzaminoPazymys;
+    studentas.galutineMediana = koefVidurkis * studentas.mediana + koefEgzaminas * studentas.egzaminoPazymys;
 
     return studentas;
 }
+
 
 // Pagrindinė programos funkcija
 void programa() {
@@ -475,11 +488,11 @@ void vykdytiVisusZingsnius() {
         auto trukmeDalinimo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaDalinimo - pradziaDalinimo);
         cout << "Rezultatu failo dalinimas uztruko " << trukmeDalinimo.count() << " ms." << endl;
 
-        // Calculate total time
+        // Skaičuoti bendrą laiką
         long long bendrasLaikas = trukmeGeneravimo.count() + trukmeSkaitymo + trukmeVidurkio + trukmeIrasymo + trukmeDalinimo.count();
         cout << "Visi zingsniai su " << kiekis << " studentu baigti. Trukme: " << bendrasLaikas << " ms." << endl << endl;
 
-        // Write data to CSV file
+        // Surašyti laikus į CSV failą
         csvFile << timestamp << ";"
                 << kiekis << ";"
                 << trukmeGeneravimo.count() << ";"
