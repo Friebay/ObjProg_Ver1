@@ -15,10 +15,10 @@
 #include <chrono>
 #include <numeric>
 #include <random>
-#include <sstream>
-#include <fstream>
-#include <chrono>
-#include <stdexcept>
+#include <cstring>
+#include <iostream>
+#include <cctype>
+#include <locale>
 
 using std::endl;
 using std::cout;
