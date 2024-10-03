@@ -165,7 +165,7 @@ void programa() {
     cout << "2. Automatiskai generuoti duomenis" << '\n';
     cout << "3. Nuskaityti duomenis is failo" << '\n';
     cout << "4. Sukurti atsitiktiniu studentu failus" << '\n';
-    cout << "5. Nuskaityti sugeneruotus failus ir suskaiciuoti rezultatus" << '\n';
+    cout << "5. Suskaiciuoti rezultatus" << '\n';
     cout << "6. Padalinti rezultatu faila i islaikius ir neislaikius" << '\n';
     cout << "7. Sugeneruoti 5 atsitiktinius failus" << '\n';
     cout << "8. Vykdyti visus zingsnius visiems studentu kiekiams" << '\n';
@@ -261,6 +261,7 @@ void programa() {
                 }
 
                 skaitytiDuomenisIsFailo(failoPavadinimas, studentai, trukmeSkaitymo, trukmeVidurkio);
+                cout << "Duomenys nuskaityti is " << failoPavadinimas << " per " << trukmeSkaitymo << " ms\n";
                 break;
             }
 
@@ -270,22 +271,22 @@ void programa() {
                 return;
             }   
             case 5: {
-                // Skaityti generuotus failus
-                vector<int> studentuSkaicius = {1000, 10000, 100000, 1000000, 10000000};
-                cout << "Pasirinkite faila:" << '\n';
-                for (int i = 0; i < studentuSkaicius.size(); ++i) {
-                    cout << i + 1 << ". studentai_" << studentuSkaicius[i] << ".txt" << '\n';
-                }
+                // Skaičiuoti rezultatus
+                vector<string> studentuSkaicius = {"_1000", "_10000", "_100000", "_1000000", "_10000000", "1000", "10000", "100000", "1000000", "10000000"};
+                cout << "Pasirinkite rezultatu faila:\n";
+                cout << "Kodo generuoti duomenys\n1. studentai_1000.txt\n2. studentai_10000.txt\n3. studentai_100000.txt\n4. studentai_1000000.txt\n5. studentai_10000000.txt\n";
+                cout << "Pavyzdiniai duomenys\n6. studentai1000.txt\n7. studentai10000.txt\n8. studentai100000.txt\n9.studentai1000000.txt\n10. studentai10000000.txt\n";
+                
 
                 int failoPasirinkimas;
                 cout << "Jusu pasirinkimas: ";
                 cin >> failoPasirinkimas;
-                if (failoPasirinkimas < 1 || failoPasirinkimas > 5) {
+                if (failoPasirinkimas < 1 || failoPasirinkimas > 10) {
                     throw runtime_error("Neteisingas failo pasirinkimas.");
                 }
 
-                string duomenuFailas = "studentai_" + to_string(studentuSkaicius[failoPasirinkimas - 1]) + ".txt";
-                string isvestiesFailoPavadinimas = "rezultatai_" + to_string(studentuSkaicius[failoPasirinkimas - 1]) + ".txt";
+                string duomenuFailas = "studentai" + (studentuSkaicius[failoPasirinkimas - 1]) + ".txt";
+                string isvestiesFailoPavadinimas = "rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + ".txt";
 
 
                 skaitytiIrIsvestiDuomenis(duomenuFailas, isvestiesFailoPavadinimas, trukmeSkaitymo, trukmeVidurkio, trukmeIrasymo);
@@ -295,8 +296,8 @@ void programa() {
 
             case 6: {
                 // Rūšiuoti į išlaikiusius ir neišlaikiusius
-                vector<int> studentuSkaicius = {1000, 10000, 100000, 1000000, 10000000};
-                cout << "Pasirinkite rezultatu faila:" << '\n';
+                vector<string> studentuSkaicius = {"_1000", "_10000", "_100000", "_1000000", "_10000000", "1000", "10000", "100000", "1000000", "10000000"};
+                cout << "Pasirinkite rezultatu faila:\n";
                 cout << "Kodo generuoti duomenys\n1. rezultatai_1000.txt\n2. rezultatai_10000.txt\n3. rezultatai_100000.txt\n4. rezultatai_1000000.txt\n5. rezultatai_10000000.txt\n";
                 cout << "Pavyzdiniai duomenys\n6. rezultatai1000.txt\n7. rezultatai10000.txt\n8. rezultatai100000.txt\n9. rezultatai1000000.txt\n10. rezultatai10000000.txt\n";
                 
@@ -304,13 +305,13 @@ void programa() {
                 int failoPasirinkimas;
                 cout << "Jusu pasirinkimas: ";
                 cin >> failoPasirinkimas;
-                if (failoPasirinkimas < 1 || failoPasirinkimas > 5) {
+                if (failoPasirinkimas < 1 || failoPasirinkimas > 10) {
                     throw runtime_error("Neteisingas failo pasirinkimas.");
                 }
 
-                string duomenuFailas = "rezultatai_" + to_string(studentuSkaicius[failoPasirinkimas - 1]) + ".txt";
-                string islaikiusiuFailoPavadinimas = "rezultatai_" + to_string(studentuSkaicius[failoPasirinkimas - 1]) + "_islaike.txt";
-                string neislaikiusiuFailoPavadinimas = "rezultatai_" + to_string(studentuSkaicius[failoPasirinkimas - 1]) + "_neislaike.txt";
+                string duomenuFailas = "rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + ".txt";
+                string islaikiusiuFailoPavadinimas = "rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + "_islaike.txt";
+                string neislaikiusiuFailoPavadinimas = "rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + "_neislaike.txt";
 
                 padalintiRezultatuFaila(duomenuFailas, islaikiusiuFailoPavadinimas, neislaikiusiuFailoPavadinimas);
                 cout << "Rezultatu failas padalintas i " << islaikiusiuFailoPavadinimas << " ir " << neislaikiusiuFailoPavadinimas << '\n';

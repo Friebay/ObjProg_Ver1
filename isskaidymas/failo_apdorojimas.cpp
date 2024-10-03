@@ -216,9 +216,9 @@ void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const strin
     // Įrašyti surūšiuotus studentus į atitinkamus failus
     for (const auto& student : studentai) {
         if (student.galutinisVidurkis >= 5.0f) {
-            islaikiusiuFailas << student.pavarde << " " << student.vardas << " " << student.galutinisVidurkis << " " << student.galutineMediana <<'\n';
+            islaikiusiuFailas << left << setw(15) << student.pavarde << " " << setw(15) << student.vardas << " " << setw(24) << student.galutinisVidurkis << " " << student.galutineMediana <<'\n';
         } else {
-            neislaikiusiuFailas << student.pavarde << " " << student.vardas << " " << student.galutinisVidurkis <<  " " << student.galutineMediana <<'\n';
+            neislaikiusiuFailas << left << setw(15) << student.pavarde << " " << setw(15) << student.vardas << " " << setw(24) << student.galutinisVidurkis <<  " " << student.galutineMediana <<'\n';
         }
     }
     auto pabaigaRasymo = std::chrono::high_resolution_clock::now();
