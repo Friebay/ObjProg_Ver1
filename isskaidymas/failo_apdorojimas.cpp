@@ -7,9 +7,13 @@ void skaiciuotiIsFailo(Studentas& studentas, bool tinkamiPazymiai, vector<Studen
 
         studentas.vidurkis = skaiciuotiVidurki(studentas.pazymiai);
         studentas.mediana = skaiciuotiMediana(studentas.pazymiai);
-        
-        studentas.galutinisVidurkis = 0.4 * studentas.vidurkis + 0.6 * studentas.egzaminoPazymys;
-        studentas.galutineMediana = 0.4 * studentas.mediana + 0.6 * studentas.egzaminoPazymys;
+
+        const double egzaminoBalas = 0.6 * studentas.egzaminoPazymys;
+        const double vidurkioBalas = 0.4 * studentas.vidurkis;
+        const double medianosBalas = 0.4 * studentas.mediana;
+
+        studentas.galutinisVidurkis = vidurkioBalas + egzaminoBalas;
+        studentas.galutineMediana = medianosBalas + egzaminoBalas;
 
         studentai.push_back(move(studentas));
     } else {
@@ -26,29 +30,29 @@ void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& 
     }
 
     string buffer;
-    buffer.reserve(1048576); // Use a buffer to reduce reallocations
+    buffer.reserve(1048576); // Buferio dydis baitais
 
-    // Skip the header
+    // Praleidžia antraštę
     getline(failas, buffer);
 
     while (getline(failas, buffer)) {
-        if (buffer.length() < 52) { // Minimum length check
-            throw runtime_error("Invalid line length: " + buffer);
+        if (buffer.length() < 52) { // Minimalaus ilgio patikrinimas
+            throw runtime_error("Netinkamas eilutes ilgis");
         }
 
         Studentas studentas;
         
-        // Parse vardas and pavarde directly by indices
+        // Skaito vardą ir pavardę
         studentas.vardas = buffer.substr(0, 16);
         studentas.pavarde = buffer.substr(16, 32);
 
-        // Lambda function to trim leading and trailing whitespaces
+        // Funkcija ištrinti whitespace iš string
         auto trim = [](std::string &str) {
-            // Remove leading whitespaces
+            // Ištrinti pradžioję esantį whitespace
             str.erase(str.begin(), std::find_if(str.begin(), str.end(), [](unsigned char ch) {
                 return !std::isspace(ch);
             }));
-            // Remove trailing whitespaces
+            // Ištrinti pabaigoje esantį whitespace
             str.erase(std::find_if(str.rbegin(), str.rend(), [](unsigned char ch) {
                 return !std::isspace(ch);
             }).base(), str.end());
@@ -56,81 +60,74 @@ void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& 
 
         trim(studentas.pavarde);
         
-        // Preallocate space for grades (assuming max ~25 grades)
+        // Rezervuoja vietą 25-iams pažymiams
         studentas.pazymiai.reserve(25);
 
-        // Parse grades starting from position 52
-        size_t pos = 52;
+        // Pažymiai prasideda nuo 52 simbolio
+        size_t pozicija = 52;
         bool tinkamiPazymiai = true;
         
-        while (pos < buffer.length()) {
-            // Skip whitespace
-            while (pos < buffer.length() && isspace(buffer[pos])) pos++;
-            if (pos >= buffer.length()) break;
+        while (pozicija < buffer.length()) {
+            // Praleidžia whitespace
+            while (pozicija < buffer.length() && isspace(buffer[pozicija])) pozicija++;
+            if (pozicija >= buffer.length()) break;
 
             int grade = 0;
-            bool valid = true;
+            bool tinkamas = true;
             
-            // Check if the current character is a digit
-            if (isdigit(buffer[pos])) {
-                // Manually parse the integer
-                while (pos < buffer.length() && isdigit(buffer[pos])) {
-                    grade = grade * 10 + (buffer[pos] - '0');
-                    pos++;
+            // Patikrina ar skaičius
+            if (isdigit(buffer[pozicija])) {
+                while (pozicija < buffer.length() && isdigit(buffer[pozicija])) {
+                    grade = grade * 10 + (buffer[pozicija] - '0');
+                    pozicija++;
                 }
 
-                // Check if the grade is valid (0-10)
+                // Patikrina ar tarp 0 ir 10
                 if (grade < 0 || grade > 10) {
-                    valid = false;
+                    tinkamas = false;
                 }
             } else {
-                // If not a digit, skip to the next non-space character
-                valid = false; // Mark the grade as invalid
-                pos++; // Move past the invalid character
+                // Jeigu ne skaičius:
+                tinkamas = false; // Netinkamas
+                pozicija++; // Eina į kitą poziciją
             }
 
-            // Check if the grade is valid (0-10)
-            if (grade < 0 || grade > 10) {
-                valid = false;
-            }
-
-            if (valid) {
+            if (tinkamas) {
                 studentas.pazymiai.push_back(grade);
             } else {
                 tinkamiPazymiai = false;
                 break;
             }
             
-            // Skip the space after the grade
-            while (pos < buffer.length() && isspace(buffer[pos])) pos++;
+            // Praleidžia whitespace
+            while (pozicija < buffer.length() && isspace(buffer[pozicija])) pozicija++;
         }
 
-        // Process student
+        // Paskaičiuoja rezultatus
         skaiciuotiIsFailo(studentas, tinkamiPazymiai, studentai);
     }
 
     auto pabaigaSkaitymo = std::chrono::high_resolution_clock::now();
     trukmeSkaitymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo).count();
-    trukmeVidurkio = 0; // Assuming average time is computed later
+    trukmeVidurkio = 0;
 }
 
-void skaitytiIrIsvestiDuomenis(const string& ivestiesFailoPavadinimas, const string& outputFileName, long long& trukmeSkaitymo, long long& trukmeVidurkio, long long& trukmeIrasymo) {
+void skaitytiIrIsvestiDuomenis(const string& ivestiesFailoPavadinimas, const string& irasymoFailoPavadinimas, long long& trukmeSkaitymo, long long& trukmeVidurkio, long long& trukmeIrasymo) {
     vector<Studentas> studentai;
     skaitytiDuomenisIsFailo(ivestiesFailoPavadinimas, studentai, trukmeSkaitymo, trukmeVidurkio);
 
     auto pradziaIrasimo = std::chrono::high_resolution_clock::now();
     
-    // Use stringstream for buffered output
+    // Naudoja stringstream buferiui
     ostringstream buffer;
 
-    // Write header
+    // Įrašo antraštę į buferį
     buffer << left << setw(16) << "Pavarde" 
            << setw(16) << "Vardas" 
            << setw(25) << "Galutinis Vidurkis" 
            << "Galutine Mediana" << '\n';
     buffer << string(70, '-') << '\n';
 
-    // Pre-format the student data into the buffer
     for (const auto& studentas : studentai) {
         buffer << left << setw(16) << studentas.pavarde
                << setw(16) << studentas.vardas
@@ -139,15 +136,15 @@ void skaitytiIrIsvestiDuomenis(const string& ivestiesFailoPavadinimas, const str
                << '\n';
     }
 
-    // Open file for output
-    ofstream outputFile(outputFileName, std::ios::out | std::ios::binary);
-    if (!outputFile) {
-        throw runtime_error("Nepavyko atidaryti isvesties failo " + outputFileName);
+    // Atidaro failą įrašymui
+    ofstream irasymoFailas(irasymoFailoPavadinimas, std::ios::out | std::ios::binary);
+    if (!irasymoFailas) {
+        throw runtime_error("Nepavyko atidaryti isvesties failo " + irasymoFailoPavadinimas);
     }
 
-    // Write the entire buffer to the file at once
-    outputFile << buffer.str();
-    outputFile.close();
+    // Įrašo visą buferį vienu metu
+    irasymoFailas << buffer.str();
+    irasymoFailas.close();
 
     auto pabaigaIrasimo = std::chrono::high_resolution_clock::now();
     trukmeIrasymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaIrasimo - pradziaIrasimo).count();
@@ -199,9 +196,9 @@ void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const strin
 
             // Patikrinimas pagal galutinį vidurkį ir rašymas į atitinkamą failą
             if (galutinisVidurkis >= 5.0f) {
-                islaikiusiuFailas << eilute << '\n'; // Buffer successful students
+                islaikiusiuFailas << eilute << '\n';
             } else {
-                neislaikiusiuFailas << eilute << '\n'; // Buffer failed students
+                neislaikiusiuFailas << eilute << '\n';
             }
         }
     }

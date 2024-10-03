@@ -385,13 +385,13 @@ void generuotiAtsitiktiniusFailus() {
 void vykdytiVisusZingsnius() {
     vector<int> studentuKiekiai = {1000, 10000, 100000, 1000000, 10000000};
     
-    // Open CSV file for writing
+    // Atidaryti CSV failą rašymui
     ofstream csvFile("performance_data.csv", std::ios::app);
     if (!csvFile.is_open()) {
         throw runtime_error("Nepavyko atidaryti CSV failo");
     }
     
-    // Write CSV header if the file is empty
+    // Įrašo CSV antraštę, jei failas tuščias
     csvFile.seekp(0, std::ios::end);
     if (csvFile.tellp() == 0) {
         csvFile << "Timestamp;StudentuKiekis;GeneravimoLaikas;SkaitymoLaikas;VidurkioLaikas;trukmeIrasymo;DalinimoLaikas;BendrasLaikas\n";
@@ -400,7 +400,7 @@ void vykdytiVisusZingsnius() {
     for (int kiekis : studentuKiekiai) {
         cout << "Vykdomi zingsniai su " << kiekis << " studentu:" << '\n';
         
-        // Get current timestamp
+        // Gauti dabartinį laiką
         auto now = std::chrono::system_clock::now();
         auto in_time_t = std::chrono::system_clock::to_time_t(now);
         std::stringstream ss;
@@ -415,19 +415,18 @@ void vykdytiVisusZingsnius() {
         auto trukmeGeneravimo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaGeneravimo - pradziaGeneravimo);
         cout << "Failo generavimas uztruko " << trukmeGeneravimo.count() << " ms." << '\n';
 
-        // Skaitomas sugeneruotas failas ir išvedamas į naują failą
+        // Skaitomas sugeneruotas failas, apskaičiuoja galutinius rezultatus ir išvedamas į rezultatų failą
         string rezultatuFailas = "rezultatai_" + to_string(kiekis) + ".txt";
-        cout << "Skaitomi duomenys is " << studentuFailas << " ir isvedami i " << rezultatuFailas << "..." << '\n';
-    
+        cout << "Skaitomi duomenys ir isvedami i " << rezultatuFailas << "..." << '\n';
         long long trukmeSkaitymo, trukmeVidurkio, trukmeIrasymo;
         auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();
         skaitytiIrIsvestiDuomenis(studentuFailas, rezultatuFailas, trukmeSkaitymo, trukmeVidurkio, trukmeIrasymo);
         auto pabaigaSkaitymo = std::chrono::high_resolution_clock::now();
         auto trukmeSkaitymoLaikas = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo);
         
-        cout << studentuFailas << "Skaitymo laikas: " << trukmeSkaitymo << " ms." << '\n';
+        cout << "Skaitymo laikas: " << trukmeSkaitymo << " ms." << '\n';
         cout << "Vidurkio skaiciavimas uztruko " << trukmeVidurkio << " ms." << '\n';
-        cout << "Duomenu isvedimas i " << rezultatuFailas << " uztruko " << trukmeIrasymo << " ms." << '\n';
+        cout << "Duomenu isvedimas uztruko " << trukmeIrasymo << " ms." << '\n';
 
         // Rezultatų failo padalijimas į išlaikiusius ir neišlaikiusius
         string islaikeFailas = "rezultatai_" + to_string(kiekis) + "_islaike.txt";

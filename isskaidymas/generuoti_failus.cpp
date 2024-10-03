@@ -16,7 +16,7 @@ void generuotiStudentuFaila(int studentuKiekis, const string& failoPavadinimas) 
         throw runtime_error("Nepavyko atidaryti failo " + failoPavadinimas);
     }
 
-    // Generuojamas antraštės eilutė
+    // Generuojama antraštės eilutė
     ostringstream headerStream;
     headerStream << left << setw(16) << "Vardas" << setw(16) << "Pavarde" << setw(20) << " ";
     for (int i = 1; i <= 8; ++i) {
