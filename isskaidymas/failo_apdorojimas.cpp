@@ -151,33 +151,38 @@ void skaitytiIrIsvestiDuomenis(const string& ivestiesFailoPavadinimas, const str
 }
 
 void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const string& islaikiusiuFailoPavadinimas, const string& neislaikiusiuFailoPavadinimas) {
-    // Atidaromas įvesties failas binariniu režimu
-    ifstream ivestiesFailas(ivestiesFailoPavadinimas, std::ios::in | std::ios::binary);
+    auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();
+    
+    // Atidaro duomenis binariniu režimu
+    ifstream ivestiesFailas(ivestiesFailoPavadinimas, std::ios::in | ios::binary);
     if (!ivestiesFailas) {
         throw runtime_error("Nepavyko atidaryti ivesties failo " + ivestiesFailoPavadinimas);
     }
 
-    // Skaitomas įvesties failas į buferį
-    ivestiesFailas.seekg(0, std::ios::end);
+    // Perskaito duomenis į buferį
+    ivestiesFailas.seekg(0, ios::end);
     size_t failoDydis = ivestiesFailas.tellg();
-    ivestiesFailas.seekg(0, std::ios::beg);
+    ivestiesFailas.seekg(0, ios::beg);
     vector<char> buferis(failoDydis);
     ivestiesFailas.read(buferis.data(), failoDydis);
     ivestiesFailas.close();
 
-    // Atidaromi išvesties failai vieną kartą
-    ofstream islaikiusiuFailas(islaikiusiuFailoPavadinimas, std::ios::out | std::ios::binary);
-    ofstream neislaikiusiuFailas(neislaikiusiuFailoPavadinimas, std::ios::out | std::ios::binary);
+    auto pabaigaSkaitymo = std::chrono::high_resolution_clock::now();
+    auto laikasSkaitymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo);
+    cout << "Failo skaitymas uztruko " << laikasSkaitymo.count() << " ms." << endl;
+
+    ofstream islaikiusiuFailas(islaikiusiuFailoPavadinimas, ios::out | ios::binary);
+    ofstream neislaikiusiuFailas(neislaikiusiuFailoPavadinimas, ios::out | ios::binary);
     if (!islaikiusiuFailas || !neislaikiusiuFailas) {
         throw runtime_error("Nepavyko atidaryti išvesties failų");
     }
 
-    // Sukuriama eilutes string
+    // Konvertuoti buferį į string
     string failoTurinys(buferis.begin(), buferis.end());
     istringstream iss(failoTurinys);
     string eilute;
 
-    // Pirmoji ir antroji antraštės eilutės - kopijuojamos į abu išvesties failus
+    // Pirmus dvi eilutės yra antraštės
     getline(iss, eilute);
     islaikiusiuFailas << eilute << '\n';
     neislaikiusiuFailas << eilute << '\n';
@@ -186,24 +191,41 @@ void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const strin
     islaikiusiuFailas << eilute << '\n';
     neislaikiusiuFailas << eilute << '\n';
 
-    // Eilinė turinio peržiūra ir skirstymas
+    vector<Studentas> studentai;
+
     while (getline(iss, eilute)) {
-        // Naudojame rfind, kad rastume paskutinį tarpo simbolį
-        size_t paskutinisTarpas = eilute.rfind(' ');
-        if (paskutinisTarpas != string::npos) {
-            // Gauti galutinį vidurkį kaip float
-            float galutinisVidurkis = stof(eilute.substr(paskutinisTarpas + 1));
-
-            // Patikrinimas pagal galutinį vidurkį ir rašymas į atitinkamą failą
-            if (galutinisVidurkis >= 5.0f) {
-                islaikiusiuFailas << eilute << '\n';
-            } else {
-                neislaikiusiuFailas << eilute << '\n';
-            }
-        }
+        istringstream studentLine(eilute);
+        Studentas student;
+        studentLine >> student.pavarde >> student.vardas >> student.galutinisVidurkis >> student.galutineMediana;
+        studentai.push_back(student);
     }
 
-    // Uždaryti išvesties failus
+    auto pradetiRusiavima = std::chrono::high_resolution_clock::now();
+    
+    // Rušiuoti studentus pagal galutinį pažymį
+    sort(studentai.begin(), studentai.end(), [](const Studentas& a, const Studentas& b) {
+        return a.galutinisVidurkis > b.galutinisVidurkis;
+    });
+
+    auto pabaigaRusiavimo = std::chrono::high_resolution_clock::now();
+    auto rusiavimoLaikas = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaRusiavimo - pradetiRusiavima);
+    cout << "Rusiavimas uztruko " << rusiavimoLaikas.count() << " ms." << endl;
+
+    auto pradetiRasyma = std::chrono::high_resolution_clock::now();
+
+    // Įrašyti surūšiuotus studentus į atitinkamus failus
+    for (const auto& student : studentai) {
+        if (student.galutinisVidurkis >= 5.0f) {
+            islaikiusiuFailas << student.pavarde << " " << student.vardas << " " << student.galutinisVidurkis << " " << student.galutineMediana <<'\n';
+        } else {
+            neislaikiusiuFailas << student.pavarde << " " << student.vardas << " " << student.galutinisVidurkis <<  " " << student.galutineMediana <<'\n';
+        }
+    }
+    auto pabaigaRasymo = std::chrono::high_resolution_clock::now();
+    auto laikasRasymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaRasymo - pradetiRasyma);
+    cout << "Rasymas uztruko " << laikasRasymo.count() << " ms." << endl;
+
+    // Uždaryti failus
     islaikiusiuFailas.close();
     neislaikiusiuFailas.close();
 }

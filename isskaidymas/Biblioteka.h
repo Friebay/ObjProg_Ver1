@@ -49,6 +49,6 @@ using std::stof;
 using std::isspace;
 using std::ostringstream;
 using std::right;
-
+using std::ios;
 
 #endif

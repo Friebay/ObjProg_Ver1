@@ -56,18 +56,18 @@ void generuotiStudentuFaila(int studentuKiekis, const string& failoPavadinimas) 
 }
 
 void generuotiFaila() {
-    vector<int> fileSizes = {1000, 10000, 100000, 1000000, 10000000};
+    vector<int> studentuSkaicius = {1000, 10000, 100000, 1000000, 10000000};
     
     cout << "Kiek studentu norite sugeneruoti:" << '\n';
-    for (int i = 0; i < fileSizes.size(); ++i) {
-        cout << i + 1 << ". " << fileSizes[i] << " studentu." << '\n';
+    for (int i = 0; i < studentuSkaicius.size(); ++i) {
+        cout << i + 1 << ". " << studentuSkaicius[i] << " studentu." << '\n';
     }
 
-    int choice;
+    int pasirinkimas;
     while (true) {
         cout << "Prasome ivesti skaiciu (1-5): ";
-        cin >> choice;
-        if (cin.fail() || choice < 1 || choice > 5) {
+        cin >> pasirinkimas;
+        if (cin.fail() || pasirinkimas < 1 || pasirinkimas > 5) {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "Neteisingas pasirinkimas. Prasome ivesti 1, 2, 3, 4 arba 5." << '\n';
@@ -76,11 +76,15 @@ void generuotiFaila() {
         }
     }
 
-    int studentuKiekis = fileSizes[choice - 1];
+    int studentuKiekis = studentuSkaicius[pasirinkimas - 1];
     string failoPavadinimas = "studentai_" + to_string(studentuKiekis) + ".txt";
 
     try {
+        auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();
         generuotiStudentuFaila(studentuKiekis, failoPavadinimas);
+        auto pabaigaSkaitymo = std::chrono::high_resolution_clock::now();
+        long long trukmeSkaitymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo).count();
+        cout << "Duomenu generavimas ir failo irasymas truko " << trukmeSkaitymo << "ms.\n";
     } catch (const exception& e) {
         cout << "Klaida: " << e.what() << '\n';
     }

@@ -141,11 +141,12 @@ Studentas generuotiAtsitiktiniStudenta() {
     studentas.mediana = skaiciuotiMediana(studentas.pazymiai);
 
     // Apskaičiuojami galutiniai įvertinimai, naudojami constant multipliers
-    const float koefVidurkis = 0.4f;
-    const float koefEgzaminas = 0.6f;
+    const double egzaminoBalas = 0.6 * studentas.egzaminoPazymys;
+    const double vidurkioBalas = 0.4 * studentas.vidurkis;
+    const double medianosBalas = 0.4 * studentas.mediana;
 
-    studentas.galutinisVidurkis = koefVidurkis * studentas.vidurkis + koefEgzaminas * studentas.egzaminoPazymys;
-    studentas.galutineMediana = koefVidurkis * studentas.mediana + koefEgzaminas * studentas.egzaminoPazymys;
+    studentas.galutinisVidurkis = vidurkioBalas + egzaminoBalas;
+    studentas.galutineMediana = medianosBalas + egzaminoBalas;
 
     return studentas;
 }
@@ -288,7 +289,7 @@ void programa() {
 
 
                 skaitytiIrIsvestiDuomenis(duomenuFailas, isvestiesFailoPavadinimas, trukmeSkaitymo, trukmeVidurkio, trukmeIrasymo);
-                cout << "Duomenys nuskaityti is " << duomenuFailas << " ir isvesti i " << isvestiesFailoPavadinimas << '\n';
+                cout << "Duomenys nuskaityti is " << duomenuFailas << " per " << trukmeSkaitymo << "ms ir isvesti i " << isvestiesFailoPavadinimas << " per " << trukmeIrasymo << " ms.\n";
                 return;
             }
 
@@ -296,9 +297,9 @@ void programa() {
                 // Rūšiuoti į išlaikiusius ir neišlaikiusius
                 vector<int> studentuSkaicius = {1000, 10000, 100000, 1000000, 10000000};
                 cout << "Pasirinkite rezultatu faila:" << '\n';
-                for (int i = 0; i < studentuSkaicius.size(); ++i) {
-                    cout << i + 1 << ". rezultatai_" << studentuSkaicius[i] << ".txt" << '\n';
-                }
+                cout << "Kodo generuoti duomenys\n1. rezultatai_1000.txt\n2. rezultatai_10000.txt\n3. rezultatai_100000.txt\n4. rezultatai_1000000.txt\n5. rezultatai_10000000.txt\n";
+                cout << "Pavyzdiniai duomenys\n6. rezultatai1000.txt\n7. rezultatai10000.txt\n8. rezultatai100000.txt\n9. rezultatai1000000.txt\n10. rezultatai10000000.txt\n";
+                
 
                 int failoPasirinkimas;
                 cout << "Jusu pasirinkimas: ";
