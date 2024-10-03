@@ -18,7 +18,7 @@ void generuotiStudentuFaila(int studentuKiekis, const string& failoPavadinimas) 
 
     // Generuojamas antraštės eilutė
     ostringstream headerStream;
-    headerStream << left << setw(25) << "Vardas" << setw(25) << "Pavarde" << setw(2) << " "; // Adjusted widths
+    headerStream << left << setw(16) << "Vardas" << setw(16) << "Pavarde" << setw(20) << " ";
     for (int i = 1; i <= 8; ++i) {
         headerStream << setw(10) << ("ND" + to_string(i));
     }
@@ -37,7 +37,7 @@ void generuotiStudentuFaila(int studentuKiekis, const string& failoPavadinimas) 
         string vardas = generuotiVardaPavarde();  // Generuojami vardai ir pavardės
         string pavarde = generuotiVardaPavarde();
 
-        outputStream << left << setw(16) << (vardas) << right << setw(16) << (pavarde) << setw(13) << " ";;
+        outputStream << left << setw(16) << vardas << setw(16) << pavarde << setw(13) << " ";
 
         // Generuojami 15 pažymių
         for (int j = 0; j < 15; ++j) {

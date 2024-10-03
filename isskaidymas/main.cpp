@@ -2,8 +2,7 @@
 #include "failo_apdorojimas.h"
 
 int main() {
-    inicializuotiAtsitiktinius();
-    
+   
     char pabaiga = 'N';
 
     while (toupper(pabaiga) != 'T') { 

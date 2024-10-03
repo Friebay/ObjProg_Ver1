@@ -19,6 +19,7 @@
 #include <iostream>
 #include <cctype>
 #include <locale>
+#include <iomanip>
 
 using std::endl;
 using std::cout;

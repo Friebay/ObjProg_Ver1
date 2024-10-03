@@ -40,8 +40,22 @@ void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& 
         
         // Parse vardas and pavarde directly by indices
         studentas.vardas = buffer.substr(0, 16);
-        studentas.pavarde = buffer.substr(0, 16);
+        studentas.pavarde = buffer.substr(16, 32);
 
+        // Lambda function to trim leading and trailing whitespaces
+        auto trim = [](std::string &str) {
+            // Remove leading whitespaces
+            str.erase(str.begin(), std::find_if(str.begin(), str.end(), [](unsigned char ch) {
+                return !std::isspace(ch);
+            }));
+            // Remove trailing whitespaces
+            str.erase(std::find_if(str.rbegin(), str.rend(), [](unsigned char ch) {
+                return !std::isspace(ch);
+            }).base(), str.end());
+        };
+
+        trim(studentas.pavarde);
+        
         // Preallocate space for grades (assuming max ~25 grades)
         studentas.pazymiai.reserve(25);
 

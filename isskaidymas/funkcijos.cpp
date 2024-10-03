@@ -1,16 +1,6 @@
 #include "funkcijos.h"
 #include "failo_apdorojimas.h"
 
-#include <fstream>
-#include <iomanip>
-#include <ctime>
-
-// Inicializuoja atsitiktinių skaičių generatorių
-void inicializuotiAtsitiktinius() {
-    int random = int(time(0));
-    srand(random);
-}
-
 // Gauna pažymį iš vartotojo įvesties
 int gautiPazymi(const string& klausimas) {
     while (true) {
@@ -105,8 +95,8 @@ float skaiciuotiVidurki(vector<int>& pazymiai) {
 }
 
 int generuotiSkaiciu(int min, int max) {
-    static std::random_device rd;  // Non-deterministic random seed
-    static std::mt19937 gen(rd()); // Mersenne Twister RNG
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
     std::uniform_int_distribution<int> distrib(min, max);
     return distrib(gen);
 }
@@ -118,7 +108,7 @@ string generuotiVardaPavarde() {
     static std::mt19937 gen(rd());
     std::uniform_int_distribution<int> raideDistrib(0, 25);
     
-    string vardasPavarde(4, ' ');  // Fixed length of 4 characters
+    string vardasPavarde(4, ' '); 
 
     for (int i = 0; i < 4; ++i) {
         vardasPavarde[i] = raides[raideDistrib(gen)];
@@ -136,7 +126,7 @@ Studentas generuotiAtsitiktiniStudenta() {
 
     // Pre-allocate space for pazymiai to avoid reallocations
     int pazymiuKiekis = generuotiSkaiciu(1, 20);
-    studentas.pazymiai.reserve(pazymiuKiekis);  // Reserve space for pazymiai
+    studentas.pazymiai.reserve(pazymiuKiekis);
 
     // Generuojami atsitiktiniai pažymiai
     for (int i = 0; i < pazymiuKiekis; i++) {
