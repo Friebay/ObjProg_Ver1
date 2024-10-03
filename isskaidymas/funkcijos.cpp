@@ -49,14 +49,12 @@ void ivestiStudentoDuomenis(Studentas& studentas) {
         studentas.mediana = skaiciuotiMediana(studentas.pazymiai);
     }
 
-    // Skaičiuoja galutinius įvertinimus
-    studentas.galutinisVidurkis = 0.4 * studentas.vidurkis + 0.6 * studentas.egzaminoPazymys;
-    studentas.galutineMediana = 0.4 * studentas.mediana + 0.6 * studentas.egzaminoPazymys;
-}
+    const double egzaminoBalas = 0.6 * studentas.egzaminoPazymys;
+    const double vidurkioBalas = 0.4 * studentas.vidurkis;
+    const double medianosBalas = 0.4 * studentas.mediana;
 
-// Rūšiuoja pažymius didėjimo tvarka
-void rusiuotiPazymius(vector<int>& pazymiai) {
-    sort(pazymiai.begin(), pazymiai.end());
+    studentas.galutinisVidurkis = vidurkioBalas + egzaminoBalas;
+    studentas.galutineMediana = medianosBalas + egzaminoBalas;
 }
 
 // Rūšiuoja studentus pagal pavardę, o jei pavardės vienodos - pagal vardą
