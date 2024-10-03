@@ -41,6 +41,13 @@ using std::exception;
 using std::sort;
 using std::to_string;
 using std::ofstream;
-using namespace std::chrono;
+using std::getline;
+using std::isdigit;
+using std::move;
+using std::stof;
+using std::isspace;
+using std::ostringstream;
+using std::right;
+
 
 #endif

@@ -10,49 +10,49 @@
 #include <iomanip>
 #include <stdexcept>
 
-void generuotiStudentuFaila(int studentuKiekis, const std::string& failoPavadinimas) {
-    std::ofstream isvedimoFailas(failoPavadinimas);
+void generuotiStudentuFaila(int studentuKiekis, const string& failoPavadinimas) {
+    ofstream isvedimoFailas(failoPavadinimas);
     if (!isvedimoFailas.is_open()) {
-        throw std::runtime_error("Nepavyko atidaryti failo " + failoPavadinimas);
+        throw runtime_error("Nepavyko atidaryti failo " + failoPavadinimas);
     }
 
     // Generuojamas antraštės eilutė
-    std::ostringstream headerStream;
-    headerStream << std::left << std::setw(25) << "Vardas" << std::setw(25) << "Pavarde" << std::setw(2) << " "; // Adjusted widths
+    ostringstream headerStream;
+    headerStream << left << setw(25) << "Vardas" << setw(25) << "Pavarde" << setw(2) << " "; // Adjusted widths
     for (int i = 1; i <= 8; ++i) {
-        headerStream << std::setw(10) << ("ND" + std::to_string(i));
+        headerStream << setw(10) << ("ND" + to_string(i));
     }
 
-    headerStream << std::setw(9) << ("ND9");
+    headerStream << setw(9) << ("ND9");
 
     for (int i = 10; i <= 15; ++i) {
-        headerStream << std::setw(10) << ("ND" + std::to_string(i));
+        headerStream << setw(10) << ("ND" + to_string(i));
     }
-    headerStream << std::setw(9) << "Egz." << "\n";
+    headerStream << setw(9) << "Egz." << "\n";
     isvedimoFailas << headerStream.str();
 
     // Naudojamas stringstream, kad kauptų studentų duomenis prieš įrašymą
-    std::ostringstream outputStream;
+    ostringstream outputStream;
     for (int i = 0; i < studentuKiekis; ++i) {
-        std::string vardas = generuotiVardaPavarde();  // Generuojami vardai ir pavardės
-        std::string pavarde = generuotiVardaPavarde();
+        string vardas = generuotiVardaPavarde();  // Generuojami vardai ir pavardės
+        string pavarde = generuotiVardaPavarde();
 
-        outputStream << std::left << std::setw(16) << (vardas) << std::right << std::setw(16) << (pavarde) << std::setw(13) << " ";;
+        outputStream << left << setw(16) << (vardas) << right << setw(16) << (pavarde) << setw(13) << " ";;
 
         // Generuojami 15 pažymių
         for (int j = 0; j < 15; ++j) {
-            outputStream << std::right << std::setw(10) << generuotiSkaiciu(1, 10);
+            outputStream << right << setw(10) << generuotiSkaiciu(1, 10);
         }
 
         // Generuojamas egzamino pažymys
-        outputStream << std::right << std::setw(10) << generuotiSkaiciu(1, 10) << "\n";
+        outputStream << right << setw(10) << generuotiSkaiciu(1, 10) << "\n";
     }
 
     // Galutinis rašymas iš stream į failą
     isvedimoFailas << outputStream.str();
 
     isvedimoFailas.close();
-    std::cout << "Failas '" << failoPavadinimas << "' su " << studentuKiekis << " studentais buvo sugeneruotas." << '\n';
+    cout << "Failas '" << failoPavadinimas << "' su " << studentuKiekis << " studentais buvo sugeneruotas." << '\n';
 }
 
 void generuotiFaila() {
@@ -77,7 +77,7 @@ void generuotiFaila() {
     }
 
     int studentuKiekis = fileSizes[choice - 1];
-    string failoPavadinimas = "studentai_" + std::to_string(studentuKiekis) + ".txt";
+    string failoPavadinimas = "studentai_" + to_string(studentuKiekis) + ".txt";
 
     try {
         generuotiStudentuFaila(studentuKiekis, failoPavadinimas);
