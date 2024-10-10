@@ -23,6 +23,26 @@ int gautiPazymi(const string& klausimas) {
     }
 }
 
+// Rūšiuoja studentus pagal pavardę, o jei pavardės vienodos - pagal vardą
+void rusiuotiStudentusPagalPavarde(vector<Studentas>& studentai) {
+    sort(studentai.begin(), studentai.end(), [](const Studentas& a, const Studentas& b) {
+        if (a.pavarde == b.pavarde) {
+            return a.vardas < b.vardas;
+        }
+        return a.pavarde < b.pavarde;
+    });
+}
+
+// Rūšiuoja studentus pagal vardą, o jei vardai vienodos - pagal pavardę
+void rusiuotiStudentusPagalVarda(vector<Studentas>& studentai) {
+    sort(studentai.begin(), studentai.end(), [](const Studentas& a, const Studentas& b) {
+        if (a.vardas == b.vardas) {
+            return a.pavarde < b.pavarde;
+        }
+        return a.vardas < b.vardas;
+    });
+}
+
 // Įveda studento duomenis
 void ivestiStudentoDuomenis(Studentas& studentas) {
     cout << "Vardas: ";
@@ -273,7 +293,7 @@ void programa() {
                 vector<string> studentuSkaicius = {"_1000", "_10000", "_100000", "_1000000", "_10000000", "1000", "10000", "100000", "1000000", "10000000"};
                 cout << "Pasirinkite rezultatu faila:\n";
                 cout << "Kodo generuoti duomenys\n1. studentai_1000.txt\n2. studentai_10000.txt\n3. studentai_100000.txt\n4. studentai_1000000.txt\n5. studentai_10000000.txt\n";
-                cout << "Pavyzdiniai duomenys\n6. studentai1000.txt\n7. studentai10000.txt\n8. studentai100000.txt\n9.studentai1000000.txt\n10. studentai10000000.txt\n";
+                cout << "Pavyzdiniai duomenys\n6. studentai1000.txt\n7. studentai10000.txt\n8. studentai100000.txt\n9. studentai1000000.txt\n10. studentai10000000.txt\n";
                 
 
                 int failoPasirinkimas;
@@ -323,24 +343,23 @@ void programa() {
             }
 
             case 8: {
+                // Kelius kartus sukamas kodas, kad sužinoti kiek laiko užtrunka kodas
                 int kartai;
                 bool validInput = false;
                 
-                // Get the number of repetitions from the user
                 while (!validInput) {
                     cout << "Kiek kartu norite paleisti funkcija 'vykdytiVisusZingsnius'? ";
                     cin >> kartai;
                     
                     if (cin.fail() || kartai <= 0) {
-                        cin.clear();  // Clear the error flag on cin
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard invalid input
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
                         cout << "Neteisingas skaicius. Prasome ivesti teigiama skaiciu." << '\n';
                     } else {
                         validInput = true;
                     }
                 }
 
-                // Run 'vykdytiVisusZingsnius' the specified number of times
                 for (int i = 0; i < kartai; i++) {
                     cout << "Vykdoma " << i + 1 << " karta:" << '\n';
                     vykdytiVisusZingsnius();
@@ -354,14 +373,25 @@ void programa() {
             throw runtime_error("Nera studentu duomenu.");
         }
 
+        int pasirinkimas;
+        cout << "Jeigu norite rusiuoti pagal varda - rasykite 1, jeigu pagal pavarde - 2: ";
+        cin >> pasirinkimas;
+
         // Rūšiuoja studentus
-        rusiuotiStudentus(studentai);
+        if (pasirinkimas == 1){
+            rusiuotiStudentusPagalVarda(studentai);
+        }
+        else if (pasirinkimas == 2) {
+            rusiuotiStudentusPagalPavarde(studentai);
+        }
+        else {
+            cout << "Blogas pasirinkimas, rusiuojama pagal varda.";
+            rusiuotiStudentusPagalVarda(studentai);
+        }
 
         // Spausdina rezultatus
         cout << left << setw(16) << "Pavarde" << setw(16) << "Vardas" << setw(25) << "Galutinis Vidurkis" << " / " << "Galutine Mediana" << '\n';
         cout << "-------------------------------------------------------------------------" << '\n';
-
-        // Set fixed and precision once before the loop
         cout << fixed << setprecision(2);
 
         for (const Studentas& studentas : studentai) {
