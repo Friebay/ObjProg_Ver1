@@ -148,7 +148,7 @@ void skaitytiIrIsvestiDuomenis(const string& ivestiesFailoPavadinimas, const str
     trukmeIrasymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaIrasimo - pradziaIrasimo).count();
 }
 
-void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const string& islaikiusiuFailoPavadinimas, const string& neislaikiusiuFailoPavadinimas) {
+void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const string& islaikiusiuFailoPavadinimas, const string& neislaikiusiuFailoPavadinimas, long long& laikasSkaitymo, long long& rusiavimoLaikas, long long& laikasRasymo) {
     auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();
     
     // Atidaro duomenis binariniu režimu
@@ -165,9 +165,7 @@ void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const strin
     ivestiesFailas.read(buferis.data(), failoDydis);
     ivestiesFailas.close();
 
-    auto pabaigaSkaitymo = std::chrono::high_resolution_clock::now();
-    auto laikasSkaitymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo);
-    cout << "Failo skaitymas uztruko " << laikasSkaitymo.count() << " ms." << endl;
+    
 
     ofstream islaikiusiuFailas(islaikiusiuFailoPavadinimas, ios::out | ios::binary);
     ofstream neislaikiusiuFailas(neislaikiusiuFailoPavadinimas, ios::out | ios::binary);
@@ -198,6 +196,10 @@ void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const strin
         studentai.push_back(student);
     }
 
+    auto pabaigaSkaitymo = std::chrono::high_resolution_clock::now();
+    laikasSkaitymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo).count();
+    cout << "Failo skaitymas uztruko " << laikasSkaitymo << " ms." << endl;
+
     auto pradetiRusiavima = std::chrono::high_resolution_clock::now();
     
     // Rušiuoti studentus pagal galutinį pažymį
@@ -207,8 +209,8 @@ void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const strin
 
 
     auto pabaigaRusiavimo = std::chrono::high_resolution_clock::now();
-    auto rusiavimoLaikas = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaRusiavimo - pradetiRusiavima);
-    cout << "Rusiavimas uztruko " << rusiavimoLaikas.count() << " ms." << endl;
+    rusiavimoLaikas = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaRusiavimo - pradetiRusiavima).count();
+    cout << "Rusiavimas uztruko " << rusiavimoLaikas<< " ms." << endl;
 
     auto pradetiRasyma = std::chrono::high_resolution_clock::now();
 
@@ -221,8 +223,8 @@ void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const strin
         }
     }
     auto pabaigaRasymo = std::chrono::high_resolution_clock::now();
-    auto laikasRasymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaRasymo - pradetiRasyma);
-    cout << "Rasymas uztruko " << laikasRasymo.count() << " ms." << endl;
+    laikasRasymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaRasymo - pradetiRasyma).count();
+    cout << "Rasymas uztruko " << laikasRasymo << " ms." << endl;
 
     // Uždaryti failus
     islaikiusiuFailas.close();

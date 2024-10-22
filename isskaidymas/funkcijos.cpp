@@ -322,7 +322,8 @@ void programa() {
                 string islaikiusiuFailoPavadinimas = "rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + "_islaike.txt";
                 string neislaikiusiuFailoPavadinimas = "rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + "_neislaike.txt";
 
-                padalintiRezultatuFaila(duomenuFailas, islaikiusiuFailoPavadinimas, neislaikiusiuFailoPavadinimas);
+                long long trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas;
+                padalintiRezultatuFaila(duomenuFailas, islaikiusiuFailoPavadinimas, neislaikiusiuFailoPavadinimas, trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas);
                 cout << "Rezultatu failas padalintas i " << islaikiusiuFailoPavadinimas << " ir " << neislaikiusiuFailoPavadinimas << '\n';
                 return;
             }
@@ -406,7 +407,7 @@ void generuotiAtsitiktiniusFailus() {
 }
 
 void vykdytiVisusZingsnius() {
-    vector<int> studentuKiekiai = {1000, 10000, 100000, 1000000, 10000000};
+    vector<int> studentuKiekiai = {1000, 10000, 100000, 1000000};
     
     // Atidaryti CSV failą rašymui
     ofstream csvFile("performance_data.csv", std::ios::app);
@@ -417,11 +418,12 @@ void vykdytiVisusZingsnius() {
     // Įrašo CSV antraštę, jei failas tuščias
     csvFile.seekp(0, std::ios::end);
     if (csvFile.tellp() == 0) {
-        csvFile << "Timestamp;StudentuKiekis;GeneravimoLaikas;SkaitymoLaikas;VidurkioLaikas;trukmeIrasymo;DalinimoLaikas;BendrasLaikas\n";
+        csvFile << "Testavimo Laikas;Studentu Kiekis;Studentu generavimo laikas;Sugeneruotu duomenu skaitymo laikas;Rezultatu irasymo laikas;Rezultatu skaitymo laikas;Rezultatu skaidymo laikas;Skaidymo irasymas;Bendras Laikas\n";
     }
 
     for (int kiekis : studentuKiekiai) {
         cout << "Vykdomi zingsniai su " << kiekis << " studentu:" << '\n';
+        auto pradziaVisko = std::chrono::high_resolution_clock::now();
         
         // Gauti dabartinį laiką
         auto now = std::chrono::system_clock::now();
@@ -436,7 +438,7 @@ void vykdytiVisusZingsnius() {
         generuotiStudentuFaila(kiekis, studentuFailas);
         auto pabaigaGeneravimo = std::chrono::high_resolution_clock::now();
         auto trukmeGeneravimo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaGeneravimo - pradziaGeneravimo);
-        cout << "Failo generavimas uztruko " << trukmeGeneravimo.count() << " ms." << '\n';
+        cout << "Failo su " << kiekis << "studentais generavimas uztruko " << trukmeGeneravimo.count() << " ms." << '\n';
 
         // Skaitomas sugeneruotas failas, apskaičiuoja galutinius rezultatus ir išvedamas į rezultatų failą
         string rezultatuFailas = "rezultatai_" + to_string(kiekis) + ".txt";
@@ -448,31 +450,34 @@ void vykdytiVisusZingsnius() {
         auto trukmeSkaitymoLaikas = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo);
         
         cout << "Skaitymo laikas: " << trukmeSkaitymo << " ms." << '\n';
-        cout << "Vidurkio skaiciavimas uztruko " << trukmeVidurkio << " ms." << '\n';
-        cout << "Duomenu isvedimas uztruko " << trukmeIrasymo << " ms." << '\n';
+        cout << "Duomenu isvedimas i " << rezultatuFailas << " uztruko " << trukmeIrasymo << " ms." << '\n';
 
         // Rezultatų failo padalijimas į išlaikiusius ir neišlaikiusius
         string islaikeFailas = "rezultatai_" + to_string(kiekis) + "_islaike.txt";
         string neislaikeFailas = "rezultatai_" + to_string(kiekis) + "_neislaike.txt";
         cout << "Dalinamas rezultatu failas i islaikiusius ir neislaikiusius..." << '\n';
-        auto pradziaDalinimo = std::chrono::high_resolution_clock::now();
-        padalintiRezultatuFaila(rezultatuFailas, islaikeFailas, neislaikeFailas);
-        auto pabaigaDalinimo = std::chrono::high_resolution_clock::now();
-        auto trukmeDalinimo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaDalinimo - pradziaDalinimo);
-        cout << "Rezultatu failo dalinimas uztruko " << trukmeDalinimo.count() << " ms." << '\n';
+        long long trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas;
+        padalintiRezultatuFaila(rezultatuFailas, islaikeFailas, neislaikeFailas, trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas);
+        cout << "Rezultatu failo dalinimas uztruko " << trukmeRezultatuSkaitymo + trukmeRezultatuSkaidymas + trukmeSkaidymoIrasymas << " ms." << '\n';
 
         // Skaičuoti bendrą laiką
-        long long bendrasLaikas = trukmeGeneravimo.count() + trukmeSkaitymo + trukmeVidurkio + trukmeIrasymo + trukmeDalinimo.count();
+        long long bendrasLaikas = trukmeGeneravimo.count() + trukmeSkaitymo + trukmeIrasymo + trukmeRezultatuSkaitymo + trukmeRezultatuSkaidymas + trukmeSkaidymoIrasymas;
         cout << "Visi zingsniai su " << kiekis << " studentu baigti. Trukme: " << bendrasLaikas << " ms." << '\n' << '\n';
+
+        auto pabaigaVisko = std::chrono::high_resolution_clock::now();
+        auto trukmeVisko = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaVisko - pradziaVisko);
+        cout << "Visi zingsniai su " << kiekis << " studentu baigti. Trukme: " << trukmeVisko.count() << " ms." << '\n' << '\n';
+
 
         // Surašyti laikus į CSV failą
         csvFile << timestamp << ";"
                 << kiekis << ";"
                 << trukmeGeneravimo.count() << ";"
                 << trukmeSkaitymo << ";"
-                << trukmeVidurkio << ";"
                 << trukmeIrasymo << ";"
-                << trukmeDalinimo.count() << ";"
+                << trukmeRezultatuSkaitymo << ";"
+                << trukmeRezultatuSkaidymas << ";"
+                << trukmeSkaidymoIrasymas << ";"
                 << bendrasLaikas << "\n";
     }
 
