@@ -20,6 +20,7 @@
 #include <cctype>
 #include <locale>
 #include <iomanip>
+#include <list>
 
 using std::endl;
 using std::cout;
@@ -50,5 +51,6 @@ using std::isspace;
 using std::ostringstream;
 using std::right;
 using std::ios;
+using std::list;
 
 #endif

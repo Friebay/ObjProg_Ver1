@@ -24,23 +24,26 @@ int gautiPazymi(const string& klausimas) {
 }
 
 // Rūšiuoja studentus pagal pavardę, o jei pavardės vienodos - pagal vardą
-void rusiuotiStudentusPagalPavarde(vector<Studentas>& studentai) {
-    sort(studentai.begin(), studentai.end(), [](const Studentas& a, const Studentas& b) {
-        if (a.pavarde == b.pavarde) {
-            return a.vardas < b.vardas;
-        }
-        return a.pavarde < b.pavarde;
-    });
+void rusiuotiStudentusPagalPavarde(list<Studentas>& studentai) {
+    studentai.sort([](const Studentas& a, const Studentas& b) {
+    if (a.pavarde == b.pavarde) {
+        return a.vardas < b.vardas;
+    }
+    return a.pavarde < b.pavarde;
+});
+
 }
 
 // Rūšiuoja studentus pagal vardą, o jei vardai vienodos - pagal pavardę
-void rusiuotiStudentusPagalVarda(vector<Studentas>& studentai) {
-    sort(studentai.begin(), studentai.end(), [](const Studentas& a, const Studentas& b) {
-        if (a.vardas == b.vardas) {
-            return a.pavarde < b.pavarde;
-        }
-        return a.vardas < b.vardas;
-    });
+void rusiuotiStudentusPagalVarda(list<Studentas>& studentai) {
+    studentai.sort([](const Studentas& a, const Studentas& b) {
+    if (a.vardas == b.vardas) {
+        return a.pavarde < b.pavarde;
+    }
+    return a.vardas < b.vardas;
+});
+
+
 }
 
 // Įveda studento duomenis
@@ -75,16 +78,6 @@ void ivestiStudentoDuomenis(Studentas& studentas) {
 
     studentas.galutinisVidurkis = vidurkioBalas + egzaminoBalas;
     studentas.galutineMediana = medianosBalas + egzaminoBalas;
-}
-
-// Rūšiuoja studentus pagal pavardę, o jei pavardės vienodos - pagal vardą
-void rusiuotiStudentus(vector<Studentas>& studentai) {
-    sort(studentai.begin(), studentai.end(), [](const Studentas& a, const Studentas& b) {
-        if (a.pavarde == b.pavarde) {
-            return a.vardas < b.vardas;
-        }
-        return a.pavarde < b.pavarde;
-    });
 }
 
 // Skaičiuoja pažymių medianą
@@ -144,7 +137,6 @@ Studentas generuotiAtsitiktiniStudenta() {
 
     // Pre-allocate space for pazymiai to avoid reallocations
     int pazymiuKiekis = generuotiSkaiciu(1, 20);
-    studentas.pazymiai.reserve(pazymiuKiekis);
 
     // Generuojami atsitiktiniai pažymiai
     for (int i = 0; i < pazymiuKiekis; i++) {
@@ -172,7 +164,7 @@ Studentas generuotiAtsitiktiniStudenta() {
 
 // Pagrindinė programos funkcija
 void programa() {
-    vector<Studentas> studentai;
+    list<Studentas> studentai;
     int pasirinkimas;
     int failoPasirinkimas;
     int studentuKiekis;
@@ -222,7 +214,6 @@ void programa() {
                     }
                 }
 
-                studentai.resize(studentuKiekis);
                 for (Studentas& studentas : studentai) {
                     ivestiStudentoDuomenis(studentas);
                 }

@@ -2,6 +2,7 @@
 #define FUNKCIJOS_H
 
 #include "Biblioteka.h"
+#include <list>
 
 struct Studentas {
     string vardas, pavarde;
@@ -20,7 +21,7 @@ Studentas generuotiAtsitiktiniStudenta();
 int gautiPazymi(const string& klausimas);
 float skaiciuotiMediana(vector<int>& pazymiai);
 float skaiciuotiVidurki(vector<int>& pazymiai);
-void rusiuotiStudentus(vector<Studentas>& studentai);
+void rusiuotiStudentus(list<Studentas>& studentai);
 int generuotiSkaiciu(int min, int max);
 string generuotiVardaPavarde();
 void generuotiFaila();

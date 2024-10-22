@@ -1,6 +1,7 @@
 #include "failo_apdorojimas.h"
+#include <list>
 
-void skaiciuotiIsFailo(Studentas& studentas, bool tinkamiPazymiai, vector<Studentas>& studentai) {
+void skaiciuotiIsFailo(Studentas& studentas, bool tinkamiPazymiai, list<Studentas>& studentai) {
     if (tinkamiPazymiai && !studentas.pazymiai.empty()) {
         studentas.egzaminoPazymys = studentas.pazymiai.back();
         studentas.pazymiai.pop_back();
@@ -21,7 +22,7 @@ void skaiciuotiIsFailo(Studentas& studentas, bool tinkamiPazymiai, vector<Studen
     }
 }
 
-void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& studentai, long long& trukmeSkaitymo, long long& trukmeVidurkio) {
+void skaitytiDuomenisIsFailo(const string& failoPavadinimas, list<Studentas>& studentai, long long& trukmeSkaitymo, long long& trukmeVidurkio) {
     auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();
 
     ifstream failas(failoPavadinimas, std::ios::in | std::ios::binary);
@@ -59,9 +60,6 @@ void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& 
         };
 
         trim(studentas.pavarde);
-        
-        // Rezervuoja vietą 25-iams pažymiams
-        studentas.pazymiai.reserve(25);
 
         // Pažymiai prasideda nuo 52 simbolio
         size_t pozicija = 52;
@@ -113,7 +111,7 @@ void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& 
 }
 
 void skaitytiIrIsvestiDuomenis(const string& ivestiesFailoPavadinimas, const string& irasymoFailoPavadinimas, long long& trukmeSkaitymo, long long& trukmeVidurkio, long long& trukmeIrasymo) {
-    vector<Studentas> studentai;
+    list<Studentas> studentai;
     skaitytiDuomenisIsFailo(ivestiesFailoPavadinimas, studentai, trukmeSkaitymo, trukmeVidurkio);
 
     auto pradziaIrasimo = std::chrono::high_resolution_clock::now();
@@ -191,7 +189,7 @@ void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const strin
     islaikiusiuFailas << eilute << '\n';
     neislaikiusiuFailas << eilute << '\n';
 
-    vector<Studentas> studentai;
+    list<Studentas> studentai;
 
     while (getline(iss, eilute)) {
         istringstream studentLine(eilute);
@@ -203,9 +201,10 @@ void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const strin
     auto pradetiRusiavima = std::chrono::high_resolution_clock::now();
     
     // Rušiuoti studentus pagal galutinį pažymį
-    sort(studentai.begin(), studentai.end(), [](const Studentas& a, const Studentas& b) {
+    studentai.sort([](const Studentas& a, const Studentas& b) {
         return a.galutinisVidurkis > b.galutinisVidurkis;
     });
+
 
     auto pabaigaRusiavimo = std::chrono::high_resolution_clock::now();
     auto rusiavimoLaikas = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaRusiavimo - pradetiRusiavima);
