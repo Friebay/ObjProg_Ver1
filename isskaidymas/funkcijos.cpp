@@ -407,7 +407,7 @@ void generuotiAtsitiktiniusFailus() {
 }
 
 void vykdytiVisusZingsnius() {
-    vector<int> studentuKiekiai = {1000, 10000, 100000, 1000000};
+    vector<int> studentuKiekiai = {1000, 10000, 100000, 1000000, 10000000};
     
     // Atidaryti CSV failą rašymui
     ofstream csvFile("performance_data.csv", std::ios::app);
