@@ -122,7 +122,7 @@ void skaitytiIrIsvestiDuomenis(const string& ivestiesFailoPavadinimas, const str
     buffer << left << setw(16) << "Pavarde" 
            << setw(16) << "Vardas" 
            << setw(25) << "Galutinis Vidurkis" 
-           << "Galutine Mediana" << '\n';
+           << "Galutine Mediana\n";
     buffer << string(70, '-') << '\n';
 
     for (const auto& studentas : studentai) {

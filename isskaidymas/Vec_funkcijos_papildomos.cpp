@@ -16,10 +16,10 @@ int gautiPazymi(const string& klausimas) {
             if (pazymys >= 0 && pazymys <= 10) {
                 return pazymys;
             } else {
-                cout << "Klaida: pazymys turi buti tarp 0 ir 10." << '\n';
+                cout << "Klaida: pazymys turi buti tarp 0 ir 10.\n";
             }
         } catch (const invalid_argument&) {
-            cout << "Klaida: iveskite teisinga skaiciu." << '\n';
+            cout << "Klaida: iveskite teisinga skaiciu.\n";
         }
     }
 }
@@ -164,6 +164,6 @@ void generuotiAtsitiktiniusFailus() {
         int studentuKiekis = generuotiSkaiciu(1, 1000000);
         string failoPavadinimas = "studentai_random_" + to_string(i) + ".txt";
         generuotiStudentuFaila(studentuKiekis, failoPavadinimas);
-        cout << "Sugeneruotas failas " << failoPavadinimas << " su " << studentuKiekis << " studentu." << '\n';
+        cout << "Sugeneruotas failas " << failoPavadinimas << " su " << studentuKiekis << " studentu.\n";
     }
 }
