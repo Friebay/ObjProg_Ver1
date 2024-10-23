@@ -1,17 +1,6 @@
 #include "List_funkcijos.h"
 #include "Vec_funkcijos_papildomos.h"
 
-#include <fstream>
-#include <iomanip>
-#include <sstream>
-
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <iomanip>
-#include <stdexcept>
-
 void List_generuotiStudentuFaila(int studentuKiekis, const string& failoPavadinimas) {
     ofstream isvedimoFailas(failoPavadinimas);
     if (!isvedimoFailas.is_open()) {
@@ -58,21 +47,21 @@ void List_generuotiStudentuFaila(int studentuKiekis, const string& failoPavadini
 }
 
 void List_generuotiFaila() {
-    vector<int> studentuSkaicius = {1000, 10000, 100000, 1000000, 10000000};
+    const vector<int> studentuSkaicius = {1000, 10000, 100000, 1000000, 10000000};
     
     cout << "Kiek studentu norite sugeneruoti:\n";
     for (int i = 0; i < studentuSkaicius.size(); ++i) {
         cout << i + 1 << ". " << studentuSkaicius[i] << " studentu.\n";
     }
 
-    int pasirinkimas;
+    int pasirinkimas = 0;
     while (true) {
         cout << "Prasome ivesti skaiciu (1-5): ";
         cin >> pasirinkimas;
         if (cin.fail() || pasirinkimas < 1 || pasirinkimas > 5) {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Neteisingas pasirinkimas. Prasome ivesti 1, 2, 3, 4 arba 5.\n";
+            cout << "Neteisingas pasirinkimas. Prasome ivesti nuo skaiciu nuo 1 iki 5.\n";
         } else {
             break;
         }

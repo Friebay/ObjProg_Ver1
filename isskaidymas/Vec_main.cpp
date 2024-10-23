@@ -40,6 +40,7 @@ int main() {
             cout << "Neteisingas pasirinkimas. Prasome ivesti T arba N: ";
             cin >> pabaiga;
         }
+        cout << "\n";
     }
 
     return 0;

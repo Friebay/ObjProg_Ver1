@@ -16,10 +16,8 @@
 #include <numeric>
 #include <random>
 #include <cstring>
-#include <iostream>
 #include <cctype>
 #include <locale>
-#include <iomanip>
 #include <list>
 
 using std::endl;

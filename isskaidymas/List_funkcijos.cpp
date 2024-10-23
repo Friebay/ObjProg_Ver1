@@ -3,10 +3,6 @@
 #include "List_generuoti_failus.h"
 #include "Vec_funkcijos_papildomos.h"
 
-#include <iostream>
-#include <list>
-#include <iomanip>
-#include <limits>
 
 // Įveda studento duomenis
 void List_ivestiStudentoDuomenis(List_Studentas& studentas) {

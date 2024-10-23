@@ -1,7 +1,6 @@
 #include "List_failo_apdorojimas.h"
 #include "List_funkcijos.h"
 #include "Vec_funkcijos_papildomos.h"
-#include <list>
 
 void List_skaiciuotiIsFailo(List_Studentas& studentas, bool tinkamiPazymiai, list<List_Studentas>& studentai) {
     if (tinkamiPazymiai && !studentas.pazymiai.empty()) {
@@ -20,7 +19,7 @@ void List_skaiciuotiIsFailo(List_Studentas& studentas, bool tinkamiPazymiai, lis
 
         studentai.push_back(move(studentas));
     } else {
-        cout << "Klaida: truksta pazymiu studentui " << studentas.vardas << " " << studentas.pavarde << '\n';
+        cout << "Klaida: truksta pazymiu studentui " << studentas.vardas << " " << studentas.pavarde << "\n";
     }
 }
 
@@ -126,15 +125,15 @@ void List_skaitytiIrIsvestiDuomenis(const string& ivestiesFailoPavadinimas, cons
     buffer << left << setw(16) << "Pavarde" 
            << setw(16) << "Vardas" 
            << setw(25) << "Galutinis Vidurkis" 
-           << "Galutine Mediana" << '\n';
-    buffer << string(70, '-') << '\n';
+           << "Galutine Mediana\n";
+    buffer << string(70, '-') << "\n";
 
     for (const auto& studentas : studentai) {
         buffer << left << setw(16) << studentas.pavarde
                << setw(16) << studentas.vardas
                << setw(25) << fixed << setprecision(2) << studentas.galutinisVidurkis
                << fixed << setprecision(2) << studentas.galutineMediana
-               << '\n';
+               << "\n";
     }
 
     // Atidaro failą įrašymui
@@ -181,12 +180,12 @@ void List_padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const 
 
     // Pirmus dvi eilutės yra antraštės
     getline(iss, eilute);
-    islaikiusiuFailas << eilute << '\n';
-    neislaikiusiuFailas << eilute << '\n';
+    islaikiusiuFailas << eilute << "\n";
+    neislaikiusiuFailas << eilute << "\n";
 
     getline(iss, eilute);
-    islaikiusiuFailas << eilute << '\n';
-    neislaikiusiuFailas << eilute << '\n';
+    islaikiusiuFailas << eilute << "\n";
+    neislaikiusiuFailas << eilute << "\n";
 
     // Naudojame list su List_Studentas struktūra
     list<List_Studentas> studentai;
@@ -218,9 +217,9 @@ void List_padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const 
     // Įrašyti surūšiuotus studentus į atitinkamus failus
     for (const auto& student : studentai) {
         if (student.galutinisVidurkis >= 5.0f) {
-            islaikiusiuFailas << left << setw(15) << student.pavarde << " " << setw(15) << student.vardas << " " << setw(24) << student.galutinisVidurkis << " " << student.galutineMediana << '\n';
+            islaikiusiuFailas << left << setw(15) << student.pavarde << " " << setw(15) << student.vardas << " " << setw(24) << student.galutinisVidurkis << " " << student.galutineMediana << "\n";
         } else {
-            neislaikiusiuFailas << left << setw(15) << student.pavarde << " " << setw(15) << student.vardas << " " << setw(24) << student.galutinisVidurkis << " " << student.galutineMediana << '\n';
+            neislaikiusiuFailas << left << setw(15) << student.pavarde << " " << setw(15) << student.vardas << " " << setw(24) << student.galutinisVidurkis << " " << student.galutineMediana << "\n";
         }
     }
 

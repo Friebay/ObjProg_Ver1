@@ -3,7 +3,6 @@
 
 #include "List_Biblioteka.h"
 #include "List_funkcijos.h"
-#include <list>
 
 void List_skaitytiDuomenisIsFailo(const string& failoPavadinimas, list<List_Studentas>& studentai, long long& trukmeSkaitymo, long long& trukmeVidurkio);
 void skaiciuotiIsFailo(List_Studentas& studentas, bool tinkamiPazymiai, list<List_Studentas>& studentai);

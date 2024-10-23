@@ -17,7 +17,7 @@ void skaiciuotiIsFailo(Studentas& studentas, bool tinkamiPazymiai, vector<Studen
 
         studentai.push_back(move(studentas));
     } else {
-        cout << "Klaida: truksta pazymiu studentui " << studentas.vardas << " " << studentas.pavarde << '\n';
+        cout << "Klaida: truksta pazymiu studentui " << studentas.vardas << " " << studentas.pavarde << "\n";
     }
 }
 
@@ -123,14 +123,14 @@ void skaitytiIrIsvestiDuomenis(const string& ivestiesFailoPavadinimas, const str
            << setw(16) << "Vardas" 
            << setw(25) << "Galutinis Vidurkis" 
            << "Galutine Mediana\n";
-    buffer << string(70, '-') << '\n';
+    buffer << string(70, '-') << "\n";
 
     for (const auto& studentas : studentai) {
         buffer << left << setw(16) << studentas.pavarde
                << setw(16) << studentas.vardas
                << setw(25) << fixed << setprecision(2) << studentas.galutinisVidurkis
                << fixed << setprecision(2) << studentas.galutineMediana
-               << '\n';
+               << "\n";
     }
 
     // Atidaro failą įrašymui
@@ -177,12 +177,12 @@ void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const strin
 
     // Pirmus dvi eilutės yra antraštės
     getline(iss, eilute);
-    islaikiusiuFailas << eilute << '\n';
-    neislaikiusiuFailas << eilute << '\n';
+    islaikiusiuFailas << eilute << "\n";
+    neislaikiusiuFailas << eilute << "\n";
 
     getline(iss, eilute);
-    islaikiusiuFailas << eilute << '\n';
-    neislaikiusiuFailas << eilute << '\n';
+    islaikiusiuFailas << eilute << "\n";
+    neislaikiusiuFailas << eilute << "\n";
 
     vector<Studentas> studentai;
 
@@ -213,9 +213,9 @@ void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const strin
     // Įrašyti surūšiuotus studentus į atitinkamus failus
     for (const auto& student : studentai) {
         if (student.galutinisVidurkis >= 5.0f) {
-            islaikiusiuFailas << left << setw(15) << student.pavarde << " " << setw(15) << student.vardas << " " << setw(24) << student.galutinisVidurkis << " " << student.galutineMediana <<'\n';
+            islaikiusiuFailas << left << setw(15) << student.pavarde << " " << setw(15) << student.vardas << " " << setw(24) << student.galutinisVidurkis << " " << student.galutineMediana <<"\n";
         } else {
-            neislaikiusiuFailas << left << setw(15) << student.pavarde << " " << setw(15) << student.vardas << " " << setw(24) << student.galutinisVidurkis <<  " " << student.galutineMediana <<'\n';
+            neislaikiusiuFailas << left << setw(15) << student.pavarde << " " << setw(15) << student.vardas << " " << setw(24) << student.galutinisVidurkis <<  " " << student.galutineMediana <<"\n";
         }
     }
     auto pabaigaRasymo = std::chrono::high_resolution_clock::now();

@@ -77,6 +77,6 @@ void generuotiFaila() {
         long long trukmeSkaitymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo).count();
         cout << "Duomenu generavimas ir failo irasymas truko " << trukmeSkaitymo << "ms.\n";
     } catch (const exception& e) {
-        cout << "Klaida: " << e.what() << '\n';
+        cout << "Klaida: " << e.what() << "\n";
     }
 }

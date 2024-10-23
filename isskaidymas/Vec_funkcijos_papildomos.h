@@ -13,6 +13,7 @@ int generuotiSkaiciu(int min, int max);
 string generuotiVardaPavarde();
 Studentas generuotiAtsitiktiniStudenta();
 void generuotiAtsitiktiniusFailus();
+void vykdytiVisusZingsnius();
 
 
 #endif

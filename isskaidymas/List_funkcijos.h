@@ -2,7 +2,6 @@
 #define LIST_FUNKCIJOS_H
 
 #include "List_Biblioteka.h"
-#include <list>
 
 struct List_Studentas {
     string vardas, pavarde;
