@@ -162,7 +162,7 @@ Studentas generuotiAtsitiktiniStudenta() {
 void generuotiAtsitiktiniusFailus() {
     for (int i = 1; i <= 5; ++i) {
         int studentuKiekis = generuotiSkaiciu(1, 1000000);
-        string failoPavadinimas = "studentai_random_" + to_string(i) + ".txt";
+        string failoPavadinimas = "txt_failai/studentai_random_" + to_string(i) + ".txt";
         generuotiStudentuFaila(studentuKiekis, failoPavadinimas);
         cout << "Sugeneruotas failas " << failoPavadinimas << " su " << studentuKiekis << " studentu.\n";
     }

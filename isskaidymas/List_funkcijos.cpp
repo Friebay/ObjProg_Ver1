@@ -150,7 +150,7 @@ void List_vykdytiVisusZingsnius() {
         string timestamp = ss.str();
 
         // Generuoti studentų failą
-        string studentuFailas = "studentai_" + to_string(kiekis) + ".txt";
+        string studentuFailas = "txt_failai/studentai_" + to_string(kiekis) + ".txt";
         auto pradziaGeneravimo = std::chrono::high_resolution_clock::now();
         List_generuotiStudentuFaila(kiekis, studentuFailas);
         auto pabaigaGeneravimo = std::chrono::high_resolution_clock::now();
@@ -158,7 +158,7 @@ void List_vykdytiVisusZingsnius() {
         cout << "Failo su " << kiekis << "studentais generavimas uztruko " << trukmeGeneravimo.count() << " ms.\n";
 
         // Skaitomas sugeneruotas failas, apskaičiuoja galutinius rezultatus ir išvedamas į rezultatų failą
-        string rezultatuFailas = "rezultatai_" + to_string(kiekis) + ".txt";
+        string rezultatuFailas = "txt_failai/rezultatai_" + to_string(kiekis) + ".txt";
         cout << "Skaitomi duomenys ir isvedami i " << rezultatuFailas << "...\n";
         long long trukmeSkaitymo, trukmeVidurkio, trukmeIrasymo;
         auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();
@@ -170,8 +170,8 @@ void List_vykdytiVisusZingsnius() {
         cout << "Duomenu isvedimas i " << rezultatuFailas << " uztruko " << trukmeIrasymo << " ms.\n";
 
         // Rezultatų failo padalijimas į išlaikiusius ir neišlaikiusius
-        string islaikeFailas = "rezultatai_" + to_string(kiekis) + "_islaike.txt";
-        string neislaikeFailas = "rezultatai_" + to_string(kiekis) + "_neislaike.txt";
+        string islaikeFailas = "txt_failai/rezultatai_" + to_string(kiekis) + "_islaike.txt";
+        string neislaikeFailas = "txt_failai/rezultatai_" + to_string(kiekis) + "_neislaike.txt";
         cout << "Dalinamas rezultatu failas i islaikiusius ir neislaikiusius...\n";
         long long trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas;
         List_padalintiRezultatuFaila(rezultatuFailas, islaikeFailas, neislaikeFailas, trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas);
@@ -312,13 +312,13 @@ void List_programa() {
 
                 string failoPavadinimas;
                 switch (failoPasirinkimas) {
-                    case 1: failoPavadinimas = "studentai10.txt"; break;
-                    case 2: failoPavadinimas = "studentai100.txt"; break;
-                    case 3: failoPavadinimas = "studentai10000.txt"; break;
-                    case 4: failoPavadinimas = "studentai100000.txt"; break;
-                    case 5: failoPavadinimas = "studentai1000000.txt"; break;
-                    case 6: failoPavadinimas = "studentai10_blog.txt"; break;
-                    case 7: failoPavadinimas = "tuscias.txt"; break;
+                    case 1: failoPavadinimas = "txt_failai/studentai10.txt"; break;
+                    case 2: failoPavadinimas = "txt_failai/studentai100.txt"; break;
+                    case 3: failoPavadinimas = "txt_failai/studentai10000.txt"; break;
+                    case 4: failoPavadinimas = "txt_failai/studentai100000.txt"; break;
+                    case 5: failoPavadinimas = "txt_failai/studentai1000000.txt"; break;
+                    case 6: failoPavadinimas = "txt_failai/studentai10_blog.txt"; break;
+                    case 7: failoPavadinimas = "txt_failai/tuscias.txt"; break;
                 }
 
                 List_skaitytiDuomenisIsFailo(failoPavadinimas, studentai, trukmeSkaitymo, trukmeVidurkio);

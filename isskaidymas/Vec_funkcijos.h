@@ -13,7 +13,7 @@ struct Studentas {
     float galutineMediana = 0;
 };
 
-void programa();
+void Vec_programa();
 void ivestiStudentoDuomenis(Studentas& studentas);
 void inicializuotiAtsitiktinius();
 Studentas generuotiAtsitiktiniStudenta();

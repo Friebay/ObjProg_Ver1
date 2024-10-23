@@ -3,7 +3,7 @@
 #include "Vec_failo_apdorojimas.h"
 
 // Pagrindinė vektoriaus programos funkcija
-void programa() {
+void Vec_programa() {
     vector<Studentas> studentai;
     int pasirinkimas;
     int failoPasirinkimas;
@@ -106,13 +106,13 @@ void programa() {
 
                 string failoPavadinimas;
                 switch (failoPasirinkimas) {
-                    case 1: failoPavadinimas = "studentai10.txt"; break;
-                    case 2: failoPavadinimas = "studentai100.txt"; break;
-                    case 3: failoPavadinimas = "studentai10000.txt"; break;
-                    case 4: failoPavadinimas = "studentai100000.txt"; break;
-                    case 5: failoPavadinimas = "studentai1000000.txt"; break;
-                    case 6: failoPavadinimas = "studentai10_blog.txt"; break;
-                    case 7: failoPavadinimas = "tuscias.txt"; break;
+                    case 1: failoPavadinimas = "txt_failai/studentai10.txt"; break;
+                    case 2: failoPavadinimas = "txt_failai/studentai100.txt"; break;
+                    case 3: failoPavadinimas = "txt_failai/studentai10000.txt"; break;
+                    case 4: failoPavadinimas = "txt_failai/studentai100000.txt"; break;
+                    case 5: failoPavadinimas = "txt_failai/studentai1000000.txt"; break;
+                    case 6: failoPavadinimas = "txt_failai/studentai10_blog.txt"; break;
+                    case 7: failoPavadinimas = "txt_failai/tuscias.txt"; break;
                 }
 
                 skaitytiDuomenisIsFailo(failoPavadinimas, studentai, trukmeSkaitymo, trukmeVidurkio);
@@ -140,8 +140,8 @@ void programa() {
                     throw runtime_error("Neteisingas failo pasirinkimas.");
                 }
 
-                string duomenuFailas = "studentai" + (studentuSkaicius[failoPasirinkimas - 1]) + ".txt";
-                string isvestiesFailoPavadinimas = "rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + ".txt";
+                string duomenuFailas = "txt_failai/studentai" + (studentuSkaicius[failoPasirinkimas - 1]) + ".txt";
+                string isvestiesFailoPavadinimas = "txt_failai/rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + ".txt";
 
 
                 skaitytiIrIsvestiDuomenis(duomenuFailas, isvestiesFailoPavadinimas, trukmeSkaitymo, trukmeVidurkio, trukmeIrasymo);
@@ -164,9 +164,9 @@ void programa() {
                     throw runtime_error("Neteisingas failo pasirinkimas.");
                 }
 
-                string duomenuFailas = "rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + ".txt";
-                string islaikiusiuFailoPavadinimas = "rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + "_islaike.txt";
-                string neislaikiusiuFailoPavadinimas = "rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + "_neislaike.txt";
+                string duomenuFailas = "txt_failai/rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + ".txt";
+                string islaikiusiuFailoPavadinimas = "txt_failai/rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + "_islaike.txt";
+                string neislaikiusiuFailoPavadinimas = "txt_failai/rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + "_neislaike.txt";
 
                 long long trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas;
                 padalintiRezultatuFaila(duomenuFailas, islaikiusiuFailoPavadinimas, neislaikiusiuFailoPavadinimas, trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas);

@@ -47,7 +47,7 @@ void generuotiStudentuFaila(int studentuKiekis, const string& failoPavadinimas) 
 }
 
 void generuotiFaila() {
-    vector<int> studentuSkaicius = {1000, 10000, 100000, 1000000};
+    vector<int> studentuSkaicius = {1000, 10000, 100000, 1000000, 10000000};
     
     cout << "Kiek studentu norite sugeneruoti:\n";
     for (int i = 0; i < studentuSkaicius.size(); ++i) {
@@ -68,7 +68,7 @@ void generuotiFaila() {
     }
 
     int studentuKiekis = studentuSkaicius[pasirinkimas - 1];
-    string failoPavadinimas = "studentai_" + to_string(studentuKiekis) + ".txt";
+    string failoPavadinimas = "txt_failai/studentai_" + to_string(studentuKiekis) + ".txt";
 
     try {
         auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();

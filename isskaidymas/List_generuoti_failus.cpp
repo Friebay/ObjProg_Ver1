@@ -68,7 +68,7 @@ void List_generuotiFaila() {
     }
 
     int studentuKiekis = studentuSkaicius[pasirinkimas - 1];
-    string failoPavadinimas = "studentai_" + to_string(studentuKiekis) + ".txt";
+    string failoPavadinimas = "txt_failai/studentai_" + to_string(studentuKiekis) + ".txt";
 
     try {
         auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();
