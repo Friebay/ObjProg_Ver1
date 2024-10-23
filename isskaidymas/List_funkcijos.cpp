@@ -52,19 +52,19 @@ float List_skaiciuotiVidurki(list<int>& pazymiai) {
 float List_skaiciuotiMediana(list<int>& pazymiai) {
     if (pazymiai.empty()) return 0.0f;
 
-    // Sort the list
+    // Rušiuoja sąrašą
     pazymiai.sort();
 
     size_t n = pazymiai.size();
     auto it = pazymiai.begin();
     
-    // Move iterator to the middle of the list
+    // Eina į vidurį
     std::advance(it, n / 2);
 
-    // If the size is even, we need to average the two middle values
+    // Jeigu dydis lyginis, tai reikia dviejų vidurinių elementų
     if (n % 2 == 0) {
         auto it_prev = it;
-        --it_prev;  // Get the previous element for even size
+        --it_prev;
         return (*it + *it_prev) / 2.0f;
     } else {
         return *it;
@@ -208,7 +208,7 @@ void List_vykdytiVisusZingsnius() {
 }
 
 
-// Pagrindinė programos funkcija
+// Pagrindinė sąrašo (list) programos funkcija
 void List_programa() {
     list<List_Studentas> studentai;
     int pasirinkimas;

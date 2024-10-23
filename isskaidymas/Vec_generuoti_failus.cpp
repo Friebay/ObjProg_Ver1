@@ -1,14 +1,5 @@
 #include "Vec_funkcijos.h"
-#include <fstream>
-#include <iomanip>
-#include <sstream>
 
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <iomanip>
-#include <stdexcept>
 
 void generuotiStudentuFaila(int studentuKiekis, const string& failoPavadinimas) {
     ofstream isvedimoFailas(failoPavadinimas);

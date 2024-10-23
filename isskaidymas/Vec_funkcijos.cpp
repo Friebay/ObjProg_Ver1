@@ -2,7 +2,7 @@
 #include "Vec_funkcijos_papildomos.h"
 #include "Vec_failo_apdorojimas.h"
 
-// Pagrindinė programos funkcija
+// Pagrindinė vektoriaus programos funkcija
 void programa() {
     vector<Studentas> studentai;
     int pasirinkimas;
@@ -60,7 +60,7 @@ void programa() {
                 studentai.resize(studentuKiekis);
                 for (Studentas& studentas : studentai) {
                     ivestiStudentoDuomenis(studentas);
-                    // Output the memory address of the object
+                    // Spausdinama vektoriaus vieta atmintyje
                     cout << "Studento vektoriaus objektas atmintyje saugomas adresu: " << &studentas << endl;
                 }
                 break;
