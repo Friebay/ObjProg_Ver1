@@ -1,7 +1,7 @@
 #ifndef FUNKCIJOS_H
 #define FUNKCIJOS_H
 
-#include "Biblioteka.h"
+#include "Vec_Biblioteka.h"
 
 struct Studentas {
     string vardas, pavarde;

@@ -1,12 +1,15 @@
-#include "failo_apdorojimas.h"
+#include "List_failo_apdorojimas.h"
+#include "List_funkcijos.h"
+#include "Vec_funkcijos_papildomos.h"
+#include <list>
 
-void skaiciuotiIsFailo(Studentas& studentas, bool tinkamiPazymiai, vector<Studentas>& studentai) {
+void List_skaiciuotiIsFailo(List_Studentas& studentas, bool tinkamiPazymiai, list<List_Studentas>& studentai) {
     if (tinkamiPazymiai && !studentas.pazymiai.empty()) {
         studentas.egzaminoPazymys = studentas.pazymiai.back();
         studentas.pazymiai.pop_back();
 
-        studentas.vidurkis = skaiciuotiVidurki(studentas.pazymiai);
-        studentas.mediana = skaiciuotiMediana(studentas.pazymiai);
+        studentas.vidurkis = List_skaiciuotiVidurki(studentas.pazymiai);
+        studentas.mediana = List_skaiciuotiMediana(studentas.pazymiai);
 
         const double egzaminoBalas = 0.6 * studentas.egzaminoPazymys;
         const double vidurkioBalas = 0.4 * studentas.vidurkis;
@@ -21,7 +24,7 @@ void skaiciuotiIsFailo(Studentas& studentas, bool tinkamiPazymiai, vector<Studen
     }
 }
 
-void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& studentai, long long& trukmeSkaitymo, long long& trukmeVidurkio) {
+void List_skaitytiDuomenisIsFailo(const string& failoPavadinimas, list<List_Studentas>& studentai, long long& trukmeSkaitymo, long long& trukmeVidurkio) {
     auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();
 
     ifstream failas(failoPavadinimas, std::ios::in | std::ios::binary);
@@ -40,7 +43,7 @@ void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& 
             throw runtime_error("Netinkamas eilutes ilgis");
         }
 
-        Studentas studentas;
+        List_Studentas studentas;
         
         // Skaito vardą ir pavardę
         studentas.vardas = buffer.substr(0, 16);
@@ -59,9 +62,6 @@ void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& 
         };
 
         trim(studentas.pavarde);
-        
-        // Rezervuoja vietą 25-iams pažymiams
-        studentas.pazymiai.reserve(25);
 
         // Pažymiai prasideda nuo 52 simbolio
         size_t pozicija = 52;
@@ -104,7 +104,7 @@ void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& 
         }
 
         // Paskaičiuoja rezultatus
-        skaiciuotiIsFailo(studentas, tinkamiPazymiai, studentai);
+        List_skaiciuotiIsFailo(studentas, tinkamiPazymiai, studentai);
     }
 
     auto pabaigaSkaitymo = std::chrono::high_resolution_clock::now();
@@ -112,9 +112,10 @@ void skaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& 
     trukmeVidurkio = 0;
 }
 
-void skaitytiIrIsvestiDuomenis(const string& ivestiesFailoPavadinimas, const string& irasymoFailoPavadinimas, long long& trukmeSkaitymo, long long& trukmeVidurkio, long long& trukmeIrasymo) {
-    vector<Studentas> studentai;
-    skaitytiDuomenisIsFailo(ivestiesFailoPavadinimas, studentai, trukmeSkaitymo, trukmeVidurkio);
+
+void List_skaitytiIrIsvestiDuomenis(const string& ivestiesFailoPavadinimas, const string& irasymoFailoPavadinimas, long long& trukmeSkaitymo, long long& trukmeVidurkio, long long& trukmeIrasymo) {
+    list<List_Studentas> studentai;
+    List_skaitytiDuomenisIsFailo(ivestiesFailoPavadinimas, studentai, trukmeSkaitymo, trukmeVidurkio);
 
     auto pradziaIrasimo = std::chrono::high_resolution_clock::now();
     
@@ -150,7 +151,7 @@ void skaitytiIrIsvestiDuomenis(const string& ivestiesFailoPavadinimas, const str
     trukmeIrasymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaIrasimo - pradziaIrasimo).count();
 }
 
-void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const string& islaikiusiuFailoPavadinimas, const string& neislaikiusiuFailoPavadinimas) {
+void List_padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const string& islaikiusiuFailoPavadinimas, const string& neislaikiusiuFailoPavadinimas, long long& laikasSkaitymo, long long& rusiavimoLaikas, long long& laikasRasymo) {
     auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();
     
     // Atidaro duomenis binariniu režimu
@@ -166,10 +167,6 @@ void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const strin
     vector<char> buferis(failoDydis);
     ivestiesFailas.read(buferis.data(), failoDydis);
     ivestiesFailas.close();
-
-    auto pabaigaSkaitymo = std::chrono::high_resolution_clock::now();
-    auto laikasSkaitymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo);
-    cout << "Failo skaitymas uztruko " << laikasSkaitymo.count() << " ms." << endl;
 
     ofstream islaikiusiuFailas(islaikiusiuFailoPavadinimas, ios::out | ios::binary);
     ofstream neislaikiusiuFailas(neislaikiusiuFailoPavadinimas, ios::out | ios::binary);
@@ -191,39 +188,45 @@ void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const strin
     islaikiusiuFailas << eilute << '\n';
     neislaikiusiuFailas << eilute << '\n';
 
-    vector<Studentas> studentai;
+    // Naudojame list su List_Studentas struktūra
+    list<List_Studentas> studentai;
 
     while (getline(iss, eilute)) {
         istringstream studentLine(eilute);
-        Studentas student;
+        List_Studentas student;
         studentLine >> student.pavarde >> student.vardas >> student.galutinisVidurkis >> student.galutineMediana;
         studentai.push_back(student);
     }
 
+    auto pabaigaSkaitymo = std::chrono::high_resolution_clock::now();
+    laikasSkaitymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo).count();
+    cout << "Failo skaitymas uztruko " << laikasSkaitymo << " ms." << endl;
+
     auto pradetiRusiavima = std::chrono::high_resolution_clock::now();
     
-    // Rušiuoti studentus pagal galutinį pažymį
-    sort(studentai.begin(), studentai.end(), [](const Studentas& a, const Studentas& b) {
-        return a.galutinisVidurkis > b.galutinisVidurkis;
+    // Rušiuoti studentus pagal galutinį pažymį naudojant list::sort
+    studentai.sort([](const List_Studentas& a, const List_Studentas& b) {
+        return a.galutinisVidurkis > b.galutinisVidurkis; // Sort in descending order
     });
 
     auto pabaigaRusiavimo = std::chrono::high_resolution_clock::now();
-    auto rusiavimoLaikas = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaRusiavimo - pradetiRusiavima);
-    cout << "Rusiavimas uztruko " << rusiavimoLaikas.count() << " ms." << endl;
+    rusiavimoLaikas = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaRusiavimo - pradetiRusiavima).count();
+    cout << "Rusiavimas uztruko " << rusiavimoLaikas << " ms." << endl;
 
     auto pradetiRasyma = std::chrono::high_resolution_clock::now();
 
     // Įrašyti surūšiuotus studentus į atitinkamus failus
     for (const auto& student : studentai) {
         if (student.galutinisVidurkis >= 5.0f) {
-            islaikiusiuFailas << left << setw(15) << student.pavarde << " " << setw(15) << student.vardas << " " << setw(24) << student.galutinisVidurkis << " " << student.galutineMediana <<'\n';
+            islaikiusiuFailas << left << setw(15) << student.pavarde << " " << setw(15) << student.vardas << " " << setw(24) << student.galutinisVidurkis << " " << student.galutineMediana << '\n';
         } else {
-            neislaikiusiuFailas << left << setw(15) << student.pavarde << " " << setw(15) << student.vardas << " " << setw(24) << student.galutinisVidurkis <<  " " << student.galutineMediana <<'\n';
+            neislaikiusiuFailas << left << setw(15) << student.pavarde << " " << setw(15) << student.vardas << " " << setw(24) << student.galutinisVidurkis << " " << student.galutineMediana << '\n';
         }
     }
+
     auto pabaigaRasymo = std::chrono::high_resolution_clock::now();
-    auto laikasRasymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaRasymo - pradetiRasyma);
-    cout << "Rasymas uztruko " << laikasRasymo.count() << " ms." << endl;
+    laikasRasymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaRasymo - pradetiRasyma).count();
+    cout << "Rasymas uztruko " << laikasRasymo << " ms." << endl;
 
     // Uždaryti failus
     islaikiusiuFailas.close();

@@ -1,4 +1,6 @@
-#include "funkcijos.h"
+#include "List_funkcijos.h"
+#include "Vec_funkcijos_papildomos.h"
+
 #include <fstream>
 #include <iomanip>
 #include <sstream>
@@ -10,7 +12,7 @@
 #include <iomanip>
 #include <stdexcept>
 
-void generuotiStudentuFaila(int studentuKiekis, const string& failoPavadinimas) {
+void List_generuotiStudentuFaila(int studentuKiekis, const string& failoPavadinimas) {
     ofstream isvedimoFailas(failoPavadinimas);
     if (!isvedimoFailas.is_open()) {
         throw runtime_error("Nepavyko atidaryti failo " + failoPavadinimas);
@@ -52,15 +54,15 @@ void generuotiStudentuFaila(int studentuKiekis, const string& failoPavadinimas) 
     isvedimoFailas << outputStream.str();
 
     isvedimoFailas.close();
-    cout << "Failas '" << failoPavadinimas << "' su " << studentuKiekis << " studentais buvo sugeneruotas." << '\n';
+    cout << "Failas '" << failoPavadinimas << "' su " << studentuKiekis << " studentais buvo sugeneruotas.\n";
 }
 
-void generuotiFaila() {
+void List_generuotiFaila() {
     vector<int> studentuSkaicius = {1000, 10000, 100000, 1000000, 10000000};
     
-    cout << "Kiek studentu norite sugeneruoti:" << '\n';
+    cout << "Kiek studentu norite sugeneruoti:\n";
     for (int i = 0; i < studentuSkaicius.size(); ++i) {
-        cout << i + 1 << ". " << studentuSkaicius[i] << " studentu." << '\n';
+        cout << i + 1 << ". " << studentuSkaicius[i] << " studentu.\n";
     }
 
     int pasirinkimas;
@@ -70,7 +72,7 @@ void generuotiFaila() {
         if (cin.fail() || pasirinkimas < 1 || pasirinkimas > 5) {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Neteisingas pasirinkimas. Prasome ivesti 1, 2, 3, 4 arba 5." << '\n';
+            cout << "Neteisingas pasirinkimas. Prasome ivesti 1, 2, 3, 4 arba 5.\n";
         } else {
             break;
         }
@@ -81,7 +83,7 @@ void generuotiFaila() {
 
     try {
         auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();
-        generuotiStudentuFaila(studentuKiekis, failoPavadinimas);
+        List_generuotiStudentuFaila(studentuKiekis, failoPavadinimas);
         auto pabaigaSkaitymo = std::chrono::high_resolution_clock::now();
         long long trukmeSkaitymo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo).count();
         cout << "Duomenu generavimas ir failo irasymas truko " << trukmeSkaitymo << "ms.\n";

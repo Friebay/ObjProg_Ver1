@@ -1,5 +1,5 @@
-#ifndef BIBLIOTEKA_H_INCLUDED
-#define BIBLIOTEKA_H_INCLUDED
+#ifndef LIST_BIBLIOTEKA_H_INCLUDED
+#define LIST_BIBLIOTEKA_H_INCLUDED
 
 #include <iostream>
 #include <iomanip>
@@ -20,6 +20,7 @@
 #include <cctype>
 #include <locale>
 #include <iomanip>
+#include <list>
 
 using std::endl;
 using std::cout;
@@ -50,5 +51,6 @@ using std::isspace;
 using std::ostringstream;
 using std::right;
 using std::ios;
+using std::list;
 
 #endif
