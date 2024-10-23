@@ -40,7 +40,7 @@
 
 ### Sistemos parametrai
 ```
-CPU: i7-9750H
+CPU: i7-9750H 6C/12T
 RAM: 32GB 2400MHz
 HDD/SSD: Kingston SA2000M8500G, NVMe PCI, skaitymo greitis iki 2200 MB/s, įrašymo greitis iki 2000 MB/s.
 ```
@@ -52,8 +52,8 @@ HDD/SSD: Kingston SA2000M8500G, NVMe PCI, skaitymo greitis iki 2200 MB/s, įraš
 ##### Studentų generavimo laikas (ms)
 | Įrašų kiekis | std::vector | std::list | Skirtumas |
 |--------------|-------------|------------|-----------|
-| 1,000        |             |            |           |
-| 10,000       |             |            |           |
+| 1,000        |3.5|8|4.5|
+| 10,000       |26.75|31.5|4.75|
 | 100,000      |             |            |           |
 | 1,000,000    |             |            |           |
 | 10,000,000   |             |            |           |
