@@ -164,8 +164,6 @@ void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const strin
     ivestiesFailas.read(buferis.data(), failoDydis);
     ivestiesFailas.close();
 
-    
-
     ofstream islaikiusiuFailas(islaikiusiuFailoPavadinimas, ios::out | ios::binary);
     ofstream neislaikiusiuFailas(neislaikiusiuFailoPavadinimas, ios::out | ios::binary);
     if (!islaikiusiuFailas || !neislaikiusiuFailas) {
@@ -205,7 +203,6 @@ void padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const strin
     sort(studentai.begin(), studentai.end(), [](const Studentas& a, const Studentas& b) {
         return a.galutinisVidurkis > b.galutinisVidurkis; // Sort in descending order
     });
-
 
     auto pabaigaRusiavimo = std::chrono::high_resolution_clock::now();
     rusiavimoLaikas = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaRusiavimo - pradetiRusiavima).count();

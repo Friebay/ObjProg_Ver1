@@ -1,12 +1,12 @@
-#include "funkcijos.h"
-#include "failo_apdorojimas.h"
+#include "List_funkcijos.h"
+#include "List_failo_apdorojimas.h"
 
 int main() {
    
     char pabaiga = 'N';
 
     while (toupper(pabaiga) != 'T') { 
-        programa();
+        List_programa();
 
         cout << "Ar norite uzdaryti programa? Jeigu taip - rasykite T, jeigu ne - rasykite N: ";
 

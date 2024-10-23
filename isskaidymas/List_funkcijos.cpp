@@ -1,60 +1,22 @@
-#include "funkcijos.h"
-#include "failo_apdorojimas.h"
+#include "List_funkcijos.h"
+#include "List_failo_apdorojimas.h"
+#include "List_generuoti_failus.h"
+#include "Vec_funkcijos_papildomos.h"
 
-// Gauna pažymį iš vartotojo įvesties
-int gautiPazymi(const string& klausimas) {
-    while (true) {
-        string skaicius;
-        cout << klausimas;
-        cin >> skaicius;
-
-        if (skaicius == "-1") return -1; // Grąžina -1, jei vartotojas nori baigti įvestį
-
-        try {
-            int pazymys = stoi(skaicius);
-            if (pazymys >= 0 && pazymys <= 10) {
-                return pazymys;
-            } else {
-                cout << "Klaida: pazymys turi buti tarp 0 ir 10." << '\n';
-            }
-        } catch (const invalid_argument&) {
-            cout << "Klaida: iveskite teisinga skaiciu." << '\n';
-        }
-    }
-}
-
-// Rūšiuoja studentus pagal pavardę, o jei pavardės vienodos - pagal vardą
-void rusiuotiStudentusPagalPavarde(list<Studentas>& studentai) {
-    studentai.sort([](const Studentas& a, const Studentas& b) {
-    if (a.pavarde == b.pavarde) {
-        return a.vardas < b.vardas;
-    }
-    return a.pavarde < b.pavarde;
-});
-
-}
-
-// Rūšiuoja studentus pagal vardą, o jei vardai vienodos - pagal pavardę
-void rusiuotiStudentusPagalVarda(list<Studentas>& studentai) {
-    studentai.sort([](const Studentas& a, const Studentas& b) {
-    if (a.vardas == b.vardas) {
-        return a.pavarde < b.pavarde;
-    }
-    return a.vardas < b.vardas;
-});
-
-
-}
+#include <iostream>
+#include <list>
+#include <iomanip>
+#include <limits>
 
 // Įveda studento duomenis
-void ivestiStudentoDuomenis(Studentas& studentas) {
+void List_ivestiStudentoDuomenis(List_Studentas& studentas) {
     cout << "Vardas: ";
     cin >> studentas.vardas;
 
     cout << "Pavarde: ";
     cin >> studentas.pavarde;
 
-    cout << "Iveskite pazymius (iveskite -1, kad baigtumete):" << '\n';
+    cout << "Iveskite pazymius (iveskite -1, kad baigtumete):\n";
     while (true) {
         int pazymys = gautiPazymi("Pazymys (arba -1, kad baigtumete): ");
         if (pazymys == -1) break;
@@ -68,8 +30,8 @@ void ivestiStudentoDuomenis(Studentas& studentas) {
 
     // Skaičiuoja vidurkį ir medianą, jei yra pažymių
     if (!studentas.pazymiai.empty()) {
-        studentas.vidurkis = skaiciuotiVidurki(studentas.pazymiai);
-        studentas.mediana = skaiciuotiMediana(studentas.pazymiai);
+        studentas.vidurkis = List_skaiciuotiVidurki(studentas.pazymiai);
+        studentas.mediana = List_skaiciuotiMediana(studentas.pazymiai);
     }
 
     const double egzaminoBalas = 0.6 * studentas.egzaminoPazymys;
@@ -80,56 +42,59 @@ void ivestiStudentoDuomenis(Studentas& studentas) {
     studentas.galutineMediana = medianosBalas + egzaminoBalas;
 }
 
-// Skaičiuoja pažymių medianą
-float skaiciuotiMediana(vector<int>& pazymiai) {
-    if (pazymiai.empty()) return 0;
-    
-    size_t n = pazymiai.size();
-    size_t middle = n / 2;
-    
-    if (n % 2 == 0) {
-        nth_element(pazymiai.begin(), pazymiai.begin() + middle - 1, pazymiai.end());
-        nth_element(pazymiai.begin() + middle - 1, pazymiai.begin() + middle, pazymiai.end());
-        return (pazymiai[middle-1] + pazymiai[middle]) / 2.0f;
-    } else {
-        nth_element(pazymiai.begin(), pazymiai.begin() + middle, pazymiai.end());
-        return pazymiai[middle];
-    }
-}
-
-// Skaičiuoja pažymių vidurkį
-float skaiciuotiVidurki(vector<int>& pazymiai) {
+float List_skaiciuotiVidurki(list<int>& pazymiai) {
     if (pazymiai.empty()) {
         return 0.0f;
     }
     return std::accumulate(pazymiai.begin(), pazymiai.end(), 0.0f) / pazymiai.size();
 }
 
-int generuotiSkaiciu(int min, int max) {
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    std::uniform_int_distribution<int> distrib(min, max);
-    return distrib(gen);
-}
+float List_skaiciuotiMediana(list<int>& pazymiai) {
+    if (pazymiai.empty()) return 0.0f;
 
-// Generuoja atsitiktinį vardą arba pavardę
-string generuotiVardaPavarde() {
-    static const char raides[] = "abcdefghijklmnopqrstuvwxyz";
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    std::uniform_int_distribution<int> raideDistrib(0, 25);
+    // Sort the list
+    pazymiai.sort();
+
+    size_t n = pazymiai.size();
+    auto it = pazymiai.begin();
     
-    string vardasPavarde(4, ' '); 
+    // Move iterator to the middle of the list
+    std::advance(it, n / 2);
 
-    for (int i = 0; i < 4; ++i) {
-        vardasPavarde[i] = raides[raideDistrib(gen)];
+    // If the size is even, we need to average the two middle values
+    if (n % 2 == 0) {
+        auto it_prev = it;
+        --it_prev;  // Get the previous element for even size
+        return (*it + *it_prev) / 2.0f;
+    } else {
+        return *it;
     }
-
-    return vardasPavarde;
 }
 
-Studentas generuotiAtsitiktiniStudenta() {
-    Studentas studentas;
+
+// Rūšiuoja studentus pagal pavardę, o jei pavardės vienodos - pagal vardą
+void rusiuotiStudentusPagalPavarde(list<List_Studentas>& studentai) {
+    studentai.sort([](const List_Studentas& a, const List_Studentas& b) {
+    if (a.pavarde == b.pavarde) {
+        return a.vardas < b.vardas;
+    }
+    return a.pavarde < b.pavarde;
+});
+
+}
+
+// Rūšiuoja studentus pagal vardą, o jei vardai vienodos - pagal pavardę
+void rusiuotiStudentusPagalVarda(list<List_Studentas>& studentai) {
+    studentai.sort([](const List_Studentas& a, const List_Studentas& b) {
+    if (a.vardas == b.vardas) {
+        return a.pavarde < b.pavarde;
+    }
+    return a.vardas < b.vardas;
+});
+}
+
+List_Studentas List_generuotiAtsitiktiniStudenta() {
+    List_Studentas studentas;
     
     // Generuojami atsitiktiniai vardas ir pavarde
     studentas.vardas = generuotiVardaPavarde();
@@ -147,8 +112,8 @@ Studentas generuotiAtsitiktiniStudenta() {
     studentas.egzaminoPazymys = generuotiSkaiciu(0, 10);
 
     // Apskaičiuojami vidurkis ir mediana
-    studentas.vidurkis = skaiciuotiVidurki(studentas.pazymiai);
-    studentas.mediana = skaiciuotiMediana(studentas.pazymiai);
+    studentas.vidurkis = List_skaiciuotiVidurki(studentas.pazymiai);
+    studentas.mediana = List_skaiciuotiMediana(studentas.pazymiai);
 
     // Apskaičiuojami galutiniai įvertinimai, naudojami constant multipliers
     const double egzaminoBalas = 0.6 * studentas.egzaminoPazymys;
@@ -162,9 +127,90 @@ Studentas generuotiAtsitiktiniStudenta() {
 }
 
 
+void List_vykdytiVisusZingsnius() {
+    vector<int> studentuKiekiai = {1000, 10000, 100000, 1000000, 10000000};
+    
+    // Atidaryti CSV failą rašymui
+    ofstream csvFile("performance_data.csv", std::ios::app);
+    if (!csvFile.is_open()) {
+        throw runtime_error("Nepavyko atidaryti CSV failo");
+    }
+    
+    // Įrašo CSV antraštę, jei failas tuščias
+    csvFile.seekp(0, std::ios::end);
+    if (csvFile.tellp() == 0) {
+        csvFile << "Testavimo Laikas;Studentu Kiekis;Studentu generavimo laikas;Sugeneruotu duomenu skaitymo laikas;Rezultatu irasymo laikas;Rezultatu skaitymo laikas;Rezultatu skaidymo laikas;Skaidymo irasymas;Bendras Laikas\n";
+    }
+
+    for (int kiekis : studentuKiekiai) {
+        cout << "Vykdomi zingsniai su " << kiekis << " studentu:" << '\n';
+        auto pradziaVisko = std::chrono::high_resolution_clock::now();
+        
+        // Gauti dabartinį laiką
+        auto now = std::chrono::system_clock::now();
+        auto in_time_t = std::chrono::system_clock::to_time_t(now);
+        std::stringstream ss;
+        ss << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d %X");
+        string timestamp = ss.str();
+
+        // Generuoti studentų failą
+        string studentuFailas = "studentai_" + to_string(kiekis) + ".txt";
+        auto pradziaGeneravimo = std::chrono::high_resolution_clock::now();
+        List_generuotiStudentuFaila(kiekis, studentuFailas);
+        auto pabaigaGeneravimo = std::chrono::high_resolution_clock::now();
+        auto trukmeGeneravimo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaGeneravimo - pradziaGeneravimo);
+        cout << "Failo su " << kiekis << "studentais generavimas uztruko " << trukmeGeneravimo.count() << " ms." << '\n';
+
+        // Skaitomas sugeneruotas failas, apskaičiuoja galutinius rezultatus ir išvedamas į rezultatų failą
+        string rezultatuFailas = "rezultatai_" + to_string(kiekis) + ".txt";
+        cout << "Skaitomi duomenys ir isvedami i " << rezultatuFailas << "..." << '\n';
+        long long trukmeSkaitymo, trukmeVidurkio, trukmeIrasymo;
+        auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();
+        List_skaitytiIrIsvestiDuomenis(studentuFailas, rezultatuFailas, trukmeSkaitymo, trukmeVidurkio, trukmeIrasymo);
+        auto pabaigaSkaitymo = std::chrono::high_resolution_clock::now();
+        auto trukmeSkaitymoLaikas = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo);
+        
+        cout << "Skaitymo laikas: " << trukmeSkaitymo << " ms." << '\n';
+        cout << "Duomenu isvedimas i " << rezultatuFailas << " uztruko " << trukmeIrasymo << " ms." << '\n';
+
+        // Rezultatų failo padalijimas į išlaikiusius ir neišlaikiusius
+        string islaikeFailas = "rezultatai_" + to_string(kiekis) + "_islaike.txt";
+        string neislaikeFailas = "rezultatai_" + to_string(kiekis) + "_neislaike.txt";
+        cout << "Dalinamas rezultatu failas i islaikiusius ir neislaikiusius..." << '\n';
+        long long trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas;
+        List_padalintiRezultatuFaila(rezultatuFailas, islaikeFailas, neislaikeFailas, trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas);
+        cout << "Rezultatu failo dalinimas uztruko " << trukmeRezultatuSkaitymo + trukmeRezultatuSkaidymas + trukmeSkaidymoIrasymas << " ms." << '\n';
+
+        // Skaičuoti bendrą laiką
+        long long bendrasLaikas = trukmeGeneravimo.count() + trukmeSkaitymo + trukmeIrasymo + trukmeRezultatuSkaitymo + trukmeRezultatuSkaidymas + trukmeSkaidymoIrasymas;
+        cout << "Visi zingsniai su " << kiekis << " studentu baigti. Trukme: " << bendrasLaikas << " ms." << '\n' << '\n';
+
+        auto pabaigaVisko = std::chrono::high_resolution_clock::now();
+        auto trukmeVisko = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaVisko - pradziaVisko);
+        cout << "Visi zingsniai su " << kiekis << " studentu baigti. Trukme: " << trukmeVisko.count() << " ms." << '\n' << '\n';
+
+
+        // Surašyti laikus į CSV failą
+        csvFile << timestamp << ";"
+                << kiekis << ";"
+                << trukmeGeneravimo.count() << ";"
+                << trukmeSkaitymo << ";"
+                << trukmeIrasymo << ";"
+                << trukmeRezultatuSkaitymo << ";"
+                << trukmeRezultatuSkaidymas << ";"
+                << trukmeSkaidymoIrasymas << ";"
+                << bendrasLaikas << "\n";
+    }
+
+    csvFile.close();
+    cout << "Visi zingsniai visiems studentu kiekiams baigti." << '\n';
+    cout << "Duomenys issaugoti faile 'performance_data.csv'" << '\n';
+}
+
+
 // Pagrindinė programos funkcija
-void programa() {
-    list<Studentas> studentai;
+void List_programa() {
+    list<List_Studentas> studentai;
     int pasirinkimas;
     int failoPasirinkimas;
     int studentuKiekis;
@@ -214,9 +260,19 @@ void programa() {
                     }
                 }
 
-                for (Studentas& studentas : studentai) {
-                    ivestiStudentoDuomenis(studentas);
+                for (int i = 0; i < studentuKiekis; i++) {
+                    List_Studentas studentas;
+                    
+                    // Įvedami 1 studento duomenys
+                    List_ivestiStudentoDuomenis(studentas);
+                    
+                    // Pridedama studento informacija į list
+                    studentai.push_back(studentas);
+                    
+                    // Išvadamas sąrašo adresas atmintyje
+                    cout << "Studento saraso objektas atmintyje saugomas adresu: " << &studentas << endl;
                 }
+
                 break;
             }
 
@@ -237,7 +293,7 @@ void programa() {
                 }
 
                 for (int i = 0; i < studentuKiekis; i++) {
-                    studentai.push_back(generuotiAtsitiktiniStudenta());
+                    studentai.push_back(List_generuotiAtsitiktiniStudenta());
                 }
                 break;
             }
@@ -269,7 +325,7 @@ void programa() {
                     case 7: failoPavadinimas = "tuscias.txt"; break;
                 }
 
-                skaitytiDuomenisIsFailo(failoPavadinimas, studentai, trukmeSkaitymo, trukmeVidurkio);
+                List_skaitytiDuomenisIsFailo(failoPavadinimas, studentai, trukmeSkaitymo, trukmeVidurkio);
                 cout << "Duomenys nuskaityti is " << failoPavadinimas << " per " << trukmeSkaitymo << " ms\n";
                 break;
             }
@@ -323,7 +379,7 @@ void programa() {
                 string neislaikiusiuFailoPavadinimas = "rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + "_neislaike.txt";
 
                 long long trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas;
-                padalintiRezultatuFaila(duomenuFailas, islaikiusiuFailoPavadinimas, neislaikiusiuFailoPavadinimas, trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas);
+                List_padalintiRezultatuFaila(duomenuFailas, islaikiusiuFailoPavadinimas, neislaikiusiuFailoPavadinimas, trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas);
                 cout << "Rezultatu failas padalintas i " << islaikiusiuFailoPavadinimas << " ir " << neislaikiusiuFailoPavadinimas << '\n';
                 return;
             }
@@ -354,7 +410,7 @@ void programa() {
 
                 for (int i = 0; i < kartai; i++) {
                     cout << "Vykdoma " << i + 1 << " karta:" << '\n';
-                    vykdytiVisusZingsnius();
+                    List_vykdytiVisusZingsnius();
                 }
 
                 return;
@@ -377,7 +433,7 @@ void programa() {
             rusiuotiStudentusPagalPavarde(studentai);
         }
         else {
-            cout << "Blogas pasirinkimas, rusiuojama pagal varda.";
+            cout << "Blogas pasirinkimas, rusiuojama pagal varda.\n";
             rusiuotiStudentusPagalVarda(studentai);
         }
 
@@ -386,7 +442,7 @@ void programa() {
         cout << "-------------------------------------------------------------------------" << '\n';
         cout << fixed << setprecision(2);
 
-        for (const Studentas& studentas : studentai) {
+        for (const List_Studentas& studentas : studentai) {
             cout << left << setw(16) << studentas.pavarde 
                 << setw(16) << studentas.vardas 
                 << setw(25) << studentas.galutinisVidurkis 
@@ -395,93 +451,4 @@ void programa() {
     } catch (const exception& e) {
         cout << "Ivyko klaida: " << e.what() << '\n';
     }
-}
-
-void generuotiAtsitiktiniusFailus() {
-    for (int i = 1; i <= 5; ++i) {
-        int studentuKiekis = generuotiSkaiciu(1, 1000000);
-        string failoPavadinimas = "studentai_random_" + to_string(i) + ".txt";
-        generuotiStudentuFaila(studentuKiekis, failoPavadinimas);
-        cout << "Sugeneruotas failas " << failoPavadinimas << " su " << studentuKiekis << " studentu." << '\n';
-    }
-}
-
-void vykdytiVisusZingsnius() {
-    vector<int> studentuKiekiai = {1000, 10000, 100000, 1000000, 10000000};
-    
-    // Atidaryti CSV failą rašymui
-    ofstream csvFile("performance_data.csv", std::ios::app);
-    if (!csvFile.is_open()) {
-        throw runtime_error("Nepavyko atidaryti CSV failo");
-    }
-    
-    // Įrašo CSV antraštę, jei failas tuščias
-    csvFile.seekp(0, std::ios::end);
-    if (csvFile.tellp() == 0) {
-        csvFile << "Testavimo Laikas;Studentu Kiekis;Studentu generavimo laikas;Sugeneruotu duomenu skaitymo laikas;Rezultatu irasymo laikas;Rezultatu skaitymo laikas;Rezultatu skaidymo laikas;Skaidymo irasymas;Bendras Laikas\n";
-    }
-
-    for (int kiekis : studentuKiekiai) {
-        cout << "Vykdomi zingsniai su " << kiekis << " studentu:" << '\n';
-        auto pradziaVisko = std::chrono::high_resolution_clock::now();
-        
-        // Gauti dabartinį laiką
-        auto now = std::chrono::system_clock::now();
-        auto in_time_t = std::chrono::system_clock::to_time_t(now);
-        std::stringstream ss;
-        ss << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d %X");
-        string timestamp = ss.str();
-
-        // Generuoti studentų failą
-        string studentuFailas = "studentai_" + to_string(kiekis) + ".txt";
-        auto pradziaGeneravimo = std::chrono::high_resolution_clock::now();
-        generuotiStudentuFaila(kiekis, studentuFailas);
-        auto pabaigaGeneravimo = std::chrono::high_resolution_clock::now();
-        auto trukmeGeneravimo = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaGeneravimo - pradziaGeneravimo);
-        cout << "Failo su " << kiekis << "studentais generavimas uztruko " << trukmeGeneravimo.count() << " ms." << '\n';
-
-        // Skaitomas sugeneruotas failas, apskaičiuoja galutinius rezultatus ir išvedamas į rezultatų failą
-        string rezultatuFailas = "rezultatai_" + to_string(kiekis) + ".txt";
-        cout << "Skaitomi duomenys ir isvedami i " << rezultatuFailas << "..." << '\n';
-        long long trukmeSkaitymo, trukmeVidurkio, trukmeIrasymo;
-        auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();
-        skaitytiIrIsvestiDuomenis(studentuFailas, rezultatuFailas, trukmeSkaitymo, trukmeVidurkio, trukmeIrasymo);
-        auto pabaigaSkaitymo = std::chrono::high_resolution_clock::now();
-        auto trukmeSkaitymoLaikas = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaSkaitymo - pradziaSkaitymo);
-        
-        cout << "Skaitymo laikas: " << trukmeSkaitymo << " ms." << '\n';
-        cout << "Duomenu isvedimas i " << rezultatuFailas << " uztruko " << trukmeIrasymo << " ms." << '\n';
-
-        // Rezultatų failo padalijimas į išlaikiusius ir neišlaikiusius
-        string islaikeFailas = "rezultatai_" + to_string(kiekis) + "_islaike.txt";
-        string neislaikeFailas = "rezultatai_" + to_string(kiekis) + "_neislaike.txt";
-        cout << "Dalinamas rezultatu failas i islaikiusius ir neislaikiusius..." << '\n';
-        long long trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas;
-        padalintiRezultatuFaila(rezultatuFailas, islaikeFailas, neislaikeFailas, trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas);
-        cout << "Rezultatu failo dalinimas uztruko " << trukmeRezultatuSkaitymo + trukmeRezultatuSkaidymas + trukmeSkaidymoIrasymas << " ms." << '\n';
-
-        // Skaičuoti bendrą laiką
-        long long bendrasLaikas = trukmeGeneravimo.count() + trukmeSkaitymo + trukmeIrasymo + trukmeRezultatuSkaitymo + trukmeRezultatuSkaidymas + trukmeSkaidymoIrasymas;
-        cout << "Visi zingsniai su " << kiekis << " studentu baigti. Trukme: " << bendrasLaikas << " ms." << '\n' << '\n';
-
-        auto pabaigaVisko = std::chrono::high_resolution_clock::now();
-        auto trukmeVisko = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaVisko - pradziaVisko);
-        cout << "Visi zingsniai su " << kiekis << " studentu baigti. Trukme: " << trukmeVisko.count() << " ms." << '\n' << '\n';
-
-
-        // Surašyti laikus į CSV failą
-        csvFile << timestamp << ";"
-                << kiekis << ";"
-                << trukmeGeneravimo.count() << ";"
-                << trukmeSkaitymo << ";"
-                << trukmeIrasymo << ";"
-                << trukmeRezultatuSkaitymo << ";"
-                << trukmeRezultatuSkaidymas << ";"
-                << trukmeSkaidymoIrasymas << ";"
-                << bendrasLaikas << "\n";
-    }
-
-    csvFile.close();
-    cout << "Visi zingsniai visiems studentu kiekiams baigti." << '\n';
-    cout << "Duomenys issaugoti faile 'performance_data.csv'" << '\n';
 }
