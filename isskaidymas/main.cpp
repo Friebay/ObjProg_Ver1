@@ -6,7 +6,7 @@ int main() {
     char vec_li;
 
     do {
-        // Vartotojas įveda konteinerio tipas (vektorius arba sąrašas)
+        // Vartotojas įveda konteinerio tipą (vektorius arba sąrašas)
         do {
             cout << "Ar norite naudoti Vector ar List? Jeigu Vector - rasykite V, jeigu List - rasykite L: ";
             cin >> vec_li;

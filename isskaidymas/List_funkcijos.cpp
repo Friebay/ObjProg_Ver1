@@ -346,8 +346,8 @@ void List_programa() {
                     throw runtime_error("Neteisingas failo pasirinkimas.");
                 }
 
-                string duomenuFailas = "studentai" + (studentuSkaicius[failoPasirinkimas - 1]) + ".txt";
-                string isvestiesFailoPavadinimas = "rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + ".txt";
+                string duomenuFailas = "txt_failai/studentai" + (studentuSkaicius[failoPasirinkimas - 1]) + ".txt";
+                string isvestiesFailoPavadinimas = "txt_failai/rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + ".txt";
 
 
                 skaitytiIrIsvestiDuomenis(duomenuFailas, isvestiesFailoPavadinimas, trukmeSkaitymo, trukmeVidurkio, trukmeIrasymo);
@@ -370,9 +370,9 @@ void List_programa() {
                     throw runtime_error("Neteisingas failo pasirinkimas.");
                 }
 
-                string duomenuFailas = "rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + ".txt";
-                string islaikiusiuFailoPavadinimas = "rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + "_islaike.txt";
-                string neislaikiusiuFailoPavadinimas = "rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + "_neislaike.txt";
+                string duomenuFailas = "txt_failai/rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + ".txt";
+                string islaikiusiuFailoPavadinimas = "txt_failai/rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + "_islaike.txt";
+                string neislaikiusiuFailoPavadinimas = "txt_failai/rezultatai" + (studentuSkaicius[failoPasirinkimas - 1]) + "_neislaike.txt";
 
                 long long trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas;
                 List_padalintiRezultatuFaila(duomenuFailas, islaikiusiuFailoPavadinimas, neislaikiusiuFailoPavadinimas, trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas);

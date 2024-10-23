@@ -196,7 +196,7 @@ void vykdytiVisusZingsnius() {
         string timestamp = ss.str();
 
         // Generuoti studentų failą
-        string studentuFailas = "studentai_" + to_string(kiekis) + ".txt";
+        string studentuFailas = "txt_failai/studentai_" + to_string(kiekis) + ".txt";
         auto pradziaGeneravimo = std::chrono::high_resolution_clock::now();
         generuotiStudentuFaila(kiekis, studentuFailas);
         auto pabaigaGeneravimo = std::chrono::high_resolution_clock::now();
@@ -204,7 +204,7 @@ void vykdytiVisusZingsnius() {
         cout << "Failo su " << kiekis << "studentais generavimas uztruko " << trukmeGeneravimo.count() << " ms.\n";
 
         // Skaitomas sugeneruotas failas, apskaičiuoja galutinius rezultatus ir išvedamas į rezultatų failą
-        string rezultatuFailas = "rezultatai_" + to_string(kiekis) + ".txt";
+        string rezultatuFailas = "txt_failai/rezultatai_" + to_string(kiekis) + ".txt";
         cout << "Skaitomi duomenys ir isvedami i " << rezultatuFailas << "...\n";
         long long trukmeSkaitymo, trukmeVidurkio, trukmeIrasymo;
         auto pradziaSkaitymo = std::chrono::high_resolution_clock::now();
@@ -216,8 +216,8 @@ void vykdytiVisusZingsnius() {
         cout << "Duomenu isvedimas i " << rezultatuFailas << " uztruko " << trukmeIrasymo << " ms.\n";
 
         // Rezultatų failo padalijimas į išlaikiusius ir neišlaikiusius
-        string islaikeFailas = "rezultatai_" + to_string(kiekis) + "_islaike.txt";
-        string neislaikeFailas = "rezultatai_" + to_string(kiekis) + "_neislaike.txt";
+        string islaikeFailas = "txt_failai/rezultatai_" + to_string(kiekis) + "_islaike.txt";
+        string neislaikeFailas = "txt_failai/rezultatai_" + to_string(kiekis) + "_neislaike.txt";
         cout << "Dalinamas rezultatu failas i islaikiusius ir neislaikiusius...\n";
         long long trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas;
         padalintiRezultatuFaila(rezultatuFailas, islaikeFailas, neislaikeFailas, trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas);
