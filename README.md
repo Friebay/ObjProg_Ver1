@@ -175,3 +175,4 @@ HDD/SSD: Patriot PCIe M.2 P300 512 GB, skaitymo greitis iki 1700 MB/s, įrašymo
 
 ### Išvados
 
+Vektorius yra pranašesnis skaičiuojant medianas, vidurkius, o tai leidžia programai veikti 10-15% sparčiau.

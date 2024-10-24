@@ -42,7 +42,7 @@ float List_skaiciuotiVidurki(list<int>& pazymiai) {
     if (pazymiai.empty()) {
         return 0.0f;
     }
-    return std::accumulate(pazymiai.begin(), pazymiai.end(), 0.0f) / pazymiai.size();
+    return accumulate(pazymiai.begin(), pazymiai.end(), 0.0f) / pazymiai.size();
 }
 
 float List_skaiciuotiMediana(list<int>& pazymiai) {
@@ -140,7 +140,6 @@ void List_vykdytiVisusZingsnius() {
 
     for (int kiekis : studentuKiekiai) {
         cout << "Vykdomi zingsniai su " << kiekis << " studentu:\n";
-        auto pradziaVisko = std::chrono::high_resolution_clock::now();
         
         // Gauti dabartinį laiką
         auto now = std::chrono::system_clock::now();
@@ -180,11 +179,6 @@ void List_vykdytiVisusZingsnius() {
         // Skaičuoti bendrą laiką
         long long bendrasLaikas = trukmeGeneravimo.count() + trukmeSkaitymo + trukmeIrasymo + trukmeRezultatuSkaitymo + trukmeRezultatuSkaidymas + trukmeSkaidymoIrasymas;
         cout << "Visi zingsniai su " << kiekis << " studentu baigti. Trukme: " << bendrasLaikas << " ms.\n\n";
-
-        auto pabaigaVisko = std::chrono::high_resolution_clock::now();
-        auto trukmeVisko = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaVisko - pradziaVisko);
-        cout << "Visi zingsniai su " << kiekis << " studentu baigti. Trukme: " << trukmeVisko.count() << " ms.\n\n";
-
 
         // Surašyti laikus į CSV failą
         csvFile << timestamp << ";"

@@ -25,8 +25,8 @@ int gautiPazymi(const string& klausimas) {
 }
 
 // Rūšiuoja studentus pagal pavardę, o jei pavardės vienodos - pagal vardą
-void rusiuotiStudentusPagalPavarde(std::vector<Studentas>& studentai) {
-    std::sort(studentai.begin(), studentai.end(), [](const Studentas& a, const Studentas& b) {
+void rusiuotiStudentusPagalPavarde(vector<Studentas>& studentai) {
+    sort(studentai.begin(), studentai.end(), [](const Studentas& a, const Studentas& b) {
         if (a.pavarde == b.pavarde) {
             return a.vardas < b.vardas; // Sort by first name if last names are the same
         }
@@ -35,8 +35,8 @@ void rusiuotiStudentusPagalPavarde(std::vector<Studentas>& studentai) {
 }
 
 // Rūšiuoja studentus pagal vardą, o jei vardai vienodos - pagal pavardę
-void rusiuotiStudentusPagalVarda(std::vector<Studentas>& studentai) {
-    std::sort(studentai.begin(), studentai.end(), [](const Studentas& a, const Studentas& b) {
+void rusiuotiStudentusPagalVarda(vector<Studentas>& studentai) {
+    sort(studentai.begin(), studentai.end(), [](const Studentas& a, const Studentas& b) {
         if (a.vardas == b.vardas) {
             return a.pavarde < b.pavarde; // Sort by last name if first names are the same
         }
@@ -100,7 +100,7 @@ float skaiciuotiVidurki(vector<int>& pazymiai) {
     if (pazymiai.empty()) {
         return 0.0f;
     }
-    return std::accumulate(pazymiai.begin(), pazymiai.end(), 0.0f) / pazymiai.size();
+    return accumulate(pazymiai.begin(), pazymiai.end(), 0.0f) / pazymiai.size();
 }
 
 int generuotiSkaiciu(int min, int max) {
@@ -186,7 +186,6 @@ void vykdytiVisusZingsnius() {
 
     for (int kiekis : studentuKiekiai) {
         cout << "Vykdomi zingsniai su " << kiekis << " studentu:\n";
-        auto pradziaVisko = std::chrono::high_resolution_clock::now();
         
         // Gauti dabartinį laiką
         auto now = std::chrono::system_clock::now();
@@ -226,11 +225,6 @@ void vykdytiVisusZingsnius() {
         // Skaičuoti bendrą laiką
         long long bendrasLaikas = trukmeGeneravimo.count() + trukmeSkaitymo + trukmeIrasymo + trukmeRezultatuSkaitymo + trukmeRezultatuSkaidymas + trukmeSkaidymoIrasymas;
         cout << "Visi zingsniai su " << kiekis << " studentu baigti. Trukme: " << bendrasLaikas << " ms.\n\n";
-
-        auto pabaigaVisko = std::chrono::high_resolution_clock::now();
-        auto trukmeVisko = std::chrono::duration_cast<std::chrono::milliseconds>(pabaigaVisko - pradziaVisko);
-        cout << "Visi zingsniai su " << kiekis << " studentu baigti. Trukme: " << trukmeVisko.count() << " ms.\n\n";
-
 
         // Surašyti laikus į CSV failą
         csvFile << timestamp << ";"

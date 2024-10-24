@@ -36,7 +36,7 @@ void automatiskaiGeneruotiDuomenis(vector<Studentas>& studentai) {
 
     cout << "Kiek studentu norite sugeneruoti? ";
 
-    // Input validation for student count
+    // Įvesties patvirtinimas
     while (!gerasPasirinkimas) {
         cin >> studentuKiekis;
         if (cin.fail() || studentuKiekis < 1) {
@@ -84,34 +84,30 @@ void nuskaitytiDuomenisIsFailo(vector<Studentas>& studentai, long long& trukmeSk
         case 7: failoPavadinimas = "txt_failai/tuscias.txt"; break;
     }
 
-    // Read data from the file
     skaitytiDuomenisIsFailo(failoPavadinimas, studentai, trukmeSkaitymo, trukmeVidurkio);
     
-    // Output result
     cout << "Duomenys nuskaityti is " << failoPavadinimas << " per " << trukmeSkaitymo << " ms\n";
 }
 
 void skaiciuotiRezultatus(long long& trukmeSkaitymo, long long& trukmeVidurkio, long long& trukmeIrasymo) {
     vector<string> studentuSkaicius = {"_1000", "_10000", "_100000", "_1000000", "_10000000", "1000", "10000", "100000", "1000000", "10000000"};
-    
-    // Prompt user to select file
+
     cout << "Pasirinkite rezultatu faila:\n";
     cout << "Kodo generuoti duomenys\n1. studentai_1000.txt\n2. studentai_10000.txt\n3. studentai_100000.txt\n4. studentai_1000000.txt\n5. studentai_10000000.txt\n";
     cout << "Pavyzdiniai duomenys\n6. studentai1000.txt\n7. studentai10000.txt\n8. studentai100000.txt\n9. studentai1000000.txt\n10. studentai10000000.txt\n";
     cout << "Jusu pasirinkimas: ";
 
-    // Input validation for file choice
+    // Įvesties patikrinimas
     int failoPasirinkimas;
     cin >> failoPasirinkimas;
     if (failoPasirinkimas < 1 || failoPasirinkimas > 10) {
         throw runtime_error("Neteisingas failo pasirinkimas.");
     }
 
-    // Generate file names based on selection
+    // Generuoti failų pavadinimus pagal pasirinkimą
     string duomenuFailas = "txt_failai/studentai" + studentuSkaicius[failoPasirinkimas - 1] + ".txt";
     string isvestiesFailoPavadinimas = "txt_failai/rezultatai" + studentuSkaicius[failoPasirinkimas - 1] + ".txt";
 
-    // Call function to read and output results
     skaitytiIrIsvestiDuomenis(duomenuFailas, isvestiesFailoPavadinimas, trukmeSkaitymo, trukmeVidurkio, trukmeIrasymo);
     cout << "Duomenys nuskaityti is " << duomenuFailas << " per " << trukmeSkaitymo << "ms ir isvesti i " << isvestiesFailoPavadinimas << " per " << trukmeIrasymo << " ms.\n";
 }
@@ -119,25 +115,23 @@ void skaiciuotiRezultatus(long long& trukmeSkaitymo, long long& trukmeVidurkio, 
 void rusiuotiRezultatus(long long& trukmeRezultatuSkaitymo, long long& trukmeRezultatuSkaidymas, long long& trukmeSkaidymoIrasymas) {
     vector<string> studentuSkaicius = {"_1000", "_10000", "_100000", "_1000000", "_10000000", "1000", "10000", "100000", "1000000", "10000000"};
     
-    // Prompt user to select result file
     cout << "Pasirinkite rezultatu faila:\n";
     cout << "Kodo generuoti duomenys\n1. rezultatai_1000.txt\n2. rezultatai_10000.txt\n3. rezultatai_100000.txt\n4. rezultatai_1000000.txt\n5. rezultatai_10000000.txt\n";
     cout << "Pavyzdiniai duomenys\n6. rezultatai1000.txt\n7. rezultatai10000.txt\n8. rezultatai100000.txt\n9. rezultatai1000000.txt\n10. rezultatai10000000.txt\n";
     cout << "Jusu pasirinkimas: ";
 
-    // Input validation for file choice
+    // Įvesties patikrinimas
     int failoPasirinkimas;
     cin >> failoPasirinkimas;
     if (failoPasirinkimas < 1 || failoPasirinkimas > 10) {
         throw runtime_error("Neteisingas failo pasirinkimas.");
     }
 
-    // Generate file names based on selection
+    // Generuoti failų pavadinimus pagal pasirinkimą
     string duomenuFailas = "txt_failai/rezultatai" + studentuSkaicius[failoPasirinkimas - 1] + ".txt";
     string islaikiusiuFailoPavadinimas = "txt_failai/rezultatai" + studentuSkaicius[failoPasirinkimas - 1] + "_islaike.txt";
     string neislaikiusiuFailoPavadinimas = "txt_failai/rezultatai" + studentuSkaicius[failoPasirinkimas - 1] + "_neislaike.txt";
 
-    // Call function to split results
     padalintiRezultatuFaila(duomenuFailas, islaikiusiuFailoPavadinimas, neislaikiusiuFailoPavadinimas, trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas);
     cout << "Rezultatu failas padalintas i " << islaikiusiuFailoPavadinimas << " ir " << neislaikiusiuFailoPavadinimas << '\n';
 }
@@ -145,7 +139,7 @@ void rusiuotiRezultatus(long long& trukmeRezultatuSkaitymo, long long& trukmeRez
 void vykdytiKeliskart(int& kartai) {
     bool validInput = false;
 
-    // Input validation for the number of repetitions
+    // Įvesties patikrinimas
     while (!validInput) {
         cout << "Kiek kartu norite paleisti funkcija 'vykdytiVisusZingsnius'? ";
         cin >> kartai;
@@ -159,7 +153,7 @@ void vykdytiKeliskart(int& kartai) {
         }
     }
 
-    // Loop to execute the function multiple times
+    // Vykdo visus žingsnius i kartų
     for (int i = 0; i < kartai; i++) {
         cout << "Vykdoma " << i + 1 << " karta:\n";
         vykdytiVisusZingsnius();

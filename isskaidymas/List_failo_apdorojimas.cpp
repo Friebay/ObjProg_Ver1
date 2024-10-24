@@ -205,7 +205,7 @@ void List_padalintiRezultatuFaila(const string& ivestiesFailoPavadinimas, const 
     
     // Rušiuoti studentus pagal galutinį pažymį naudojant list::sort
     studentai.sort([](const List_Studentas& a, const List_Studentas& b) {
-        return a.galutinisVidurkis > b.galutinisVidurkis; // Sort in descending order
+        return a.galutinisVidurkis > b.galutinisVidurkis;
     });
 
     auto pabaigaRusiavimo = std::chrono::high_resolution_clock::now();
