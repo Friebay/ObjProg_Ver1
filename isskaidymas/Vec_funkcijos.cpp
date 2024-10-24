@@ -48,7 +48,7 @@ void automatiskaiGeneruotiDuomenis(vector<Studentas>& studentai) {
         }
     }
 
-    // Generate random students and add them to the vector
+    // Sugeneruoti atsitiktinius studentus ir pridėti juos prie vektoriaus
     for (int i = 0; i < studentuKiekis; i++) {
         studentai.push_back(generuotiAtsitiktiniStudenta());
     }
@@ -58,10 +58,10 @@ void nuskaitytiDuomenisIsFailo(vector<Studentas>& studentai, long long& trukmeSk
     int failoPasirinkimas;
     bool gerasPasirinkimas = false;
 
-    // Prompt user for file choice
+    // Leisti vartotoją pasirinkti failą
     cout << "Pasirinkite faila (1. studentai10.txt, 2. studentai100.txt, 3. studentai10000.txt, 4. studentai100000.txt, 5. studentai1000000.txt, 6. studentai10_blog.txt, 7. tuscias.txt): ";
 
-    // Input validation for file choice
+    // Įvesties patvirtinimas
     while (!gerasPasirinkimas) {
         cin >> failoPasirinkimas;
         if (cin.fail() || failoPasirinkimas < 1 || failoPasirinkimas > 7) {
@@ -73,7 +73,6 @@ void nuskaitytiDuomenisIsFailo(vector<Studentas>& studentai, long long& trukmeSk
         }
     }
 
-    // Map file selection to file names
     string failoPavadinimas;
     switch (failoPasirinkimas) {
         case 1: failoPavadinimas = "txt_failai/studentai10.txt"; break;
@@ -141,6 +140,30 @@ void rusiuotiRezultatus(long long& trukmeRezultatuSkaitymo, long long& trukmeRez
     // Call function to split results
     padalintiRezultatuFaila(duomenuFailas, islaikiusiuFailoPavadinimas, neislaikiusiuFailoPavadinimas, trukmeRezultatuSkaitymo, trukmeRezultatuSkaidymas, trukmeSkaidymoIrasymas);
     cout << "Rezultatu failas padalintas i " << islaikiusiuFailoPavadinimas << " ir " << neislaikiusiuFailoPavadinimas << '\n';
+}
+
+void vykdytiKeliskart(int& kartai) {
+    bool validInput = false;
+
+    // Input validation for the number of repetitions
+    while (!validInput) {
+        cout << "Kiek kartu norite paleisti funkcija 'vykdytiVisusZingsnius'? ";
+        cin >> kartai;
+
+        if (cin.fail() || kartai <= 0) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Neteisingas skaicius. Prasome ivesti teigiama skaiciu.\n";
+        } else {
+            validInput = true;
+        }
+    }
+
+    // Loop to execute the function multiple times
+    for (int i = 0; i < kartai; i++) {
+        cout << "Vykdoma " << i + 1 << " karta:\n";
+        vykdytiVisusZingsnius();
+    }
 }
 
 
@@ -228,25 +251,7 @@ void Vec_programa() {
             case 8: {
                 // Kelius kartus sukamas kodas, kad sužinoti kiek laiko užtrunka kodas
                 int kartai;
-                bool validInput = false;
-                
-                while (!validInput) {
-                    cout << "Kiek kartu norite paleisti funkcija 'vykdytiVisusZingsnius'? ";
-                    cin >> kartai;
-                    
-                    if (cin.fail() || kartai <= 0) {
-                        cin.clear();
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                        cout << "Neteisingas skaicius. Prasome ivesti teigiama skaiciu.\n";
-                    } else {
-                        validInput = true;
-                    }
-                }
-
-                for (int i = 0; i < kartai; i++) {
-                    cout << "Vykdoma " << i + 1 << " karta:\n";
-                    vykdytiVisusZingsnius();
-                }
+                vykdytiKeliskart(kartai);
 
                 return;
             }  
@@ -257,20 +262,29 @@ void Vec_programa() {
         }
 
         int pasirinkimas;
-        cout << "Jeigu norite rusiuoti pagal varda - rasykite 1, jeigu pagal pavarde - 2: ";
-        cin >> pasirinkimas;
+        bool validInput = false;
+
+        // Keep prompting the user until a valid choice is made
+        while (!validInput) {
+            cout << "Jeigu norite rusiuoti pagal varda - rasykite 1, jeigu pagal pavarde - rasykite 2: ";
+            cin >> pasirinkimas;
+
+            if (cin.fail() || (pasirinkimas != 1 && pasirinkimas != 2)) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Blogas pasirinkimas. Prasome ivesti 1 arba 2.\n";
+            } else {
+                validInput = true;
+            }
+        }
 
         // Rūšiuoja studentus
-        if (pasirinkimas == 1){
+        if (pasirinkimas == 1) {
             rusiuotiStudentusPagalVarda(studentai);
-        }
-        else if (pasirinkimas == 2) {
+        } else {
             rusiuotiStudentusPagalPavarde(studentai);
         }
-        else {
-            cout << "Blogas pasirinkimas, rusiuojama pagal varda.\n";
-            rusiuotiStudentusPagalVarda(studentai);
-        }
+
 
         // Spausdina rezultatus
         cout << left << setw(16) << "Pavarde" << setw(16) << "Vardas" << setw(25) << "Galutinis Vidurkis" << " / " << "Galutine Mediana\n";
